@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/19 17:00:48 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/19 19:58:00 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	char	**args;
-}	t_data;
+	t_list	**res;
+	t_list	*new;
+	t_list	*el;
 
-#endif
+	if (!lst)
+		return (NULL);
+	el = NULL;
+	res = &el;
+	while (lst)
+	{
+		new = ft_lstnew(f(lst->content));
+		if (!new)
+			ft_lstclear(res, del);
+		ft_lstadd_back(&el, new);
+		lst = lst->next;
+	}
+	return (*res);
+}

@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/08 13:47:29 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/21 16:52:20 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+size_t	ft_strlen(const char *s)
 {
-	char	**args;
-}	t_data;
+	size_t	counter;
 
-#endif
+	counter = 0;
+	while (*s++)
+		counter++;
+	return (counter);
+}

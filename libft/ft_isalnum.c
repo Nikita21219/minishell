@@ -1,34 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/08 13:58:51 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/21 11:02:13 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+int	ft_isalnum(int c)
 {
-	char	**args;
-}	t_data;
-
-#endif
+	if (ft_isalpha(c) || ft_isdigit(c))
+		return (1);
+	return (0);
+}

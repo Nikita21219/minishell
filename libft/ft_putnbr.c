@@ -1,34 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/21 14:30:03 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/21 14:30:06 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include <unistd.h>
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+void	ft_putchar(char c)
 {
-	char	**args;
-}	t_data;
+	write(1, &c, 1);
+}
 
-#endif
+void	ft_putnbr(int nb)
+{
+	if (nb == -2147483648)
+	{
+		ft_putnbr(nb / 10);
+		ft_putchar('8');
+	}
+	else if (nb < 0)
+	{
+		ft_putchar('-');
+		ft_putnbr(-nb);
+	}
+	else
+	{
+		if (nb > 9)
+			ft_putnbr(nb / 10);
+		ft_putchar(nb % 10 + 48);
+	}
+}

@@ -1,34 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/18 20:31:40 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/18 20:31:41 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+t_list	*ft_lstnew(void *content)
 {
-	char	**args;
-}	t_data;
+	t_list	*el;
 
-#endif
+	el = malloc(sizeof(t_list));
+	if (!(el))
+		return (NULL);
+	el->content = content;
+	el->next = NULL;
+	return (el);
+}

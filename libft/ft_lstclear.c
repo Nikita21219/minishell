@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/19 13:40:23 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/22 16:29:19 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+void	ft_lstclear(t_list **lst, void (*del)(void*))
 {
-	char	**args;
-}	t_data;
+	t_list	*current;
+	t_list	*prev;
 
-#endif
+	if (!(lst) || !(*lst))
+		return ;
+	current = *lst;
+	while (current != NULL)
+	{
+		prev = current;
+		current = current->next;
+		ft_lstdelone(prev, del);
+	}
+	*lst = NULL;
+}

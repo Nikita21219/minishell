@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/18 15:38:04 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/21 17:26:20 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	char	**args;
-}	t_data;
+	char		*tmp_dst;
+	const char	*tmp_src;
+	size_t		i;
 
-#endif
+	tmp_dst = dst;
+	tmp_src = src;
+	i = dstsize - 1;
+	if (dstsize != 0)
+	{	
+		while (i-- && *tmp_src)
+			*tmp_dst++ = *tmp_src++;
+		*tmp_dst = '\0';
+	}
+	return (ft_strlen(src));
+}

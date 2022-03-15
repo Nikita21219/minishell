@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/18 15:39:25 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/19 13:54:28 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	char	**args;
-}	t_data;
-
-#endif
+	while (*s1 == *s2 && n-- && *s1 && *s2)
+	{
+		s1++;
+		s2++;
+	}
+	if (n == 0)
+		return (0);
+	if ((unsigned char) *s1 > (unsigned char) *s2)
+		return (1);
+	else if ((unsigned char) *s2 > (unsigned char) *s1)
+		return (-1);
+	return (0);
+}

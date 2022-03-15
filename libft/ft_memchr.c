@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 13:22:50 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:09:32 by bclarind         ###   ########.fr       */
+/*   Created: 2021/10/18 15:39:38 by bclarind          #+#    #+#             */
+/*   Updated: 2021/10/21 16:49:59 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <errno.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
-# include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-
-#include "color.h"
-#include "libft/libft.h"
-
-typedef struct s_data
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	char	**args;
-}	t_data;
+	char	*str;
 
-#endif
+	str = (char *) s;
+	if (c == 0 && n == 0)
+		return (NULL);
+	if (c == '\0')
+	{
+		while (*str)
+			str++;
+		return (str);
+	}
+	while (n--)
+	{
+		if (*str == (char) c)
+			return (str);
+		str++;
+	}
+	return (NULL);
+}
