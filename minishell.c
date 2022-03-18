@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 13:20:51 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:51:34 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/03/18 10:24:43 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int main(int argc, char **argv, char **env)
 	(void) argc;
 	(void) argv;
 	(void) env;
-
+	printf("tets\n");
 	minishell();
 	return (0);
 }
