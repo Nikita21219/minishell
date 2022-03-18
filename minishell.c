@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 13:20:51 by bclarind          #+#    #+#             */
-/*   Updated: 2022/03/15 19:51:34 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/03/18 10:17:32 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	minishell(void)
 		parser(str, &data);
 		while (data.args[i])
 			printf("%s\n", data.args[i++]);
-		// printf("%s\n", str);
-		// printf("%s\n", data.test);
 		add_history(str);
 		free(str);
 	}
@@ -43,6 +41,8 @@ int main(int argc, char **argv, char **env)
 	(void) argv;
 	(void) env;
 
+	if (check_argv(argc, argv))
+		return (1);
 	minishell();
 	return (0);
 }
