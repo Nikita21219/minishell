@@ -3,14 +3,16 @@ CC = cc
 OBJDIR = ./objs
 CFLAGS = -Wall -Wextra -Werror
 HEADER = minishell.h
-SRC = $(wildcard *.c)
+SRCDIR = ./srcs
+HEADDIR = ./includes
+SRC = $(wildcard $(SRCDIR)/*.c)
 OBJ = $(addprefix $(OBJDIR)/,$(notdir $(SRC:.c=.o)))
 LIBFT_DIR = libft/
 
 all:    $(NAME)
 
-$(OBJDIR)/%.o : %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJDIR)/%.o :	$(SRCDIR)/%.c $(HEADDIR)/$(HEADER)
+	@$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME):    $(OBJDIR) $(OBJ)
 	make -C libft

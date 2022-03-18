@@ -1,5 +1,8 @@
 minishell
-objs
+*objs
+*.DS_Store
+.gitignore copy222
+.vscode
 
 # Prerequisites
 *.d
