@@ -19,4 +19,6 @@ typedef struct s_data
 	char	**args;
 }	t_data;
 
+int	check_argv(int argc, char **argv);
+
 #endif
