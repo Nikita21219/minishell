@@ -17,8 +17,10 @@
 typedef struct s_data
 {
 	char	**args;
+	char	*str;
 }	t_data;
 
-int	check_argv(int argc, char **argv);
+int		check_argv(int argc, char **argv, char **env, t_data *data);
+void    error_mes_with_exit(char *err_mes, t_data *data);
 
 #endif
