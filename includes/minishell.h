@@ -16,11 +16,15 @@
 
 typedef struct s_data
 {
-	char	**args;
-	char	*str;
+	char			*comm;
+	char			**flags;
+	char			*args;
+	struct s_data	*next;
 }	t_data;
 
 int		check_argv(int argc, char **argv, char **env, t_data *data);
-void    error_mes_with_exit(char *err_mes, t_data *data);
+void	error_mes_with_exit(char *err_mes, t_data *data);
+void	parser(t_data *data, char *s);
+t_data	*addelem(t_data *data);
 
 #endif
