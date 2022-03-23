@@ -20,3 +20,19 @@ t_data	*addelem(t_data *data)
 	p->next = temp;
 	return (temp);
 }
+
+void	delelem(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data)
+	{
+		while (data->flags[i])
+			free(data->flags[i++]);
+		free(data->flags);
+		free(data->args);
+		free(data->comm);
+		data = data->next;
+	}
+}

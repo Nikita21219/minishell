@@ -42,58 +42,22 @@ void	takeflags(t_data *data, char **s)
 
 void	takeargs(t_data *data, char **s)
 {
-	char	*tmp1;
-	char	*tmp2;
 	int		i;
+	char	quote;
 
 	i = 0;
 	while ((*s)[i] && (*s)[i] != '|')
 	{
-		if ((*s)[i] == 34) // "
+		if ((*s)[i] == 34 || (*s)[i] == 39)
 		{
-			if (!data->args)
-				data->args = ft_substr(*s, 0, i);
-			else
-			{
-				tmp1 = data->args;
-				data->args = ft_strjoin(tmp1, *s);
-				free(tmp1);
-			}
-			while (i--)
-				(*s)++;
+			quote = (*s)[i];
+			i = write_arg(data, s, i);
 			(*s)++;
-			// printf("arg = %s!\n", data->args);
-			// printf("s = %s\n", *s);
-			// exit(1);
-			if (ft_strchr(*s, 34))
-			{
-				i = 0;
-				tmp1 = data->args;
-				while ((*s)[i] != 34)
-					i++;
-				tmp2 = ft_substr(*s, 0, i++);
-				data->args = ft_strjoin(tmp1, tmp2);
-				while (i--)
-					(*s)++;
-				// printf("arg = %s!\n", data->args);
-				// printf("s = %s\n", *s);
-				// exit(1);
-				free(tmp1);
-				free(tmp2);
-			}
+			i = check_quote(s, data, quote);
 		}
 		i++;
 	}
-	if (!data->args)
-		data->args = ft_substr(*s, 0, i);
-	else
-	{
-		tmp1 = data->args;
-		data->args = ft_strjoin(tmp1, *s);
-		free(tmp1);
-	}
-	while (i--)
-		(*s)++;
+	write_arg(data, s, i);
 }
 
 void	parser(t_data *data, char *s)

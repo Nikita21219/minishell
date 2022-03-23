@@ -13,21 +13,22 @@ LIBFT_DIR = libft/
 all:    $(LIBFT) $(NAME)
 
 $(OBJDIR)/%.o :	$(SRCDIR)/%.c $(HEADDIR)/$(HEADER)
-	@$(CC) $(FLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	$(OBJDIR) $(OBJ)
 	@$(CC) $(CFLAGS) -o $(NAME) $(LIBFT_DIR)/libft.a -I $(HEADER) $(OBJ) -lreadline
 	@echo "\033[32mminishell compile"
 
 $(OBJDIR):
-	@if [ ! -d $(OBJDIR) ] ; then echo "creating $(OBJDIR)" ; mkdir $(OBJDIR); fi
+	@if [ ! -d $(OBJDIR) ] ; then mkdir $(OBJDIR); fi
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
 clean:
-	@if [ -d $(OBJDIR) ] ; then echo "\033[32mdeleting $(OBJDIR)" ; rm -r $(OBJDIR); fi
+	@if [ -d $(OBJDIR) ] ; then rm -r $(OBJDIR); fi
 	@make fclean -C $(LIBFT_DIR)
+	@echo "\033[32mclean minishell done"
 
 fclean: clean
 	@rm -f $(NAME)

@@ -21,6 +21,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
 
+	data = NULL;
 	if (check_argv(argc, argv, env, data))
 		return (1);
 	minishell(data);
