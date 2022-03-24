@@ -29,7 +29,8 @@ void	parser(t_data *data, char *s, char **env);
 t_data	*addelem(t_data *data, char **env);
 void	delelem(t_data *data);
 int		check_quote(char **s, t_data *data, char quote);
-int		write_arg(t_data *data, char **s, int i);
+int		write_arg(char **arg, char **s, int i, char quote);
 int		check_second_qoute(char *s, int i, char quote);
+int		takevar(char **s, t_data *data, int i);
 
 #endif

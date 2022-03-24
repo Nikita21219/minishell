@@ -48,19 +48,21 @@ void	takeargs(t_data *data, char **s)
 	i = 0;
 	while ((*s)[i] && (*s)[i] != '|')
 	{
+		if ((*s)[i] == '$')
+			i = takevar(s, data, i);
 		if ((*s)[i] == 34 || (*s)[i] == 39)
 		{
 			quote = (*s)[i];
 			if (check_second_qoute(*s, i, quote))
 			{
-				i = write_arg(data, s, i);
+				i = write_arg(&data->args, s, i, 0);
 				(*s)++;
 				i = check_quote(s, data, quote);
 			}
 		}
 		i++;
 	}
-	write_arg(data, s, i);
+	write_arg(&data->args, s, i, 0);
 }
 
 void	parser(t_data *data, char *s, char **env)
@@ -80,7 +82,6 @@ void	parser(t_data *data, char *s, char **env)
 		takeargs(p, &s);
 		printf("command = !%s!\n", p->comm);
 		printf("flags = !%s!\n", p->flags[0]);
-		printf("flags = !%s!\n", p->flags[1]);
 		printf("args = !%s!\n", p->args);
 	}
 	exit(1);

@@ -14,6 +14,7 @@ void	minishell(t_data *data, char **env)
 		parser(data, str, env);
 		add_history(str);
 		free(str);
+		delelem(data);
 	}
 }
 

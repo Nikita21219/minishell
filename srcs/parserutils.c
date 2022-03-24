@@ -1,79 +1,60 @@
 #include "../includes/minishell.h"
 
-// void	writepartstr(char **s, t_data *data, int i)
+int	takevar(char **s, t_data *data, int i)
+{
+	char	*tmp1;
+	char	*tmp2;
 
-// void	check_dquote(char **s, t_data *data, char quote, int i)
-// {
-// 	char	*tmp1;
-// 	char	*tmp2;
-
-// 	tmp1 = data->args;
-// 	while ((*s)[i] != quote)
-// 		i++;
-// 	if (!tmp1)
-// 		data->args = ft_substr(*s, 0, i++);
-// 	else
-// 	{
-// 		tmp2 = ft_substr(*s, 0, i++);
-// 		data->args = ft_strjoin(tmp1, tmp2);
-// 		free(tmp1);
-// 		free(tmp2);
-// 	}
-// 	while (i--)
-// 		(*s)++;
-// }
+	write_arg(&data->args, s, i, 0);
+	i = 0;
+	tmp1 = data->args;
+	tmp2 = getenv("PWD");
+	while ((**s) && (**s) != ' ')
+	{
+		(*s)++;
+		i++;
+	}
+	data->args = ft_strjoin(tmp1, tmp2);
+	free(tmp1);
+	return (-1);
+}
 
 int	check_quote(char **s, t_data *data, char quote)
 {
-	char	*tmp1;
-	char	*tmp2;
 	int		i;
 
 	i = 0;
-	if (quote == 34)
+	while ((*s)[i] && (*s)[i] != quote)
 	{
-		check_dquote(s, data, quote, i);
-		return (-1);
-	}
-	tmp1 = data->args;
-	while ((*s)[i] != quote)
+		if (quote == 34 && (*s)[i] == '$')
+			takevar(s, data, i);
 		i++;
-	if (!tmp1)
-		data->args = ft_substr(*s, 0, i++);
-	else
-	{
-		tmp2 = ft_substr(*s, 0, i++);
-		data->args = ft_strjoin(tmp1, tmp2);
-		free(tmp1);
-		free(tmp2);
 	}
-	while (i--)
-		(*s)++;
+	i = write_arg(&data->args, s, i, quote);
 	return (i);
 }
 
-int	write_arg(t_data *data, char **s, int i)
+int	write_arg(char **arg, char **s, int i, char quote)
 {
 	char	*tmp1;
 	char	*tmp2;
 
-	if (i > 0 && (*s)[i])
+	if (!(*arg))
+		*arg = ft_substr(*s, 0, i);
+	else
 	{
-		if (!data->args)
-			data->args = ft_substr(*s, 0, i);
-		else
-		{
-			tmp1 = data->args;
-			tmp2 = ft_substr(*s, 0, i);
-			data->args = ft_strjoin(tmp1, tmp2);
-			free(tmp1);
-			free(tmp2);
-		}
-		while (i--)
-			(*s)++;
-		if ((**s) == '|')
-			(*s)++;
+		tmp1 = *arg;
+		tmp2 = ft_substr(*s, 0, i);
+		*arg = ft_strjoin(tmp1, tmp2);
+		free(tmp1);
+		free(tmp2);
 	}
+	if (quote)
+		i++;
+	while (i--)
+		(*s)++;
+	if ((**s) == '|')
+		(*s)++;
 	return (i);
 }
 
