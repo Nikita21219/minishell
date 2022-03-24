@@ -40,26 +40,41 @@ void	takeflags(t_data *data, char **s)
 		(*s)++;
 }
 
+int	vars_quote_check(t_data *data, char **s, int i)
+{
+	char	quote;
+
+	if ((*s)[i] == '$')
+		i = takevar(s, data, i);
+	if ((*s)[i] == 34 || (*s)[i] == 39)
+	{
+		quote = (*s)[i];
+		if (check_second_qoute(*s, i, quote))
+		{
+			i = write_arg(&data->args, s, i, 0);
+			(*s)++;
+			i = check_quote(s, data, quote);
+		}
+	}
+	return (i);
+}
+
 void	takeargs(t_data *data, char **s)
 {
 	int		i;
-	char	quote;
 
 	i = 0;
 	while ((*s)[i] && (*s)[i] != '|')
 	{
-		if ((*s)[i] == '$')
-			i = takevar(s, data, i);
-		if ((*s)[i] == 34 || (*s)[i] == 39)
+		if ((*s) && (*s)[i] == ' ' && ((*s)[i + 1] == ' '))
 		{
-			quote = (*s)[i];
-			if (check_second_qoute(*s, i, quote))
-			{
-				i = write_arg(&data->args, s, i, 0);
+			i = write_arg(&data->args, s, i, 0);
+			while ((*s) && (*s)[0] == ' ' && ((*s)[1] == ' '))
 				(*s)++;
-				i = check_quote(s, data, quote);
-			}
+			if ((*s) && (*s)[0] == ' ' && !(*s)[1])
+				return ;
 		}
+		i = vars_quote_check(data, s, i);
 		i++;
 	}
 	write_arg(&data->args, s, i, 0);
@@ -75,8 +90,8 @@ void	parser(t_data *data, char *s, char **env)
 		p = addelem(data, env);
 		while (*s && *s == ' ')
 			s++;
-		if (!ft_isalpha(*s))
-			exit (1);
+		// if (!ft_isalpha(*s))
+		// 	exit (1);
 		takecommand(p, &s);
 		takeflags(p, &s);
 		takeargs(p, &s);
