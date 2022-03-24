@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-void	minishell(t_data *data)
+void	minishell(t_data *data, char **env)
 {
 	char	*str;
 	int		i;
@@ -11,7 +11,7 @@ void	minishell(t_data *data)
 		str = readline(READLINE_RED "mini_hell$ " TERM_RESET);
 		if (!str)
 			return ;
-		parser(data, str);
+		parser(data, str, env);
 		add_history(str);
 		free(str);
 	}
@@ -24,6 +24,6 @@ int	main(int argc, char **argv, char **env)
 	data = NULL;
 	if (check_argv(argc, argv, env, data))
 		return (1);
-	minishell(data);
+	minishell(data, env);
 	return (0);
 }

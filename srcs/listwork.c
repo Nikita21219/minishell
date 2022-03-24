@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-t_data	*addelem(t_data *data)
+t_data	*addelem(t_data *data, char **env)
 {
 	t_data	*temp;
 	t_data	*p;
@@ -11,6 +11,7 @@ t_data	*addelem(t_data *data)
 	temp->args = NULL;
 	temp->comm = NULL;
 	temp->flags = NULL;
+	temp->env = env;
 	temp->next = NULL;
 	if (!data)
 		return (temp);

@@ -1,6 +1,6 @@
 NAME = libft.a
 HEADER = libft.h
-CC = gcc
+CC = cc
 SRC_DIR = srcs
 OBJDIR = objs
 HEADDIR = includes
@@ -12,7 +12,7 @@ FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(OBJDIR)/%.o :	$(SRC_DIR)/%.c $(HEADDIR)/$(HEADER)
-	@$(CC) $(FLAGS) -I $(HEADDIR)/$(HEADER) -c $< -o $@
+	@$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJDIR) $(OBJ)
 	@ar rcs $(NAME) $(OBJ)

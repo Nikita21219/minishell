@@ -51,23 +51,26 @@ void	takeargs(t_data *data, char **s)
 		if ((*s)[i] == 34 || (*s)[i] == 39)
 		{
 			quote = (*s)[i];
-			i = write_arg(data, s, i);
-			(*s)++;
-			i = check_quote(s, data, quote);
+			if (check_second_qoute(*s, i, quote))
+			{
+				i = write_arg(data, s, i);
+				(*s)++;
+				i = check_quote(s, data, quote);
+			}
 		}
 		i++;
 	}
 	write_arg(data, s, i);
 }
 
-void	parser(t_data *data, char *s)
+void	parser(t_data *data, char *s, char **env)
 {
 	t_data	*p;
 
 	data = NULL;
 	while (*s)
 	{
-		p = addelem(data);
+		p = addelem(data, env);
 		while (*s && *s == ' ')
 			s++;
 		if (!ft_isalpha(*s))
@@ -75,7 +78,10 @@ void	parser(t_data *data, char *s)
 		takecommand(p, &s);
 		takeflags(p, &s);
 		takeargs(p, &s);
+		printf("command = !%s!\n", p->comm);
+		printf("flags = !%s!\n", p->flags[0]);
+		printf("flags = !%s!\n", p->flags[1]);
 		printf("args = !%s!\n", p->args);
-		exit(1);
 	}
+	exit(1);
 }
