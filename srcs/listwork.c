@@ -34,6 +34,7 @@ void	delelem(t_data *data)
 			free(data->args[i++]);
 		free(data->args);
 		free(data->comm);
+		free(data->oper);
 		data = data->next;
 	}
 }

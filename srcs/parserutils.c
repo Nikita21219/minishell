@@ -24,26 +24,33 @@ int	operand(t_data	*data, char **s, int i)
 	return (1);
 }
 
-int	takevar(char **s, char **str, int i)
+int	takevar(char **s, char **str, int i, t_data *data)
 {
 	char	*tmp1;
 	char	*tmp2;
+	t_envr	*p;
 
 	write_arg(str, s, i, 0);
 	i = 0;
+	p = data->envr;
 	tmp1 = *str;
-	tmp2 = getenv("PWD");
-	while ((**s) && (**s) != ' ')
-	{
-		(*s)++;
+	while ((*s)[i] && (*s)[i] != ' ' && operand(data, s, i))
 		i++;
+	tmp2 = ft_substr(*s, 1, i - 1);
+	while (p && !is_same_lines(tmp2, p->key))
+		p = p->next;
+	while ((**s) && (**s) != ' ' && operand(data, s, i))
+		(*s)++;
+	if (is_same_lines(tmp2, p->key))
+	{
+		*str = ft_strjoin(tmp1, p->val);
+		free(tmp1);
 	}
-	*str = ft_strjoin(tmp1, tmp2);
-	free(tmp1);
+	free(tmp2);
 	return (-1);
 }
 
-int	check_quote(char **s, char **str, char quote)
+int	check_quote(char **s, char **str, char quote, t_data *data)
 {
 	int		i;
 
@@ -51,7 +58,7 @@ int	check_quote(char **s, char **str, char quote)
 	while ((*s)[i] && (*s)[i] != quote)
 	{
 		if (quote == 34 && (*s)[i] == '$')
-			takevar(s, str, i);
+			takevar(s, str, i, data);
 		i++;
 	}
 	i = write_arg(str, s, i, quote);

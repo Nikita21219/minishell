@@ -36,10 +36,10 @@ t_envr	*take_start_env(t_envr *env, char **envar);
 void	parser(t_data *data, char *s, t_envr *env);
 t_data	*addelem(t_data *data, t_envr *en);
 void	delelem(t_data *data);
-int		check_quote(char **s, char **str, char quote);
+int		check_quote(char **s, char **str, char quote, t_data *data);
 int		write_arg(char **arg, char **s, int i, char quote);
 int		check_second_qoute(char *s, int i, char quote);
-int		takevar(char **s, char **str, int i);
+int		takevar(char **s, char **str, int i, t_data *data);
 int		operand(t_data	*data, char **s, int i);
 int		is_same_lines(char *f_str, char *s_str);
 

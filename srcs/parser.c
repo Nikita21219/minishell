@@ -1,11 +1,11 @@
 #include "../includes/minishell.h"
 
-int	vars_quote_check(char **str, char **s, int i)
+int	vars_quote_check(char **str, char **s, int i, t_data *data)
 {
 	char	quote;
 
 	if ((*s)[i] == '$')
-		i = takevar(s, str, i);
+		i = takevar(s, str, i, data);
 	if ((*s)[i] == 34 || (*s)[i] == 39)
 	{
 		quote = (*s)[i];
@@ -13,7 +13,7 @@ int	vars_quote_check(char **str, char **s, int i)
 		{
 			i = write_arg(str, s, i, 0);
 			(*s)++;
-			i = check_quote(s, str, quote);
+			i = check_quote(s, str, quote, data);
 		}
 	}
 	return (i);
@@ -27,7 +27,7 @@ void	takecommand(t_data *data, char **s)
 	while ((*s)[i] && (*s)[i] != ' ' && operand(data, s, i))
 	{
 		if ((*s)[i] == 34 || (*s)[i] == 39)
-			i = vars_quote_check(&data->comm, s, i);
+			i = vars_quote_check(&data->comm, s, i, data);
 		i++;
 	}
 	write_arg(&data->comm, s, i, 0);
@@ -42,7 +42,7 @@ void	takeargs(t_data *data, char **s)
 	i = 0;
 	while ((*s)[i] && operand(data, s, i))
 	{
-		i = vars_quote_check(&data->args[a], s, i);
+		i = vars_quote_check(&data->args[a], s, i, data);
 		if (i < 0)
 			i = 0;
 		if ((*s)[i] == ' ')
