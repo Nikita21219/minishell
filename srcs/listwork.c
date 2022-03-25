@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-t_data	*addelem(t_data *data, char **env)
+t_data	*addelem(t_data *data, t_envr *en)
 {
 	t_data	*temp;
 	t_data	*p;
@@ -11,7 +11,7 @@ t_data	*addelem(t_data *data, char **env)
 	temp->args = NULL;
 	temp->comm = NULL;
 	temp->flags = NULL;
-	temp->env = env;
+	temp->envr = en;
 	temp->next = NULL;
 	if (!data)
 		return (temp);
@@ -36,4 +36,32 @@ void	delelem(t_data *data)
 		free(data->comm);
 		data = data->next;
 	}
+}
+
+t_envr	*take_start_env(t_envr *env, char **envar)
+{
+	t_envr	*temp;
+	int		i;
+	int		x;
+	int		a;
+
+	a = -1;
+	while (envar[++a])
+	{
+		i = 0;
+		temp = (t_envr *)malloc(sizeof(t_envr));
+		while (envar[a][i])
+		{
+			while (envar[a][i] && envar[a][i] != '=')
+				i++;
+			temp->key = ft_substr(envar[a], 0, i);
+			x = ++i;
+			while (envar[a][i])
+				i++;
+			temp->val = ft_substr(envar[a], x, i - x);
+		}
+		temp->next = env;
+		env = temp;
+	}
+	return (env);
 }

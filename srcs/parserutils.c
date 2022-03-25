@@ -1,25 +1,25 @@
 #include "../includes/minishell.h"
 
-int	takevar(char **s, t_data *data, int i)
+int	takevar(char **s, char **str, int i)
 {
 	char	*tmp1;
 	char	*tmp2;
 
-	write_arg(&data->args, s, i, 0);
+	write_arg(str, s, i, 0);
 	i = 0;
-	tmp1 = data->args;
+	tmp1 = *str;
 	tmp2 = getenv("PWD");
 	while ((**s) && (**s) != ' ')
 	{
 		(*s)++;
 		i++;
 	}
-	data->args = ft_strjoin(tmp1, tmp2);
+	*str = ft_strjoin(tmp1, tmp2);
 	free(tmp1);
 	return (-1);
 }
 
-int	check_quote(char **s, t_data *data, char quote)
+int	check_quote(char **s, char **str, char quote)
 {
 	int		i;
 
@@ -27,10 +27,10 @@ int	check_quote(char **s, t_data *data, char quote)
 	while ((*s)[i] && (*s)[i] != quote)
 	{
 		if (quote == 34 && (*s)[i] == '$')
-			takevar(s, data, i);
+			takevar(s, str, i);
 		i++;
 	}
-	i = write_arg(&data->args, s, i, quote);
+	i = write_arg(str, s, i, quote);
 	return (i);
 }
 

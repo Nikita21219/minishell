@@ -6,7 +6,7 @@
 /*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 13:57:50 by rrast             #+#    #+#             */
-/*   Updated: 2022/03/17 12:41:01 by rrast            ###   ########.fr       */
+/*   Updated: 2022/03/25 10:13:15 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *str)
 	size_t	i;
 
 	i = 0;
+	if (!*str)
+		return (0);
 	while (str[i] != '\0')
 		i++;
 	return (i);
