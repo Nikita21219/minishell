@@ -1,5 +1,29 @@
 #include "../includes/minishell.h"
 
+int	operand(t_data	*data, char **s, int i)
+{
+	int	a;
+
+	a = 0;
+	if ((*s)[i] == '<')
+	{
+		if ((*s)[i] == (*s)[i + 1])
+			a++;
+		data->oper = ft_substr(*s, i, ++a);
+	}
+	if ((*s)[i] == '>')
+	{
+		if ((*s)[i] == (*s)[i + 1])
+			a++;
+		data->oper = ft_substr(*s, i, ++a);
+	}
+	if ((*s)[i] == '|')
+		data->oper = ft_substr(*s, i, ++a);
+	if (a > 0)
+		return (0);
+	return (1);
+}
+
 int	takevar(char **s, char **str, int i)
 {
 	char	*tmp1;
@@ -52,8 +76,6 @@ int	write_arg(char **arg, char **s, int i, char quote)
 	if (quote)
 		i++;
 	while (i--)
-		(*s)++;
-	if ((**s) == '|')
 		(*s)++;
 	return (i);
 }

@@ -25,6 +25,7 @@ typedef struct s_data
 {
 	char			*comm;
 	char			**args;
+	char			*oper;
 	struct s_envr	*envr;
 	struct s_data	*next;
 }	t_data;
@@ -39,5 +40,7 @@ int		check_quote(char **s, char **str, char quote);
 int		write_arg(char **arg, char **s, int i, char quote);
 int		check_second_qoute(char *s, int i, char quote);
 int		takevar(char **s, char **str, int i);
+int		operand(t_data	*data, char **s, int i);
+int		is_same_lines(char *f_str, char *s_str);
 
 #endif

@@ -24,9 +24,7 @@ void	takecommand(t_data *data, char **s)
 	int		i;
 
 	i = 0;
-	while ((*s)[i] && (*s)[i] == ' ')
-		i++;
-	while ((*s)[i] && (*s)[i] != ' ')
+	while ((*s)[i] && (*s)[i] != ' ' && operand(data, s, i))
 	{
 		if ((*s)[i] == 34 || (*s)[i] == 39)
 			i = vars_quote_check(&data->comm, s, i);
@@ -35,51 +33,32 @@ void	takecommand(t_data *data, char **s)
 	write_arg(&data->comm, s, i, 0);
 }
 
-void	takeflags(t_data *data, char **s)
-{
-	int		i;
-	char	*str;
-	char	*tmp;
-
-	i = 0;
-	str = *s;
-	while (str[i] && (str[i] == '-' || str[i] == ' '))
-	{
-		while (str[i] && str[i] != ' ')
-			i++;
-		i++;
-	}
-	tmp = ft_substr(str, 0, i);
-	data->flags = ft_split(tmp, ' ');
-	free(tmp);
-	while (i--)
-		(*s)++;
-}
-
 void	takeargs(t_data *data, char **s)
 {
-	int		i;
+	int	i;
+	int	a;
 
+	a = 1;
 	i = 0;
-	while ((*s)[i] && (*s)[i] != '|')
+	while ((*s)[i] && operand(data, s, i))
 	{
-		if ((*s) && (*s)[i] == ' ' && ((*s)[i + 1] == ' '))
+		i = vars_quote_check(&data->args[a], s, i);
+		if (i < 0)
+			i = 0;
+		if ((*s)[i] == ' ')
 		{
-			i = write_arg(&data->args, s, i, 0);
-			while ((*s) && (*s)[0] == ' ' && ((*s)[1] == ' '))
+			i = write_arg(&data->args[a], s, i, 0);
+			while ((*s)[0] && (*s)[0] == ' ')
 				(*s)++;
-			if ((*s) && (*s)[0] == ' ' && !(*s)[1])
-				return ;
+			a++;
 		}
-		i = vars_quote_check(&data->args, s, i);
 		i++;
 	}
-	write_arg(&data->args, s, i, 0);
-	if (!ft_strlen(data->args))
-	{
-		free(data->args);
-		data->args = NULL;
-	}
+	if (i > 0)
+		write_arg(&data->args[a++], s, i, 0);
+	if ((*s)[0])
+		(*s)++;
+	data->args[a] = NULL;
 }
 
 void	parser(t_data *data, char *s, t_envr *env)
@@ -93,11 +72,15 @@ void	parser(t_data *data, char *s, t_envr *env)
 		while (*s && *s == ' ')
 			s++;
 		takecommand(p, &s);
-		takeflags(p, &s);
+		while (*s && *s == ' ')
+			s++;
 		takeargs(p, &s);
 		printf("command = !%s!\n", p->comm);
-		printf("flags = !%s!\n", p->flags[0]);
-		printf("args = !%s!\n", p->args);
+		printf("args = !%s!\n", p->args[0]);
+		printf("args = !%s!\n", p->args[1]);
+		printf("args = !%s!\n", p->args[2]);
+		printf("args = !%s!\n", p->args[3]);
+		printf("oper = !%s!\n", p->oper);
 	}
 	exit(1);
 }

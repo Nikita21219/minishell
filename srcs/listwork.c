@@ -8,10 +8,11 @@ t_data	*addelem(t_data *data, t_envr *en)
 	temp = (t_data *)malloc(sizeof(t_data));
 	if (!temp)
 		return (NULL);
-	temp->args = NULL;
+	temp->args = (char **)malloc(sizeof(char *) * 100);
+	temp->args[0] = ft_strdup("./minishell");
 	temp->comm = NULL;
-	temp->flags = NULL;
 	temp->envr = en;
+	temp->oper = NULL;
 	temp->next = NULL;
 	if (!data)
 		return (temp);
@@ -29,9 +30,8 @@ void	delelem(t_data *data)
 	i = 0;
 	while (data)
 	{
-		while (data->flags[i])
-			free(data->flags[i++]);
-		free(data->flags);
+		while (data->args[i])
+			free(data->args[i++]);
 		free(data->args);
 		free(data->comm);
 		data = data->next;
