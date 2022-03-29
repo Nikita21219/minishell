@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int	operand(t_data	*data, char **s, int i)
+int	operand(t_comm	*data, char **s, int i)
 {
 	int	a;
 
@@ -19,38 +19,45 @@ int	operand(t_data	*data, char **s, int i)
 	}
 	if ((*s)[i] == '|')
 		data->oper = ft_substr(*s, i, ++a);
+	if (a > 0 && !data->oper)
+		error_mes_with_exit("Error malloc\n", data->data);
 	if (a > 0)
 		return (0);
 	return (1);
 }
 
-int	takevar(char **s, char **str, int i, t_data *data)
+int	takevar(char **s, char **str, int i, t_comm *data)
 {
 	char	*tmp1;
 	char	*tmp2;
 	t_envr	*p;
 
-	write_arg(str, s, i, 0);
+	if (write_arg(str, s, i, 0) == -100)
+		error_mes_with_exit("Error malloc\n", data->data);
 	i = 0;
-	p = data->envr;
+	p = data->data->env;
 	tmp1 = *str;
-	while ((*s)[i] && (*s)[i] != ' ' && operand(data, s, i))
+	while ((*s)[i] && (*s)[i] != ' ' && (*s)[i] != 34 && operand(data, s, i))
 		i++;
 	tmp2 = ft_substr(*s, 1, i - 1);
+	if (!tmp2)
+		error_mes_with_exit("Error malloc\n", data->data);
 	while (p && !is_same_lines(tmp2, p->key))
 		p = p->next;
 	while ((**s) && (**s) != ' ' && operand(data, s, i))
 		(*s)++;
-	if (is_same_lines(tmp2, p->key))
+	if (p && is_same_lines(tmp2, p->key))
 	{
 		*str = ft_strjoin(tmp1, p->val);
 		free(tmp1);
+		if (!(*str))
+			error_mes_with_exit("Error malloc\n", data->data);
 	}
 	free(tmp2);
 	return (-1);
 }
 
-int	check_quote(char **s, char **str, char quote, t_data *data)
+int	check_quote(char **s, char **str, char quote, t_comm *data)
 {
 	int		i;
 
@@ -62,6 +69,8 @@ int	check_quote(char **s, char **str, char quote, t_data *data)
 		i++;
 	}
 	i = write_arg(str, s, i, quote);
+	if (i == -100)
+		error_mes_with_exit("Error malloc\n", data->data);
 	return (i);
 }
 
@@ -78,7 +87,11 @@ int	write_arg(char **arg, char **s, int i, char quote)
 		tmp2 = ft_substr(*s, 0, i);
 		*arg = ft_strjoin(tmp1, tmp2);
 		free(tmp1);
+		if (!tmp2)
+			return (-100);
 		free(tmp2);
+		if (!(*arg))
+			return (-100);
 	}
 	if (quote)
 		i++;

@@ -1,45 +1,70 @@
 #include "../includes/minishell.h"
 
-t_data	*addelem(t_data *data, t_envr *en)
+t_comm	*addelem(t_data *data)
 {
-	t_data	*temp;
-	t_data	*p;
+	t_comm	*temp;
+	t_comm	*p;
 
-	temp = (t_data *)malloc(sizeof(t_data));
+	temp = (t_comm *)malloc(sizeof(t_comm));
 	if (!temp)
 		return (NULL);
 	temp->args = (char **)malloc(sizeof(char *) * 100);
 	temp->args[0] = ft_strdup("./minishell");
 	temp->comm = NULL;
-	temp->envr = en;
 	temp->oper = NULL;
+	temp->data = data;
 	temp->next = NULL;
-	if (!data)
+	if (!data->comm)
+	{
+		data->comm = temp;
 		return (temp);
-	p = data;
+	}
+	p = data->comm;
 	while (p->next)
 		p = p->next;
 	p->next = temp;
 	return (temp);
 }
 
-void	delelem(t_data *data)
+void	delcommand(t_comm **comm)
 {
-	int	i;
+	int		i;
+	t_comm	*p;
 
-	i = 0;
-	while (data)
+	while (*comm)
 	{
-		while (data->args[i])
-			free(data->args[i++]);
-		free(data->args);
-		free(data->comm);
-		free(data->oper);
-		data = data->next;
+		i = 0;
+		while ((*comm)->args[i])
+			free((*comm)->args[i++]);
+		if ((*comm)->args)
+			free((*comm)->args);
+		if ((*comm)->comm)
+			free((*comm)->comm);
+		if ((*comm)->oper)
+			free((*comm)->oper);
+		p = *comm;
+		*comm = (*comm)->next;
+		free(p);
 	}
 }
 
-t_envr	*take_start_env(t_envr *env, char **envar)
+void	delenv(t_envr **env)
+{
+	t_envr	*p;
+
+	while (*env)
+	{
+		if ((*env)->key)
+			free((*env)->key);
+		if ((*env)->val)
+			free((*env)->val);
+		p = *env;
+		*env = (*env)->next;
+		free (p);
+	}
+}
+
+void	take_start_env(t_data *data, char **envar)
 {
 	t_envr	*temp;
 	int		i;
@@ -51,6 +76,8 @@ t_envr	*take_start_env(t_envr *env, char **envar)
 	{
 		i = 0;
 		temp = (t_envr *)malloc(sizeof(t_envr));
+		if (!temp)
+			error_mes_with_exit("Error malloc\n", data);
 		while (envar[a][i])
 		{
 			while (envar[a][i] && envar[a][i] != '=')
@@ -60,9 +87,10 @@ t_envr	*take_start_env(t_envr *env, char **envar)
 			while (envar[a][i])
 				i++;
 			temp->val = ft_substr(envar[a], x, i - x);
+			if (!temp->key || !temp->val)
+				error_mes_with_exit("Error malloc\n", data);
 		}
-		temp->next = env;
-		env = temp;
+		temp->next = data->env;
+		data->env = temp;
 	}
-	return (env);
 }

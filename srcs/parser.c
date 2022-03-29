@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int	vars_quote_check(char **str, char **s, int i, t_data *data)
+int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 {
 	char	quote;
 
@@ -12,6 +12,8 @@ int	vars_quote_check(char **str, char **s, int i, t_data *data)
 		if (check_second_qoute(*s, i, quote))
 		{
 			i = write_arg(str, s, i, 0);
+			if (i == -100)
+				error_mes_with_exit("Error malloc\n", data->data);
 			(*s)++;
 			i = check_quote(s, str, quote, data);
 		}
@@ -19,7 +21,7 @@ int	vars_quote_check(char **str, char **s, int i, t_data *data)
 	return (i);
 }
 
-void	takecommand(t_data *data, char **s)
+void	takecommand(t_comm *data, char **s)
 {
 	int		i;
 
@@ -30,10 +32,11 @@ void	takecommand(t_data *data, char **s)
 			i = vars_quote_check(&data->comm, s, i, data);
 		i++;
 	}
-	write_arg(&data->comm, s, i, 0);
+	if (write_arg(&data->comm, s, i, 0) == -100)
+		error_mes_with_exit("Error malloc\n", data->data);
 }
 
-void	takeargs(t_data *data, char **s)
+void	takeargs(t_comm *data, char **s)
 {
 	int	i;
 	int	a;
@@ -48,6 +51,8 @@ void	takeargs(t_data *data, char **s)
 		if ((*s)[i] == ' ')
 		{
 			i = write_arg(&data->args[a], s, i, 0);
+			if (i == -100)
+				error_mes_with_exit("Error malloc\n", data->data);
 			while ((*s)[0] && (*s)[0] == ' ')
 				(*s)++;
 			a++;
@@ -55,32 +60,43 @@ void	takeargs(t_data *data, char **s)
 		i++;
 	}
 	if (i > 0)
-		write_arg(&data->args[a++], s, i, 0);
+		if (write_arg(&data->args[a++], s, i, 0) == -100)
+			error_mes_with_exit("Error malloc\n", data->data);
 	if ((*s)[0])
 		(*s)++;
 	data->args[a] = NULL;
 }
 
-void	parser(t_data *data, char *s, t_envr *env)
+void	parser(t_data *data)
 {
-	t_data	*p;
+	t_comm	*p;
+	char	*str;
 
-	data = NULL;
-	while (*s)
+	str = data->instr;
+	while (*str)
 	{
-		p = addelem(data, env);
-		while (*s && *s == ' ')
-			s++;
-		takecommand(p, &s);
-		while (*s && *s == ' ')
-			s++;
-		takeargs(p, &s);
-		printf("command = !%s!\n", p->comm);
-		printf("args = !%s!\n", p->args[0]);
-		printf("args = !%s!\n", p->args[1]);
-		printf("args = !%s!\n", p->args[2]);
-		printf("args = !%s!\n", p->args[3]);
-		printf("oper = !%s!\n", p->oper);
+		p = addelem(data);
+		if (!p)
+			error_mes_with_exit("Error malloc\n", data);
+		while (*str && *str == ' ')
+			str++;
+		takecommand(p, &str);
+		while (*str && *str == ' ')
+			str++;
+		takeargs(p, &str);
 	}
-	exit(1);
+	p = data->comm;
+	while (p)
+	{
+		printf("com: %s\n", p->comm);
+		printf("arg: %s\n", p->args[0]);
+		printf("arg: %s\n", p->args[1]);
+		printf("arg: %s\n", p->args[2]);
+		printf("oper: %s\n", p->oper);
+		if (p->oper && !p->next)
+			error_mes_with_exit("Error: There is no \
+			command after the operator\n", data);
+		else
+			p = p->next;
+	}
 }
