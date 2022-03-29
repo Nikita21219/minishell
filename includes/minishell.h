@@ -59,5 +59,6 @@ void	exit_from_minishell(void);
 void	launcher(t_comm *data, char **env);
 int		get_cout_comm(t_comm *data);
 int		create_pipes(int **fd, int count_comm);
+int		ft_space(char str);
 
 #endif

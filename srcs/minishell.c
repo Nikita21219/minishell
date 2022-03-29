@@ -29,12 +29,13 @@ void	minishell(t_data *data, char **env)
 		data->instr = readline(READLINE_RED "mini_hell$ " TERM_RESET);
 		if (!data->instr)
 			return ;
+		add_history(data->instr);
 		parser(data);
 		// tmp_print_arg_after_parser(data->comm); //TODO del
 		launcher(data->comm, env);
-		add_history(data->instr);
 		freedata(data);
 	}
+	freedata(data);
 }
 
 int	main(int argc, char **argv, char **env)

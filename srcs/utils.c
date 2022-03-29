@@ -66,3 +66,12 @@ int	create_pipes(int **fd, int count_comm)
 	}
 	return (0);
 }
+
+int	ft_space(char str)
+{
+	if (str == ' ' || str == '\f' || str == '\n')
+		return (1);
+	if (str == '\r' || str == '\t' || str == '\v')
+		return (1);
+	return (0);
+}
