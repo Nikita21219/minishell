@@ -10,6 +10,8 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <dirent.h>
+# include <fcntl.h>
 
 # include "color.h"
 # include "../libft/includes/libft.h"
@@ -23,6 +25,7 @@ typedef struct s_envr
 
 typedef struct s_comm
 {
+	int				*fd;
 	char			*comm;
 	char			**args;
 	char			*oper;
@@ -51,5 +54,10 @@ int		operand(t_comm	*data, char **s, int i);
 int		is_same_lines(char *f_str, char *s_str);
 void	delenv(t_envr **env);
 void	freedata(t_data *data);
+int		command_in_bin(char *command);
+void	exit_from_minishell(void);
+void	launcher(t_comm *data, char **env);
+int		get_cout_comm(t_comm *data);
+int		create_pipes(int **fd, int count_comm);
 
 #endif

@@ -32,3 +32,37 @@ void	freedata(t_data *data)
 	delcommand(&data->comm);
 	free(data->instr);
 }
+
+void	exit_from_minishell(void)
+{
+	printf("Fail from 'exit_from_minishell'\n");
+	exit(1);
+	return ;
+}
+
+int	get_cout_comm(t_comm *data)
+{
+	int	count;
+
+	count = 0;
+	while (data)
+	{
+		count++;
+		data = data->next;
+	}
+	return (count);
+}
+
+int	create_pipes(int **fd, int count_comm)
+{
+	int	i;
+
+	i = 0;
+	while (i < count_comm)
+	{
+		if (pipe(*(fd + i)) == -1)
+			return (1);
+		i += 2;
+	}
+	return (0);
+}

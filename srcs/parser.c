@@ -88,11 +88,6 @@ void	parser(t_data *data)
 	p = data->comm;
 	while (p)
 	{
-		printf("com: %s\n", p->comm);
-		printf("arg: %s\n", p->args[0]);
-		printf("arg: %s\n", p->args[1]);
-		printf("arg: %s\n", p->args[2]);
-		printf("oper: %s\n", p->oper);
 		if (p->oper && !p->next)
 			error_mes_with_exit("Error: There is no \
 			command after the operator\n", data);

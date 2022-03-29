@@ -1,5 +1,24 @@
 #include "../includes/minishell.h"
 
+void	tmp_print_arg_after_parser(t_comm *data)
+{
+	int j;
+
+	int i = 0;
+	int cout_comm = get_cout_comm(data);
+	while (i < cout_comm)
+	{
+		j = -1;
+		printf("command: %s\n", data->comm);
+		while (data->args[++j])
+			printf("data args %d: %s\n", j, data->args[j]);
+		printf("oper: %s\n", data->oper);
+		printf("\n\n");
+		i++;
+		data = data->next;
+	}
+}
+
 void	minishell(t_data *data, char **env)
 {
 	take_start_env(data, env);
@@ -11,6 +30,8 @@ void	minishell(t_data *data, char **env)
 		if (!data->instr)
 			return ;
 		parser(data);
+		// tmp_print_arg_after_parser(data->comm); //TODO del
+		launcher(data->comm, env);
 		add_history(data->instr);
 		freedata(data);
 	}
@@ -25,3 +46,5 @@ int	main(int argc, char **argv, char **env)
 	minishell(&data, env);
 	return (0);
 }
+
+// cat test.txt | grep developer | wc
