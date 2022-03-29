@@ -32,3 +32,12 @@ void	freedata(t_data *data)
 	delcommand(&data->comm);
 	free(data->instr);
 }
+
+int	ft_space(char str)
+{
+	if (str == ' ' || str == '\f' || str == '\n')
+		return (1);
+	if (str == '\r' || str == '\t' || str == '\v')
+		return (1);
+	return (0);
+}

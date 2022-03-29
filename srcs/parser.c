@@ -6,6 +6,8 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 
 	if ((*s)[i] == '$')
 		i = takevar(s, str, i, data);
+	if (i < 0)
+		i = 0;
 	if ((*s)[i] == 34 || (*s)[i] == 39)
 	{
 		quote = (*s)[i];
@@ -26,11 +28,11 @@ void	takecommand(t_comm *data, char **s)
 	int		i;
 
 	i = 0;
-	while ((*s)[i] && (*s)[i] != ' ' && operand(data, s, i))
+	while ((*s)[i] && !ft_space((*s)[i]) && operand(data, s, i))
 	{
-		if ((*s)[i] == 34 || (*s)[i] == 39)
-			i = vars_quote_check(&data->comm, s, i, data);
-		i++;
+		i = vars_quote_check(&data->comm, s, i, data);
+		if (i >= 0)
+			i++;
 	}
 	if (write_arg(&data->comm, s, i, 0) == -100)
 		error_mes_with_exit("Error malloc\n", data->data);
@@ -42,20 +44,22 @@ void	takeargs(t_comm *data, char **s)
 	int	a;
 
 	a = 1;
+	data->args[a] = NULL;
 	i = 0;
 	while ((*s)[i] && operand(data, s, i))
 	{
 		i = vars_quote_check(&data->args[a], s, i, data);
 		if (i < 0)
 			i = 0;
-		if ((*s)[i] == ' ')
+		if (ft_space((*s)[i]))
 		{
 			i = write_arg(&data->args[a], s, i, 0);
 			if (i == -100)
 				error_mes_with_exit("Error malloc\n", data->data);
-			while ((*s)[0] && (*s)[0] == ' ')
+			while ((*s)[0] && ft_space((*s)[0]))
 				(*s)++;
 			a++;
+			data->args[a] = NULL;
 		}
 		i++;
 	}
@@ -75,13 +79,17 @@ void	parser(t_data *data)
 	str = data->instr;
 	while (*str)
 	{
+		while (*str && ft_space(*str))
+			str++;
+		if (!(*str))
+			break ;
 		p = addelem(data);
 		if (!p)
 			error_mes_with_exit("Error malloc\n", data);
-		while (*str && *str == ' ')
+		while (*str && ft_space(*str))
 			str++;
 		takecommand(p, &str);
-		while (*str && *str == ' ')
+		while (*str && ft_space(*str))
 			str++;
 		takeargs(p, &str);
 	}
@@ -94,8 +102,8 @@ void	parser(t_data *data)
 		printf("arg: %s\n", p->args[2]);
 		printf("oper: %s\n", p->oper);
 		if (p->oper && !p->next)
-			error_mes_with_exit("Error: There is no \
-			command after the operator\n", data);
+			error_mes_with_exit(\
+			"Error: There is no command after the operator\n", data);
 		else
 			p = p->next;
 	}

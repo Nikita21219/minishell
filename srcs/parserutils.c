@@ -37,14 +37,21 @@ int	takevar(char **s, char **str, int i, t_comm *data)
 	i = 0;
 	p = data->data->env;
 	tmp1 = *str;
-	while ((*s)[i] && (*s)[i] != ' ' && (*s)[i] != 34 && operand(data, s, i))
+	(*s)++;
+	if (ft_isdigit(**s))
+	{
+		while ((**s) && ft_isdigit(**s))
+			(*s)++;
+		return (-1);
+	}
+	while ((*s)[i] && (((*s)[i] > 64 && (*s)[i] < 91) || (*s)[i] == '_'))
 		i++;
-	tmp2 = ft_substr(*s, 1, i - 1);
+	tmp2 = ft_substr(*s, 0, i);
 	if (!tmp2)
 		error_mes_with_exit("Error malloc\n", data->data);
 	while (p && !is_same_lines(tmp2, p->key))
 		p = p->next;
-	while ((**s) && (**s) != ' ' && operand(data, s, i))
+	while (i--)
 		(*s)++;
 	if (p && is_same_lines(tmp2, p->key))
 	{
@@ -65,7 +72,7 @@ int	check_quote(char **s, char **str, char quote, t_comm *data)
 	while ((*s)[i] && (*s)[i] != quote)
 	{
 		if (quote == 34 && (*s)[i] == '$')
-			takevar(s, str, i, data);
+			i = takevar(s, str, i, data);
 		i++;
 	}
 	i = write_arg(str, s, i, quote);
@@ -79,20 +86,20 @@ int	write_arg(char **arg, char **s, int i, char quote)
 	char	*tmp1;
 	char	*tmp2;
 
-	if (!(*arg))
+	if (!ft_strlen(*arg))
 		*arg = ft_substr(*s, 0, i);
 	else
 	{
 		tmp1 = *arg;
 		tmp2 = ft_substr(*s, 0, i);
-		*arg = ft_strjoin(tmp1, tmp2);
-		free(tmp1);
 		if (!tmp2)
 			return (-100);
+		*arg = ft_strjoin(tmp1, tmp2);
+		free(tmp1);
 		free(tmp2);
-		if (!(*arg))
-			return (-100);
 	}
+	if (!(*arg))
+		return (-100);
 	if (quote)
 		i++;
 	while (i--)

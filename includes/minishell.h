@@ -51,5 +51,6 @@ int		operand(t_comm	*data, char **s, int i);
 int		is_same_lines(char *f_str, char *s_str);
 void	delenv(t_envr **env);
 void	freedata(t_data *data);
+int		ft_space(char str);
 
 #endif

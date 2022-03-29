@@ -34,16 +34,18 @@ void	delcommand(t_comm **comm)
 	while (*comm)
 	{
 		i = 0;
-		while ((*comm)->args[i])
-			free((*comm)->args[i++]);
-		if ((*comm)->args)
-			free((*comm)->args);
-		if ((*comm)->comm)
-			free((*comm)->comm);
-		if ((*comm)->oper)
-			free((*comm)->oper);
 		p = *comm;
-		*comm = (*comm)->next;
+		*comm = p->next;
+		while (p->args[i])
+		{
+			free(p->args[i]);
+			p->args[i++] = NULL;
+		}
+		free(p->args);
+		if (p->comm)
+			free(p->comm);
+		if (p->oper)
+			free(p->oper);
 		free(p);
 	}
 }

@@ -10,10 +10,11 @@ void	minishell(t_data *data, char **env)
 		data->instr = readline(READLINE_RED "mini_hell$ " TERM_RESET);
 		if (!data->instr)
 			return ;
-		parser(data);
 		add_history(data->instr);
+		parser(data);
 		freedata(data);
 	}
+	freedata(data);
 }
 
 int	main(int argc, char **argv, char **env)
