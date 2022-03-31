@@ -5,7 +5,7 @@ void	tmp_print_arg_after_parser(t_comm *data)
 	int j;
 
 	int i = 0;
-	int cout_comm = get_cout_comm(data);
+	int cout_comm = get_count_comm(data);
 	while (i < cout_comm)
 	{
 		j = -1;
@@ -31,7 +31,7 @@ void	minishell(t_data *data, char **env)
 			return ;
 		add_history(data->instr);
 		parser(data);
-		// tmp_print_arg_after_parser(data->comm); //TODO del
+		add_ptr_prev_to_data(data->comm);
 		launcher(data->comm, env);
 		freedata(data);
 	}
@@ -45,6 +45,7 @@ int	main(int argc, char **argv, char **env)
 	if (check_argv(argc, argv, env, &data))
 		return (1);
 	minishell(&data, env);
+
 	return (0);
 }
 

@@ -40,7 +40,7 @@ void	exit_from_minishell(void)
 	return ;
 }
 
-int	get_cout_comm(t_comm *data)
+int	get_count_comm(t_comm *data)
 {
 	int	count;
 
@@ -53,19 +53,19 @@ int	get_cout_comm(t_comm *data)
 	return (count);
 }
 
-int	create_pipes(int **fd, int count_comm)
-{
-	int	i;
+// int	create_pipes(int *fd, int count_comm)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < count_comm)
-	{
-		if (pipe(*(fd + i)) == -1)
-			return (1);
-		i += 2;
-	}
-	return (0);
-}
+// 	i = 0;
+// 	while (i < count_comm)
+// 	{
+// 		if (pipe(fd + i) == -1)
+// 			return (1);
+// 		i += 2;
+// 	}
+// 	return (0);
+// }
 
 int	ft_space(char str)
 {
