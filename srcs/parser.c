@@ -83,14 +83,8 @@ int	parser(t_data *data)
 		takeargs(p, &str);
 	}
 	p = data->comm;
-	int i;
 	while (p)
 	{
-		i = 0;
-		printf("com: %s\n", p->comm);
-		while (p->args[i])
-			printf("arg: %s\n", p->args[i++]);
-		printf("oper: %s\n", p->oper);
 		if (!p->comm || (p->oper && !p->next))
 		{
 			printf("Parse error\n");
