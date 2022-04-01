@@ -59,9 +59,8 @@ int		command_in_bin(char *command);
 void	exit_from_minishell(void);
 void	launcher(t_comm *data, char **env);
 int		get_count_comm(t_comm *data);
-int		create_pipes(int *fd, int count_comm);
 int		ft_space(char str);
-int		push_fds_in_data(t_comm *data);
+int		create_pipes(t_comm *data);
 void	add_ptr_prev_to_data(t_comm *data);
 void	close_fd(t_comm *data);
 

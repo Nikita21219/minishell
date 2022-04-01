@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int	push_fds_in_data(t_comm *data)
+int	create_pipes(t_comm *data)
 {
 	int	i;
 
@@ -30,14 +30,15 @@ void	close_fd(t_comm *data)
 		data = data->prev;
 	while (data->next)
 	{
+		// printf("command = %s fd=%d\n", data->comm, data->fd[0]);
 		if (close(data->fd[0]) == -1)
 		{
-			printf("FAIL close %d\n", errno);
+			printf("FAIL close 1 errno=%d\n", errno);
 			exit(1); //FIXME
 		}
 		if (close(data->fd[1]) == -1)
 		{
-			printf("FAIL close %d\n", errno);
+			printf("FAIL close 2 errno=%d\n", errno);
 			exit(1); //FIXME
 		}
 		data = data->next;

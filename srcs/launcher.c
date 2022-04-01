@@ -91,9 +91,10 @@ int	duplicate_fd(t_comm *data, int idx, int count_comm)
 
 void	executor(t_comm *data, char *path, char **env, int count_comm)
 {
-	static int	i = 0;
+	static int	i = -1;
 	int	pid;
 
+	i++;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -103,14 +104,13 @@ void	executor(t_comm *data, char *path, char **env, int count_comm)
 	else if (pid == 0)
 	{
 		duplicate_fd(data, i, count_comm);
-		// close_fd(data);
+		close_fd(data);
 		if (execve(path, data->args, env) == -1)
 		{
 			printf(TERM_YELLOW "FAIL execve %d\n", errno);
 			exit(1); //FIXME
 		}
 	}
-	i++;
 	close_fd(data);
 	waitpid(pid, NULL, 0);
 }
@@ -217,7 +217,7 @@ void	launcher(t_comm *data, char **env)
 	count_command = get_count_comm(data);
 	if (count_command == 0)
 		return ;
-	if (push_fds_in_data(data))
+	if (create_pipes(data))
 		exit_from_minishell(); //FIXME
 	// tmp_test_func(data, env);
 	// exit(0)
