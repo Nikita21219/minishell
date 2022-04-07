@@ -22,7 +22,11 @@ int	operand(t_comm	*data, char **s, int i)
 	if (a > 0 && !data->oper)
 		error_mes_with_exit("Error malloc\n", data->data);
 	if (a > 0)
+	{
+		while (--a)
+			(*s)++;
 		return (0);
+	}
 	return (1);
 }
 

@@ -46,7 +46,7 @@ void	takeargs(t_comm *data, char **s)
 	a = 1;
 	data->args[a] = NULL;
 	i = 0;
-	while ((*s)[i] && operand(data, s, i))
+	while ((*s)[i] && !data->oper)
 	{
 		while ((*s)[i] && !ft_space((*s)[i]) && operand(data, s, i))
 			i = vars_quote_check(&data->args[a], s, i, data);
@@ -83,15 +83,23 @@ int	parser(t_data *data)
 		takeargs(p, &str);
 	}
 	p = data->comm;
+	int i;
 	while (p)
 	{
-		if (!p->comm || (p->oper && !p->next))
+		i = 0;
+		printf("comm: %s\n", p->comm);
+		while (p->args[i])
+			printf("args: %s\n", p->args[i++]);
+		printf("opr: %s\n", p->oper);
+		if ((!p->comm && !(is_same_lines(p->oper, ">") || \
+		is_same_lines(p->oper, ">>") || is_same_lines(p->oper, "<") \
+		|| is_same_lines(p->oper, "<<"))) || (p->oper && !p->next))
 		{
 			printf("Parse error\n");
-			return (0);
+			return (1);
 		}
 		else
 			p = p->next;
 	}
-	return (1);
+	return (0);
 }

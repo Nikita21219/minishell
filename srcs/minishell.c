@@ -11,7 +11,8 @@ void	minishell(t_data *data, char **env)
 		if (!data->instr)
 			return ;
 		add_history(data->instr);
-		parser(data);
+		if (!parser(data))
+			commkjbjkbjhbjhbhbhbjhbhjbbhjbhbjbjhbhjhbjhbgfcdrxreyrduyvvbjh,bghkvgfcdxerdytfygbbjkbhjjhbhgvhgvhgkv
 		freedata(data);
 	}
 	freedata(data);

@@ -16,7 +16,7 @@ $(OBJDIR)/%.o :	$(SRCDIR)/%.c $(HEADDIR)/$(HEADER)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	$(OBJDIR) $(OBJ)
-	@$(CC) $(CFLAGS) -o $(NAME) $(LIBFT_DIR)/libft.a -I $(HEADER) $(OBJ) -lreadline
+	@$(CC) $(CFLAGS) -o $(NAME) $(LIBFT_DIR)libft.a -I $(HEADER) $(OBJ) -lreadline
 	@echo "\033[32mminishell compile"
 
 $(OBJDIR):
