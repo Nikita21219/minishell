@@ -30,7 +30,8 @@ int	is_same_lines(char *f_str, char *s_str)
 void	freedata(t_data *data)
 {
 	delcommand(&data->comm);
-	free(data->instr);
+	if (data->instr)
+		free(data->instr);
 }
 
 void	exit_from_minishell(void)

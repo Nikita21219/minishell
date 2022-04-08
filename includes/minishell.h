@@ -64,5 +64,9 @@ int		ft_space(char str);
 int		create_pipes(t_comm *data);
 void	add_ptr_prev_to_data(t_comm *data);
 void	close_fd(t_comm *data);
+int		is_correct_comm(char *comm, char **dirs);
+void	free_arrs(char **arr);
+char	*get_path_to_comm(char	**comm_split);
+char	*ft_strjoin_mod(char const *s1, char const *s2);
 
 #endif

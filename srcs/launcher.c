@@ -14,15 +14,19 @@ int	read_directory(DIR *dir, char *command)
 	return (0);
 }
 
-char	*three_str_join(char *dir, char *sep, char *comm)
+char	*three_str_join(char *dir, char *sep, char *comm, char **dirs)
 {
 	char	*res;
 	char	*dir_and_sep;
+	char	*ptr_to_free;
 
-	dir_and_sep = ft_strjoin(dir, sep);
+	dir_and_sep = ft_strjoin(dir, sep); //FIXME
 	if (!dir_and_sep)
 		return (NULL);
-	res = ft_strjoin(dir_and_sep, comm);
+	ptr_to_free = dir_and_sep;
+	res = ft_strjoin(dir_and_sep, comm); //FIXME
+	free(ptr_to_free);
+	free_arrs(dirs);
 	if (!res)
 		return (NULL);
 	return (res);
@@ -39,18 +43,25 @@ char	*get_path(char *comm)
 	if (!dirs)
 		exit_from_minishell(); //FIXME
 	i = -1;
+	if (comm && comm[0] == '/' && is_correct_comm(comm, dirs))
+	{
+		free_arrs(dirs);
+		return (ft_strdup(comm));
+	}
 	while (dirs[++i])
 	{
 		correct_dir = NULL;
 		dir = opendir(dirs[i]);
 		if (!dir)
-			exit_from_minishell(); //FIXME
+			exit_from_minishell(); //FIXME need free dirs
 		if (read_directory(dir, comm))
 			correct_dir = dirs[i];
 		if (closedir(dir))
-			exit_from_minishell(); //FIXME
+			exit_from_minishell(); //FIXME need free dirs
 		if (correct_dir)
-			return (three_str_join(correct_dir, "/", comm));
+		{
+			return (three_str_join(correct_dir, "/", comm, dirs));
+		}
 	}
 	return ("dir not found");
 }
@@ -98,7 +109,7 @@ int	create_pipe(t_comm *data)
 
 int	executor(t_comm *data, char *path, char **env, int count_comm)
 {
-	int	pid;
+	int			pid;
 	static int	i = 0;
 
 	i++;
@@ -123,6 +134,7 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 			exit(1); //FIXME
 		}
 	}
+	free(path);
 	return (i);
 }
 
@@ -134,6 +146,7 @@ void	launcher(t_comm *data, char **env)
 	t_comm	*tmp_dt;
 
 	tmp_dt = data;
+	wait_count = 0;
 	count_command = get_count_comm(data);
 	if (count_command == 0)
 		return ;
@@ -152,7 +165,7 @@ void	launcher(t_comm *data, char **env)
 		data = data->next;
 	}
 	close_fd(tmp_dt);
-	while (wait_count--)
+	while (wait_count-- > 0)
 		wait(NULL);
 }
 
