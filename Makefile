@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 OBJDIR = ./objs
 LIBFT = libft/libft.a
-CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror
 HEADER = minishell.h
 SRCDIR = ./srcs
 HEADDIR = ./includes
@@ -16,7 +16,7 @@ $(OBJDIR)/%.o :	$(SRCDIR)/%.c $(HEADDIR)/$(HEADER)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	$(OBJDIR) $(OBJ)
-	@$(CC) $(CFLAGS) -o $(NAME) $(LIBFT_DIR)/libft.a -I $(HEADER) $(OBJ) -lreadline
+	@$(CC) $(CFLAGS) -o $(NAME) $(LIBFT_DIR)libft.a -I $(HEADER) $(OBJ) -lreadline
 	@echo "\033[32mminishell compile"
 
 $(OBJDIR):

@@ -5,22 +5,26 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 	char	quote;
 
 	if ((*s)[i] == '$')
-		i = takevar(s, str, i, data);
-	if (i < 0)
-		i = 0;
+	{
+		if (write_arg(str, s, i))
+			error_mes_with_exit("Error malloc\n", data->data);
+		return (takevar(s, str, data));
+	}
 	if ((*s)[i] == 34 || (*s)[i] == 39)
 	{
 		quote = (*s)[i];
 		if (check_second_qoute(*s, i, quote))
 		{
-			i = write_arg(str, s, i, 0);
-			if (i == -100)
-				error_mes_with_exit("Error malloc\n", data->data);
+			i = write_arg(str, s, i);
+			if (i)
+				error_mes_with_exit("Error malloc in parse\n", data->data);
 			(*s)++;
 			i = check_quote(s, str, quote, data);
+			i = -1;
+			(*s)++;
 		}
 	}
-	return (i);
+	return (++i);
 }
 
 void	takecommand(t_comm *data, char **s)
@@ -29,13 +33,9 @@ void	takecommand(t_comm *data, char **s)
 
 	i = 0;
 	while ((*s)[i] && !ft_space((*s)[i]) && operand(data, s, i))
-	{
 		i = vars_quote_check(&data->comm, s, i, data);
-		if (i >= 0)
-			i++;
-	}
-	if (write_arg(&data->comm, s, i, 0) == -100)
-		error_mes_with_exit("Error malloc\n", data->data);
+	if (write_arg(&data->comm, s, i))
+		error_mes_with_exit("Error malloc in parse\n", data->data);
 }
 
 void	takeargs(t_comm *data, char **s)
@@ -46,32 +46,23 @@ void	takeargs(t_comm *data, char **s)
 	a = 1;
 	data->args[a] = NULL;
 	i = 0;
-	while ((*s)[i] && operand(data, s, i))
+	while ((*s)[i] && !data->oper)
 	{
-		i = vars_quote_check(&data->args[a], s, i, data);
-		if (i < 0)
-			i = 0;
-		if (ft_space((*s)[i]))
-		{
-			i = write_arg(&data->args[a], s, i, 0);
-			if (i == -100)
-				error_mes_with_exit("Error malloc\n", data->data);
-			while ((*s)[0] && ft_space((*s)[0]))
-				(*s)++;
-			a++;
-			data->args[a] = NULL;
-		}
-		i++;
+		while ((*s)[i] && !ft_space((*s)[i]) && operand(data, s, i))
+			i = vars_quote_check(&data->args[a], s, i, data);
+		if (write_arg(&data->args[a], s, i))
+			error_mes_with_exit("Error malloc in parse\n", data->data);
+		while ((**s) && ft_space(**s))
+			(*s)++;
+		a++;
+		data->args[a] = NULL;
+		i = 0;
 	}
-	if (i > 0)
-		if (write_arg(&data->args[a++], s, i, 0) == -100)
-			error_mes_with_exit("Error malloc\n", data->data);
-	if ((*s)[0])
+	if (data->oper)
 		(*s)++;
-	data->args[a] = NULL;
 }
 
-void	parser(t_data *data)
+int	parser(t_data *data)
 {
 	t_comm	*p;
 	char	*str;
@@ -85,9 +76,7 @@ void	parser(t_data *data)
 			break ;
 		p = addelem(data);
 		if (!p)
-			error_mes_with_exit("Error malloc\n", data);
-		while (*str && ft_space(*str))
-			str++;
+			error_mes_with_exit("Error malloc in parse\n", data);
 		takecommand(p, &str);
 		while (*str && ft_space(*str))
 			str++;
@@ -96,10 +85,15 @@ void	parser(t_data *data)
 	p = data->comm;
 	while (p)
 	{
-		if (p->oper && !p->next)
-			error_mes_with_exit(\
-			"Error: There is no command after the operator\n", data);
+		if ((!p->comm && !(is_same_lines(p->oper, ">") || \
+		is_same_lines(p->oper, ">>") || is_same_lines(p->oper, "<") \
+		|| is_same_lines(p->oper, "<<"))) || (p->oper && !p->next))
+		{
+			printf("Parse error\n");
+			return (1);
+		}
 		else
 			p = p->next;
 	}
+	return (0);
 }

@@ -45,13 +45,13 @@ typedef struct s_data
 int		check_argv(int argc, char **argv, char **env, t_data *data);
 void	error_mes_with_exit(char *err_mes, t_data *data);
 void	take_start_env(t_data *data, char **envar);
-void	parser(t_data *data);
+int		parser(t_data *data);
 t_comm	*addelem(t_data *data);
 void	delcommand(t_comm **comm);
 int		check_quote(char **s, char **str, char quote, t_comm *data);
-int		write_arg(char **arg, char **s, int i, char quote);
+int		write_arg(char **arg, char **s, int i);
 int		check_second_qoute(char *s, int i, char quote);
-int		takevar(char **s, char **str, int i, t_comm *data);
+int		takevar(char **s, char **str, t_comm *data);
 int		operand(t_comm	*data, char **s, int i);
 int		is_same_lines(char *f_str, char *s_str);
 void	delenv(t_envr **env);
