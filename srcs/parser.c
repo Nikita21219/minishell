@@ -83,14 +83,8 @@ int	parser(t_data *data)
 		takeargs(p, &str);
 	}
 	p = data->comm;
-	int i;
 	while (p)
 	{
-		i = 0;
-		printf("comm: %s\n", p->comm);
-		while (p->args[i])
-			printf("args: %s\n", p->args[i++]);
-		printf("opr: %s\n", p->oper);
 		if ((!p->comm && !(is_same_lines(p->oper, ">") || \
 		is_same_lines(p->oper, ">>") || is_same_lines(p->oper, "<") \
 		|| is_same_lines(p->oper, "<<"))) || (p->oper && !p->next))
