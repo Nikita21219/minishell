@@ -26,6 +26,7 @@ typedef struct s_envr
 typedef struct s_comm
 {
 	int				fd[2];
+	int				i;
 	char			*comm;
 	char			**args;
 	char			*oper;

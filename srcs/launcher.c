@@ -82,19 +82,28 @@ int	duplicate_fd(t_comm *data, int idx, int count_comm)
 		}
 		if (dup2(data->fd[1], STDOUT_FILENO) == -1)
 		{
-			printf("FAIL dup2 4%d\n", errno);
+			printf("FAIL dup2 4 %d\n", errno);
 			exit(1); //FIXME
 		}
 	}
 	return (0);
 }
 
-void	executor(t_comm *data, char *path, char **env, int count_comm)
+int	create_pipe(t_comm *data)
 {
-	static int	i = -1;
+	if (pipe(data->fd) == -1)
+		return (1);
+	return (0);
+}
+
+int	executor(t_comm *data, char *path, char **env, int count_comm)
+{
 	int	pid;
+	static int	i = 0;
 
 	i++;
+	if (is_same_lines(data->oper, "|"))
+		create_pipe(data);
 	pid = fork();
 	if (pid < 0)
 	{
@@ -103,125 +112,32 @@ void	executor(t_comm *data, char *path, char **env, int count_comm)
 	}
 	else if (pid == 0)
 	{
-		duplicate_fd(data, i, count_comm);
-		close_fd(data);
+		if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
+		{
+			duplicate_fd(data, data->i, count_comm); //FIXME need handle if dup2 returned negative digit
+			close_fd(data);
+		}
 		if (execve(path, data->args, env) == -1)
 		{
 			printf(TERM_YELLOW "FAIL execve %d\n", errno);
 			exit(1); //FIXME
 		}
 	}
-	close_fd(data);
-	waitpid(pid, NULL, 0);
-}
-
-void	tmp_test_func(t_comm *data, char **env)
-{
-	(void) env;
-
-	int pid = fork();
-	if (pid < 0)
-	{
-		printf("FAIL fork %d\n", errno);
-		exit(1); //FIXME
-	}
-	else if (pid == 0)
-	{
-		if (dup2(data->fd[0], STDIN_FILENO) == -1)
-		{
-			printf("ERRROR");
-			exit(2); //FIXME
-		}
-		if (dup2(data->fd[1], STDOUT_FILENO) == -1)
-		{
-			printf("ERRROR");
-			exit(3); //FIXME
-		}
-		close(data->fd[0]);
-		close(data->fd[1]);
-		close(data->next->fd[0]);
-		close(data->next->fd[1]);
-		if (execve("/bin/cat", data->args, env) == -1)
-		{
-			printf("ERRROR exec");
-			exit(4); //FIXME
-		}
-	}
-
-	int pid2 = fork();
-	if (pid2 < 0)
-	{
-		printf("FAIL fork %d\n", errno);
-		exit(1); //FIXME
-	}
-	else if (pid2 == 0)
-	{
-		if (dup2(data->fd[0], STDIN_FILENO) == -1)
-		{
-			printf("ERRROR");
-			exit(2); //FIXME
-		}
-		if (dup2(data->next->fd[1], STDOUT_FILENO) == -1)
-		{
-			printf("ERRROR");
-			exit(2); //FIXME
-		}
-		close(data->fd[0]);
-		close(data->fd[1]);
-		close(data->next->fd[0]);
-		close(data->next->fd[1]);
-		if (execve("/usr/bin/grep", data->next->args, env) == -1)
-		{
-			printf("ERRROR exec");
-			exit(4); //FIXME
-		}
-	}
-
-	int pid3 = fork();
-	if (pid3 < 0)
-	{
-		printf("FAIL fork %d\n", errno);
-		exit(1); //FIXME
-	}
-	else if (pid3 == 0)
-	{
-		if (dup2(data->next->fd[0], STDIN_FILENO) == -1)
-		{
-			printf("ERRROR");
-			exit(2); //FIXME
-		}
-		close(data->fd[0]);
-		close(data->fd[1]);
-		close(data->next->fd[0]);
-		close(data->next->fd[1]);
-		if (execve("/usr/bin/wc", data->next->next->args, env) == -1)
-		{
-			printf("ERRROR exec");
-			exit(4);
-		}
-	}
-	close(data->fd[0]);
-	close(data->fd[1]);
-	close(data->next->fd[0]);
-	close(data->next->fd[1]);
-	waitpid(pid, NULL, 0);
-	waitpid(pid2, NULL, 0);
-	waitpid(pid3, NULL, 0);
+	return (i);
 }
 
 void	launcher(t_comm *data, char **env)
 {
 	char	*path;
 	int		count_command;
+	int		wait_count;
+	t_comm	*tmp_dt;
 
+	tmp_dt = data;
 	count_command = get_count_comm(data);
 	if (count_command == 0)
 		return ;
-	if (create_pipes(data))
-		exit_from_minishell(); //FIXME
-	// tmp_test_func(data, env);
-	// exit(0)
-	while (data && is_same_lines("|", data->oper))
+	while (data)
 	{
 		path = get_path(data->comm);
 		if (!path)
@@ -232,9 +148,12 @@ void	launcher(t_comm *data, char **env)
 			return ;
 		}
 		else
-			executor(data, path, env, count_command);
+			wait_count = executor(data, path, env, count_command);
 		data = data->next;
 	}
+	close_fd(tmp_dt);
+	while (wait_count--)
+		wait(NULL);
 }
 
 // cat test.txt | grep developer | wc
