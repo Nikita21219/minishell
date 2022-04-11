@@ -18,6 +18,8 @@ void	add_ptr_prev_to_data(t_comm *data)
 {
 	int	i;
 
+	if (!data)
+		return ;
 	i = 0;
 	data->prev = NULL;
 	while (data->next)
@@ -29,7 +31,7 @@ void	add_ptr_prev_to_data(t_comm *data)
 	data->i = i;
 }
 
-void	close_fd(t_comm *data)
+int	close_fd(t_comm *data)
 {
 	while (data->prev)
 		data = data->prev;
@@ -38,18 +40,13 @@ void	close_fd(t_comm *data)
 		if (data->fd[0] && data->fd[1])
 		{
 			if (close(data->fd[0]) == -1)
-			{
-				printf("FAIL close 1 errno=%d\n", errno);
-				exit(1); //FIXME
-			}
+				return (1);
 			if (close(data->fd[1]) == -1)
-			{
-				printf("FAIL close 2 errno=%d\n", errno);
-				exit(1); //FIXME
-			}
+				return (1);
 		}
 		data = data->next;
 	}
+	return (0);
 }
 
 int	get_count_comm_split(char **comm_split)
@@ -75,11 +72,23 @@ int	is_correct_comm(char *comm, char **dirs)
 
 	i = -1;
 	counter = 0;
-	comm_split = ft_split(comm, '/'); //FIXME
+	comm_split = ft_split(comm, '/');
+	if (!comm_split)
+	{
+		free_arrs(dirs);
+		free_arrs(comm_split);
+		return (-1);
+	}
 	count_comm_split = get_count_comm_split(comm_split);
 	free(comm_split[count_comm_split - 1]);
 	comm_split[count_comm_split - 1] = NULL;
-	path_to_comm = get_path_to_comm(comm_split); //FIXME free if not allocated
+	path_to_comm = get_path_to_comm(comm_split);
+	if (!path_to_comm)
+	{
+		free_arrs(dirs);
+		free_arrs(comm_split);
+		return (-1);
+	}
 	free_arrs(comm_split);
 	i = -1;
 	while (dirs[++i])

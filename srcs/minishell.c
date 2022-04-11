@@ -23,20 +23,20 @@ void	minishell(t_data *data, char **env)
 {
 	int TMP_TEST = 2;
 	take_start_env(data, env);
-	while (TMP_TEST--)
+	while (TMP_TEST)
 	{
 		if (!data->env)
 			error_mes_with_exit("Error environment\n", data);
 		data->instr = readline(READLINE_RED "mini_hell$ " TERM_RESET);
 		if (!data->instr)
-			return ;
+			continue ;
 		add_history(data->instr);
 		if (parser(data))
 			continue ;
 		add_ptr_prev_to_data(data->comm);
 		launcher(data->comm, env);
 		freedata(data);
-		sleep(10);
+		// sleep(10);
 	}
 }
 
@@ -47,7 +47,6 @@ int	main(int argc, char **argv, char **env)
 	if (check_argv(argc, argv, env, &data))
 		return (1);
 	minishell(&data, env);
-	// sleep(10);
 	return (0);
 }
 

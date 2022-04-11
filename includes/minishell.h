@@ -58,15 +58,20 @@ void	delenv(t_envr **env);
 void	freedata(t_data *data);
 int		command_in_bin(char *command);
 void	exit_from_minishell(void);
-void	launcher(t_comm *data, char **env);
+int		launcher(t_comm *data, char **env);
 int		get_count_comm(t_comm *data);
 int		ft_space(char str);
-int		create_pipes(t_comm *data);
 void	add_ptr_prev_to_data(t_comm *data);
-void	close_fd(t_comm *data);
+int		close_fd(t_comm *data);
 int		is_correct_comm(char *comm, char **dirs);
 void	free_arrs(char **arr);
 char	*get_path_to_comm(char	**comm_split);
 char	*ft_strjoin_mod(char const *s1, char const *s2);
+int		continue_with_print(char *err_str);
+int		handle_error_executor(int error);
+int		create_pipe(t_comm *data);
+char	*heredoc(t_comm *data);
+int		is_redirect(char *op);
+char	*implement_redirections(t_comm *data);
 
 #endif

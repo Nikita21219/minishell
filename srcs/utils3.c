@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-char *get_path_to_comm(char	**comm_split)
+char	*get_path_to_comm(char	**comm_split)
 {
 	int     i;
 	char    *path_to_comm;
@@ -10,38 +10,41 @@ char *get_path_to_comm(char	**comm_split)
 	while (comm_split[++i])
 	{
 		ptr_to_free = comm_split[i];
-		comm_split[i] = ft_strjoin("/", comm_split[i]); //FIXME free if not allocated
+		comm_split[i] = ft_strjoin("/", comm_split[i]);
 		free(ptr_to_free);
+		if (!comm_split[i])
+			return (NULL);
 	}
 	i = -1;
-	path_to_comm = ft_calloc(1, sizeof(char)); //FIXME free if not allocated
+	path_to_comm = ft_calloc(1, sizeof(char));
+	if (!path_to_comm)
+		return (NULL);
 	while (comm_split[++i])
 	{
 		free(path_to_comm);
-		path_to_comm = ft_strjoin(path_to_comm, comm_split[i]); //FIXME free if not allocated
+		path_to_comm = ft_strjoin(path_to_comm, comm_split[i]);
+		if (!path_to_comm)
+			return (NULL);
 	}
 	return (path_to_comm);
 }
 
-// char	*ft_strjoin_mod(char const *s1, char const *s2)
-// {
-// 	size_t	len1;
-// 	size_t	len2;
-// 	char	*dst;
+int	create_pipe(t_comm *data)
+{
+	if (pipe(data->fd) == -1)
+		return (1);
+	return (0);
+}
 
-// 	dst = 0;
-// 	if (s1 == NULL && s2 == NULL)
-// 		return (NULL);
-// 	if (s1 == NULL)
-// 		return ((char *)s2);
-// 	if (s2 == NULL)
-// 		return ((char *)s1);
-// 	len1 = ft_strlen(s1);
-// 	len2 = ft_strlen(s2);
-// 	dst = malloc(sizeof(char) * (len1 + len2) + 1);
-// 	if (!dst)
-// 		return (NULL);
-// 	ft_strlcpy(dst, s1, len1 + 1);
-// 	ft_strlcat(dst, s2, len1 + len2 + 1);
-// 	return (dst);
-// }
+int	is_redirect(char *op)
+{
+	if (is_same_lines(op, "<<"))
+		return (1);
+	if (is_same_lines(op, ">>"))
+		return (1);
+	if (is_same_lines(op, "<"))
+		return (1);
+	if (is_same_lines(op, ">"))
+		return (1);
+	return (0);
+}
