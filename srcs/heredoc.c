@@ -40,6 +40,16 @@ char	*heredoc(t_comm *data)
 		}
 	}
 	free(line);
+	if (dup2(data->fd[0], STDIN_FILENO) == -1)
+	{
+		printf("ERROR from dup2 in heredoc");
+		exit(0);
+	}
+	if (close_fd(data))
+	{
+		printf("ERROR from close in heredoc");
+		exit(0);
+	}
 	printf("%s", result);
 	return (result);
 }

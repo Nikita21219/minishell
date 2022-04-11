@@ -90,9 +90,9 @@ int	duplicate_fd(t_comm *data, int idx, int count_comm)
 
 int	executor(t_comm *data, char *path, char **env, int count_comm)
 {
-	int			pid;
-
-	if (is_same_lines(data->oper, "|"))
+	int	pid;
+	(void) count_comm;
+	if (is_same_lines(data->oper, "|") || is_same_lines(data->oper, "<<"))
 		if (create_pipe(data))
 			return (-1);
 	pid = fork();
@@ -107,6 +107,8 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 			if (close_fd(data))
 				return (-4);
 		}
+		else if (is_same_lines(data->oper, "<<"))
+			heredoc(data);
 		if (execve(path, data->args, env) == -1)
 			return (-5);
 	}
@@ -130,9 +132,9 @@ int	launcher(t_comm *data, char **env)
 	while (data)
 	{
 		path = get_path(data->comm);
-		if (!path)
+		if (!path && data->comm)
 			return (continue_with_print("Error: memory allocated failed\n"));
-		if (is_same_lines(path, "dir not found")) //TODO start builtins
+		if (is_same_lines(path, "dir not found") && !is_same_lines(data->oper, "<<")) //TODO start builtins
 		{
 			printf("dir not found\n");
 			return (0);
@@ -144,7 +146,10 @@ int	launcher(t_comm *data, char **env)
 			if (error < 0)
 				return (handle_error_executor(error));
 		}
-		data = data->next;
+		if (is_same_lines(data->oper, "<<"))
+			data = data->next->next;
+		else
+			data = data->next;
 	}
 	if (close_fd(tmp_dt))
 		return (continue_with_print("Error: close() returned fail\n"));
