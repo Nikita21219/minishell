@@ -111,7 +111,7 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 			return (-5);
 	}
 	free(path);
-	return (0);
+	return (0);asdfasdfasdfasdfasdfasfdafsdfdasfads
 }
 
 int	launcher(t_comm *data, char **env)
