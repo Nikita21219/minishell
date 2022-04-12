@@ -64,5 +64,8 @@ int		ft_space(char str);
 int		create_pipes(t_comm *data);
 void	add_ptr_prev_to_data(t_comm *data);
 void	close_fd(t_comm *data);
+int		ft_echo(t_comm com);
+int		ft_pwd(t_envr *env);
+int		ft_env(t_envr *env);
 
 #endif

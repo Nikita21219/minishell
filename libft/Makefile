@@ -12,7 +12,7 @@ FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(OBJDIR)/%.o :	$(SRC_DIR)/%.c $(HEADDIR)/$(HEADER)
-	@$(CC) $(FLAGS) -c $< -o $@
+	@$(CC) $(FLAGS) -O3 -c $< -o $@
 
 $(NAME): $(OBJDIR) $(OBJ)
 	@ar rcs $(NAME) $(OBJ)

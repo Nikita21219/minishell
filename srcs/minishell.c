@@ -31,7 +31,10 @@ void	minishell(t_data *data, char **env)
 			return ;
 		add_history(data->instr);
 		if (parser(data))
+		{
+			freedata(data);
 			continue ;
+		}
 		add_ptr_prev_to_data(data->comm);
 		launcher(data->comm, env);
 		freedata(data);
