@@ -5,6 +5,7 @@ void    cd(char *path)
     if (chdir(path))
     {
         printf("FAIL\n");
-        exit(1);
+        exit (1);
     }
 }
+    
