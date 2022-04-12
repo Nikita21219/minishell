@@ -69,12 +69,11 @@ int	ft_exit(t_data *data)
 		printf("exit: too many arguments\n");
 		return (1);
 	}
-	data->comm->args[1] = data->comm->args[1];
 	while (data->comm->args[1][i])
 	{
 		if (!(data->comm->args[1][i] >= 48 && data->comm->args[1][i++] <= 57))
 		{
-			printf("exit: privet: numeric argument required\n");
+			printf("exit: %s: numeric argument required\n", data->comm->args[1]);
 			i = 0;
 			break ;
 		}

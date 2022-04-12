@@ -67,5 +67,6 @@ void	close_fd(t_comm *data);
 int		ft_echo(t_comm com);
 int		ft_pwd(t_envr *env);
 int		ft_env(t_envr *env);
+int		ft_exit(t_data *data);
 
 #endif
