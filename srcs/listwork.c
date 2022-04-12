@@ -1,5 +1,13 @@
 #include "../includes/minishell.h"
 
+void	take_data_in_list(t_comm **temp, t_data *data)
+{
+	(*temp)->comm = NULL;
+	(*temp)->oper = NULL;
+	(*temp)->data = data;
+	(*temp)->next = NULL;
+}
+
 t_comm	*addelem(t_data *data)
 {
 	t_comm	*temp;
@@ -9,11 +17,12 @@ t_comm	*addelem(t_data *data)
 	if (!temp)
 		return (NULL);
 	temp->args = (char **)malloc(sizeof(char *) * 100);
+	if (!temp->args)
+		return (NULL);
 	temp->args[0] = ft_strdup("./minishell");
-	temp->comm = NULL;
-	temp->oper = NULL;
-	temp->data = data;
-	temp->next = NULL;
+	if (!temp->args[0])
+		return (NULL);
+	take_data_in_list(&temp, data);
 	if (!data->comm)
 	{
 		data->comm = temp;
@@ -66,11 +75,24 @@ void	delenv(t_envr **env)
 	}
 }
 
+int	write_start_env(char *envar, t_envr **temp, int i)
+{
+	int	x;
+
+	while (envar[i] && envar[i] != '=')
+		i++;
+	(*temp)->key = ft_substr(envar, 0, i);
+	x = ++i;
+	while (envar[i])
+		i++;
+	(*temp)->val = ft_substr(envar, x, i - x);
+	return (i);
+}
+
 void	take_start_env(t_data *data, char **envar)
 {
 	t_envr	*temp;
 	int		i;
-	int		x;
 	int		a;
 
 	a = -1;
@@ -82,13 +104,7 @@ void	take_start_env(t_data *data, char **envar)
 			error_mes_with_exit("Error malloc\n", data);
 		while (envar[a][i])
 		{
-			while (envar[a][i] && envar[a][i] != '=')
-				i++;
-			temp->key = ft_substr(envar[a], 0, i);
-			x = ++i;
-			while (envar[a][i])
-				i++;
-			temp->val = ft_substr(envar[a], x, i - x);
+			i = write_start_env(envar[a], &temp, i);
 			if (!temp->key || !temp->val)
 				error_mes_with_exit("Error malloc\n", data);
 		}

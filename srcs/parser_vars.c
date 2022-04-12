@@ -15,7 +15,7 @@ int	writevar(char **str, char **tmp, t_envr p)
 {
 	if (*str)
 	{
-		free(tmp);
+		free(*tmp);
 		tmp = str;
 		*str = ft_strjoin(*tmp, p.val);
 	}
@@ -33,6 +33,7 @@ int	takevar(char **s, char **str, t_comm *data)
 	int		i;
 
 	i = 0;
+	tmp = NULL;
 	p = data->data->env;
 	(*s)++;
 	if (varisdigit(s))
