@@ -88,6 +88,32 @@ int	duplicate_fd(t_comm *data, int idx, int count_comm)
 	return (0);
 }
 
+// int	executor(t_comm *data, char *path, char **env, int count_comm)
+// {
+// 	int			pid;
+
+// 	if (is_same_lines(data->oper, "|"))
+// 		if (create_pipe(data))
+// 			return (-1);
+// 	pid = fork();
+// 	if (pid < 0)
+// 		return (-2);
+// 	else if (pid == 0)
+// 	{
+// 		if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
+// 		{
+// 			if (duplicate_fd(data, data->i, count_comm))
+// 				return (-3);
+// 			if (close_fd(data))
+// 				return (-4);
+// 		}
+// 		if (execve(path, data->args, env) == -1)
+// 			return (-5);
+// 	}
+// 	free(path);
+// 	return (0);
+// }
+
 int	executor(t_comm *data, char *path, char **env, int count_comm)
 {
 	int	pid;
@@ -111,12 +137,10 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 		return (-2);
 	else if (pid == 0)
 	{
-		if (is_same_lines(data->oper, "|"))
+		if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
 		{
 			if (duplicate_fd(data, data->i, count_comm))
 				return (-3);
-			if (close_fd(data))
-				return (-4);
 		}
 		else if (is_same_lines(data->oper, "<<"))
 		{
