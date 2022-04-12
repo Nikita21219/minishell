@@ -48,3 +48,25 @@ int	is_redirect(char *op)
 		return (1);
 	return (0);
 }
+
+int	duplicate_fd(t_comm *data, int idx, int count_comm)
+{
+	if (idx == 0)
+	{
+		if (dup2(data->fd[1], STDOUT_FILENO) == -1)
+			return (1);
+	}
+	else if (idx + 1 == count_comm)
+	{
+		if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
+			return (1);
+	}
+	else
+	{
+		if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
+			return (1);
+		if (dup2(data->fd[1], STDOUT_FILENO) == -1)
+			return (1);
+	}
+	return (0);
+}

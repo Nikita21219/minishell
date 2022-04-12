@@ -26,4 +26,11 @@
 # define ERROR				TERM_RED
 # define RESET				TERM_RESET
 
+# define PIPE_ERR			-1
+# define FORK_ERR			-2
+# define DUP_ERR			-3
+# define CLOSE_ERR			-4
+# define EXEC_ERR			-5
+# define MALLOC_ERR			-6
+
 #endif

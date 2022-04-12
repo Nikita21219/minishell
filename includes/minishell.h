@@ -70,9 +70,10 @@ char	*ft_strjoin_mod(char const *s1, char const *s2);
 int		continue_with_print(char *err_str);
 int		handle_error_executor(int error);
 int		create_pipe(t_comm *data);
-char	*heredoc(t_comm *data);
+int		heredoc(t_comm *data);
 int		is_redirect(char *op);
 char	*implement_redirections(t_comm *data);
 int		duplicate_fd_for_heredoc(t_comm *data);
+int		duplicate_fd(t_comm *data, int idx, int count_comm);
 
 #endif

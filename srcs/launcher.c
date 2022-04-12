@@ -66,54 +66,6 @@ char	*get_path(char *comm)
 	return ("dir not found");
 }
 
-int	duplicate_fd(t_comm *data, int idx, int count_comm)
-{
-	if (idx == 0)
-	{
-		if (dup2(data->fd[1], STDOUT_FILENO) == -1)
-			return (1);
-	}
-	else if (idx + 1 == count_comm)
-	{
-		if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
-			return (1);
-	}
-	else
-	{
-		if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
-			return (1);
-		if (dup2(data->fd[1], STDOUT_FILENO) == -1)
-			return (1);
-	}
-	return (0);
-}
-
-// int	executor(t_comm *data, char *path, char **env, int count_comm)
-// {
-// 	int			pid;
-
-// 	if (is_same_lines(data->oper, "|"))
-// 		if (create_pipe(data))
-// 			return (-1);
-// 	pid = fork();
-// 	if (pid < 0)
-// 		return (-2);
-// 	else if (pid == 0)
-// 	{
-// 		if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
-// 		{
-// 			if (duplicate_fd(data, data->i, count_comm))
-// 				return (-3);
-// 			if (close_fd(data))
-// 				return (-4);
-// 		}
-// 		if (execve(path, data->args, env) == -1)
-// 			return (-5);
-// 	}
-// 	free(path);
-// 	return (0);
-// }
-
 int	executor(t_comm *data, char *path, char **env, int count_comm)
 {
 	int	pid;
@@ -121,48 +73,41 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 	if (is_same_lines(data->oper, "|") || is_same_lines(data->oper, "<<"))
 	{
 		if (create_pipe(data))
-			return (-1);
+			return (PIPE_ERR);
 		if (is_same_lines(data->oper, "<<"))
-		{
-			heredoc(data);//FIXME handle if returned fail (memory allocated)
-		}
+			if (heredoc(data))
+				return (MALLOC_ERR);
 	}
 	if (data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<"))
-	{
 		if (create_pipe(data->next))
-			return (-1);
-	}
+			return (PIPE_ERR);
 	pid = fork();
 	if (pid < 0)
-		return (-2);
+		return (FORK_ERR);
 	else if (pid == 0)
 	{
 		if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
 		{
 			if (duplicate_fd(data, data->i, count_comm))
-				return (-3);
+				return (DUP_ERR);
 		}
 		else if (is_same_lines(data->oper, "<<"))
 		{
 			if (duplicate_fd_for_heredoc(data))
-				return (-6);
+				return (DUP_ERR);
 			if (data->next && is_same_lines(data->next->oper, "|"))
-			{
 				if (duplicate_fd(data->next, data->next->i, count_comm))
-					return (-7);
-			}
+					return (DUP_ERR);
 		}
 		if (data->comm)
 		{
 			if (data->prev && data->prev->prev && is_same_lines(data->prev->prev->oper, "<<"))
-			{
 				if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
-					return (-8);
-			}
+					return (DUP_ERR);
 			if (close_fd(data))
-				return (-4);
+				return (CLOSE_ERR);
 			if (execve(path, data->args, env) == -1)
-				return (-5);
+				return (EXEC_ERR);
 		}
 		else
 			exit(0);
