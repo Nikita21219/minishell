@@ -73,5 +73,6 @@ int		create_pipe(t_comm *data);
 char	*heredoc(t_comm *data);
 int		is_redirect(char *op);
 char	*implement_redirections(t_comm *data);
+int		duplicate_fd_for_heredoc(t_comm *data);
 
 #endif

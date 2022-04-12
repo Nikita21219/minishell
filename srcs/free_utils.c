@@ -34,5 +34,7 @@ int	handle_error_executor(int error)
 		return (continue_with_print("Error: close() returned fail\n"));
 	if (error == -5)
 		return (continue_with_print("Error: execve() returned fail\n"));
+	if (error == -6)
+		return (continue_with_print("Error: dup2() or close() returned fail\n")); //FIXME to replace text - only one error, without 'or'
 	return (0);
 }

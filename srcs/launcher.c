@@ -91,10 +91,16 @@ int	duplicate_fd(t_comm *data, int idx, int count_comm)
 int	executor(t_comm *data, char *path, char **env, int count_comm)
 {
 	int	pid;
-	(void) count_comm;
+
 	if (is_same_lines(data->oper, "|") || is_same_lines(data->oper, "<<"))
+	{
 		if (create_pipe(data))
 			return (-1);
+		if (is_same_lines(data->oper, "<<"))
+		{
+			heredoc(data);//FIXME handle if returned fail (memory allocated)
+		}
+	}
 	pid = fork();
 	if (pid < 0)
 		return (-2);
@@ -108,9 +114,30 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 				return (-4);
 		}
 		else if (is_same_lines(data->oper, "<<"))
-			heredoc(data);
-		if (execve(path, data->args, env) == -1)
-			return (-5);
+		{
+			if (duplicate_fd_for_heredoc(data))
+				return (-6);
+			if (data->next && is_same_lines(data->next->oper, "|"))
+			{
+				if (duplicate_fd(data, data->i, count_comm))
+					return (-7);
+			}
+		}
+		if (data->comm)
+		{
+			if (data->prev && data->prev->prev && is_same_lines(data->prev->prev->oper, "<<"))
+			{
+				if (dup2(data->prev->prev->fd[0], STDIN_FILENO) == -1)
+					return (-8);
+				printf("Test\n");
+			}
+			if (close_fd(data))
+				return (-4);
+			if (execve(path, data->args, env) == -1)
+				return (-5);
+		}
+		else
+			exit(0);
 	}
 	free(path);
 	return (0);
@@ -154,9 +181,9 @@ int	launcher(t_comm *data, char **env)
 	if (close_fd(tmp_dt))
 		return (continue_with_print("Error: close() returned fail\n"));
 	while (wait_count-- > 0)
+	{
 		if (wait(NULL) == -1)
 			return (continue_with_print("Error: wait() returned fail\n"));
+	}
 	return (0);
 }
-
-// cat test.txt | grep developer | wc

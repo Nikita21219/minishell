@@ -40,25 +40,18 @@ char	*heredoc(t_comm *data)
 		}
 	}
 	free(line);
-	if (dup2(data->fd[0], STDIN_FILENO) == -1)
-	{
-		printf("ERROR from dup2 in heredoc");
-		exit(0);
-	}
-	if (close_fd(data))
-	{
-		printf("ERROR from close in heredoc");
-		exit(0);
-	}
-	printf("%s", result);
+	write(data->fd[1], result, ft_strlen(result));
 	return (result);
 }
 
-char	*implement_redirections(t_comm *data)
+int	duplicate_fd_for_heredoc(t_comm *data)
 {
-	if (is_same_lines(data->oper, "<<"))
+	if (dup2(data->fd[0], STDIN_FILENO) == -1)
 	{
-		heredoc(data);
-	}
-	return (NULL);
+		printf("FAIL from dup2 heredoc\n");
+		return (1);
+	}//FIXME
+	// if (close_fd(data))
+	// 	return (2);
+	return (0);
 }

@@ -28,6 +28,7 @@ void	minishell(t_data *data, char **env)
 		if (!data->env)
 			error_mes_with_exit("Error environment\n", data);
 		data->instr = readline(READLINE_RED "mini_hell$ " TERM_RESET);
+		// data->instr = ft_strdup("grep hello << h | wc");
 		if (!data->instr)
 			continue ;
 		add_history(data->instr);
@@ -39,6 +40,7 @@ void	minishell(t_data *data, char **env)
 		launcher(data->comm, env);
 		freedata(data);
 		// sleep(10);
+		// break ;
 	}
 }
 
