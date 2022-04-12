@@ -101,12 +101,17 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 			heredoc(data);//FIXME handle if returned fail (memory allocated)
 		}
 	}
+	if (data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<"))
+	{
+		if (create_pipe(data->next))
+			return (-1);
+	}
 	pid = fork();
 	if (pid < 0)
 		return (-2);
 	else if (pid == 0)
 	{
-		if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
+		if (is_same_lines(data->oper, "|"))
 		{
 			if (duplicate_fd(data, data->i, count_comm))
 				return (-3);
@@ -119,7 +124,7 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 				return (-6);
 			if (data->next && is_same_lines(data->next->oper, "|"))
 			{
-				if (duplicate_fd(data, data->i, count_comm))
+				if (duplicate_fd(data->next, data->next->i, count_comm))
 					return (-7);
 			}
 		}
@@ -127,9 +132,8 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 		{
 			if (data->prev && data->prev->prev && is_same_lines(data->prev->prev->oper, "<<"))
 			{
-				if (dup2(data->prev->prev->fd[0], STDIN_FILENO) == -1)
+				if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
 					return (-8);
-				printf("Test\n");
 			}
 			if (close_fd(data))
 				return (-4);
