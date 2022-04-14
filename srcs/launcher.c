@@ -59,7 +59,7 @@ char	*get_path(char *comm)
 		if (correct_dir)
 			return (three_str_join(correct_dir, "/", comm, dirs));
 	}
-	return ("dir not found");
+	return ("launch builtins");
 }
 
 int	executor(t_comm *data, char *path, char **env, int count_comm)
@@ -114,8 +114,16 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 					return (DUP_ERR);
 			if (close_fd(data))
 				return (CLOSE_ERR);
-			if (execve(path, data->args, env) == -1)
-				return (EXEC_ERR);
+			if (is_same_lines("launch builtins", path))
+			{
+				launch_builtins(data);
+				exit(0);
+			}
+			else
+			{
+				if (execve(path, data->args, env) == -1)
+					return (EXEC_ERR);
+			}
 		}
 		else
 			exit(0);
@@ -139,21 +147,16 @@ int	launcher(t_comm *data, char **env)
 		return (0);
 	while (data)
 	{
-		path = get_path(data->comm);
+		if (is_builtins(data->comm)) //TODO start builtins
+			path = ft_strdup("launch builtins");
+		else
+			path = get_path(data->comm);
 		if (!path && data->comm)
 			return (continue_with_print("Error: memory allocated failed\n"));
-		if (is_same_lines(path, "dir not found") && !is_same_lines(data->oper, "<<") && !is_same_lines(data->oper, ">")) //TODO start builtins
-		{
-			printf("dir not found\n");
-			return (0);
-		}
-		else
-		{
-			wait_count++;
-			error = executor(data, path, env, count_command);
-			if (error < 0)
-				return (handle_error_executor(error));
-		}
+		wait_count++;
+		error = executor(data, path, env, count_command);
+		if (error < 0)
+			return (handle_error_executor(error));
 		if (is_same_lines(data->oper, "<<") || is_same_lines(data->oper, ">") || is_same_lines(data->oper, ">>") || is_same_lines(data->oper, "<"))
 			data = data->next->next;
 		else

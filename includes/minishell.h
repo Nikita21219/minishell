@@ -83,5 +83,7 @@ int		ft_pwd(void);
 int		ft_env(t_envr *env);
 int		ft_exit(t_data *data);
 int		ft_cd(t_comm *comm);
+int		launch_builtins(t_comm *data);
+int		is_builtins(char *comm);
 
 #endif
