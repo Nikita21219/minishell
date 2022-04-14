@@ -36,16 +36,12 @@ char	*get_path(char *comm)
 	char	*correct_dir;
 	DIR		*dir;
 	int		i;
-	int		status;
 
 	dirs = ft_split(getenv("PATH"), ':');
 	if (!dirs)
 		return (NULL);
 	i = -1;
-	status = is_correct_comm(comm, dirs);
-	if (status < 0)
-		return (NULL);
-	if (comm && comm[0] == '/' && status)
+	if (comm && comm[0] == '/' && is_correct_comm(comm))
 	{
 		free_arrs(dirs);
 		return (ft_strdup(comm));

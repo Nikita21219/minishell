@@ -56,5 +56,3 @@ int	main(int argc, char **argv, char **env)
 	minishell(&data, env);
 	return (0);
 }
-
-// cat test.txt | grep developer | wc
