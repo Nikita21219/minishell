@@ -63,7 +63,7 @@ int	ft_exit(t_data *data)
 		printf("exit: too many arguments\n");
 		return (1);
 	}
-	while (data->comm->args[1][i])
+	while (data->comm->args[1] && data->comm->args[1][i])
 	{
 		if (!(data->comm->args[1][i] >= 48 && data->comm->args[1][i++] <= 57))
 		{
@@ -76,7 +76,7 @@ int	ft_exit(t_data *data)
 		i = ft_atoi(data->comm->args[1]);
 	freedata(data);
 	delenv(&data->env);
-	exit (i);
+	exit(i);
 }
 
 int	ft_cd(t_comm *comm)

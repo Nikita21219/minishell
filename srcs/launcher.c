@@ -62,21 +62,21 @@ char	*get_path(char *comm)
 	return (ft_strdup("launch builtins"));
 }
 
-int	executor(t_comm *data, char *path, char **env, int count_comm)
+int	executor(t_data *data, char *path, char **env, int count_comm)
 {
 	int	pid;
 
-	if (is_same_lines(data->oper, "|") || is_same_lines(data->oper, "<<"))
+	if (is_same_lines(data->comm->oper, "|") || is_same_lines(data->comm->oper, "<<"))
 	{
-		if (create_pipe(data))
+		if (create_pipe(data->comm))
 			return (PIPE_ERR);
-		if (is_same_lines(data->oper, "<<"))
-			if (heredoc(data))
+		if (is_same_lines(data->comm->oper, "<<"))
+			if (heredoc(data->comm))
 				return (MALLOC_ERR);
 	}
-	if ((data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<")) || (is_same_lines(data->oper, "<")))
+	if ((data->comm->next && is_same_lines(data->comm->next->oper, "|") && is_same_lines(data->comm->oper, "<<")) || (is_same_lines(data->comm->oper, "<")))
 	{
-		if (create_pipe(data->next))
+		if (create_pipe(data->comm->next))
 			return (PIPE_ERR);
 	}
 	pid = fork();
@@ -84,35 +84,35 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 		return (FORK_ERR);
 	else if (pid == 0)
 	{
-		if (is_same_lines(data->oper, ">") || is_same_lines(data->oper, ">>"))
+		if (is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->oper, ">>"))
 		{
-			if (redirect_out(data) == DUP_ERR)
+			if (redirect_out(data->comm) == DUP_ERR)
 				return (DUP_ERR);
 		}
-		else if (is_same_lines(data->oper, "<"))
+		else if (is_same_lines(data->comm->oper, "<"))
 		{
-			if (redirect_in(data) == DUP_ERR)
+			if (redirect_in(data->comm) == DUP_ERR)
 				return (DUP_ERR);
 		}
-		else if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
+		else if (is_same_lines(data->comm->oper, "|") || (data->comm->prev && is_same_lines(data->comm->prev->oper, "|")))
 		{
-			if (duplicate_fd(data, data->i, count_comm))
+			if (duplicate_fd(data->comm, data->comm->i, count_comm))
 				return (DUP_ERR);
 		}
-		else if (is_same_lines(data->oper, "<<"))
+		else if (is_same_lines(data->comm->oper, "<<"))
 		{
-			if (duplicate_fd_for_heredoc(data) == DUP_ERR)
+			if (duplicate_fd_for_heredoc(data->comm) == DUP_ERR)
 				return (DUP_ERR);
-			if (data->next && is_same_lines(data->next->oper, "|"))
-				if (duplicate_fd(data->next, data->next->i, count_comm))
+			if (data->comm->next && is_same_lines(data->comm->next->oper, "|"))
+				if (duplicate_fd(data->comm->next, data->comm->next->i, count_comm))
 					return (DUP_ERR);
 		}
-		if (data->comm)
+		if (data->comm->comm)
 		{
-			if (data->prev && data->prev->prev && is_same_lines(data->prev->prev->oper, "<<"))
-				if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
+			if (data->comm->prev && data->comm->prev->prev && is_same_lines(data->comm->prev->prev->oper, "<<"))
+				if (dup2(data->comm->prev->fd[0], STDIN_FILENO) == -1)
 					return (DUP_ERR);
-			if (close_fd(data))
+			if (close_fd(data->comm))
 				return (CLOSE_ERR);
 			if (is_same_lines("launch builtins", path))
 			{
@@ -122,7 +122,7 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 			}
 			else
 			{
-				if (execve(path, data->args, env) == -1)
+				if (execve(path, data->comm->args, env) == -1)
 					return (EXEC_ERR);
 			}
 		}
@@ -133,7 +133,7 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 	return (0);
 }
 
-int	launcher(t_comm *data, char **env)
+int	launcher(t_data *data, char **env)
 {
 	char	*path;
 	int		count_command;
@@ -141,27 +141,33 @@ int	launcher(t_comm *data, char **env)
 	int		error;
 	t_comm	*tmp_dt;
 
-	tmp_dt = data;
+	tmp_dt = data->comm;
 	wait_count = 0;
-	count_command = get_count_comm(data);
+	count_command = get_count_comm(data->comm);
 	if (count_command == 0)
 		return (0);
-	while (data)
+	while (data->comm)
 	{
-		if (is_builtins(data->comm)) //TODO start builtins
+		if (is_builtins_in_main_proc(data->comm->comm))
+		{
+			launch_builtins(data);
+			data->comm = data->comm->next;
+			continue ;
+		}
+		if (is_builtins(data->comm->comm)) //TODO start builtins
 			path = ft_strdup("launch builtins");
 		else
-			path = get_path(data->comm);
-		if (!path && data->comm)
+			path = get_path(data->comm->comm);
+		if (!path && data->comm->comm)
 			return (continue_with_print("Error: memory allocated failed\n"));
 		wait_count++;
 		error = executor(data, path, env, count_command);
 		if (error < 0)
 			return (handle_error_executor(error));
-		if (is_same_lines(data->oper, "<<") || is_same_lines(data->oper, ">") || is_same_lines(data->oper, ">>") || is_same_lines(data->oper, "<"))
-			data = data->next->next;
+		if (is_same_lines(data->comm->oper, "<<") || is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->oper, ">>") || is_same_lines(data->comm->oper, "<"))
+			data->comm = data->comm->next->next;
 		else
-			data = data->next;
+			data->comm = data->comm->next;
 	}
 	if (close_fd(tmp_dt))
 		return (continue_with_print("Error: close() returned fail\n"));
