@@ -78,9 +78,11 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 			if (heredoc(data))
 				return (MALLOC_ERR);
 	}
-	if (data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<"))
+	if ((data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<")) || (is_same_lines(data->oper, "<")))
+	{
 		if (create_pipe(data->next))
 			return (PIPE_ERR);
+	}
 	pid = fork();
 	if (pid < 0)
 		return (FORK_ERR);
@@ -88,7 +90,12 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 	{
 		if (is_same_lines(data->oper, ">") || is_same_lines(data->oper, ">>"))
 		{
-			if (redirect(data) == DUP_ERR)
+			if (redirect_out(data) == DUP_ERR)
+				return (DUP_ERR);
+		}
+		else if (is_same_lines(data->oper, "<"))
+		{
+			if (redirect_in(data) == DUP_ERR)
 				return (DUP_ERR);
 		}
 		else if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
@@ -151,7 +158,7 @@ int	launcher(t_comm *data, char **env)
 			if (error < 0)
 				return (handle_error_executor(error));
 		}
-		if (is_same_lines(data->oper, "<<") || is_same_lines(data->oper, ">") || is_same_lines(data->oper, ">>"))
+		if (is_same_lines(data->oper, "<<") || is_same_lines(data->oper, ">") || is_same_lines(data->oper, ">>") || is_same_lines(data->oper, "<"))
 			data = data->next->next;
 		else
 			data = data->next;

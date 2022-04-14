@@ -72,9 +72,9 @@ int		handle_error_executor(int error);
 int		create_pipe(t_comm *data);
 int		heredoc(t_comm *data);
 int		is_redirect(char *op);
-char	*implement_redirections(t_comm *data);
 int		duplicate_fd_for_heredoc(t_comm *data);
 int		duplicate_fd(t_comm *data, int idx, int count_comm);
-int		redirect(t_comm *data);
+int		redirect_out(t_comm *data);
+int		redirect_in(t_comm *data);
 
 #endif
