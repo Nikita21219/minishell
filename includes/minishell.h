@@ -39,12 +39,15 @@ typedef struct s_data
 {
 	struct s_comm	*comm;
 	struct s_envr	*env;
+	struct s_envr	*vars;
 	char			*instr;
 }	t_data;
 
 int		check_argv(int argc, char **argv, char **env, t_data *data);
 void	error_mes_with_exit(char *err_mes, t_data *data);
 void	take_start_env(t_data *data, char **envar);
+void	write_start_env(char *envar, t_envr **temp);
+int		ft_create_var(t_data *data, char *var);
 int		parser(t_data *data);
 t_comm	*addelem(t_data *data);
 void	delcommand(t_comm **comm);
@@ -65,8 +68,9 @@ int		create_pipes(t_comm *data);
 void	add_ptr_prev_to_data(t_comm *data);
 void	close_fd(t_comm *data);
 int		ft_echo(t_comm com);
-int		ft_pwd(t_envr *env);
+int		ft_pwd(void);
 int		ft_env(t_envr *env);
 int		ft_exit(t_data *data);
+int		ft_cd(t_comm *comm);
 
 #endif

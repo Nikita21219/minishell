@@ -27,21 +27,15 @@ int	ft_echo(t_comm com)
 	return (0);
 }
 
-int	ft_pwd(t_envr *env)
+int	ft_pwd(void)
 {
-	t_envr	*p;
+	char	cwd[PATH_MAX];
 
-	p = env;
-	while (p)
-	{
-		if (is_same_lines(p->key, "PWD"))
-		{
-			printf("%s\n", p->val);
-			return (0);
-		}
-		p = p->next;
-	}
-	return (1);
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		printf("%s\n", cwd);
+	else
+		return (1);
+	return (0);
 }
 
 int	ft_env(t_envr *env)
@@ -83,4 +77,11 @@ int	ft_exit(t_data *data)
 	freedata(data);
 	delenv(&data->env);
 	exit (i);
+}
+
+int	ft_cd(t_comm *comm)
+{
+	if (chdir(comm->args[1]))
+		return (printf("cd: %s: %s\n", comm->args[1], strerror(errno)));
+	return (0);
 }

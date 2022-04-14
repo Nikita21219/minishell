@@ -35,8 +35,9 @@ void	minishell(t_data *data, char **env)
 			freedata(data);
 			continue ;
 		}
-		add_ptr_prev_to_data(data->comm);
-		launcher(data->comm, env);
+		ft_create_var(data, "a=123");
+		// add_ptr_prev_to_data(data->comm);
+		// launcher(data->comm, env);
 		freedata(data);
 	}
 	freedata(data);
