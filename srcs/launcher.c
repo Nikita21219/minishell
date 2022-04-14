@@ -78,7 +78,7 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 			if (heredoc(data))
 				return (MALLOC_ERR);
 	}
-	else if (data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<"))
+	if (data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<"))
 		if (create_pipe(data->next))
 			return (PIPE_ERR);
 	pid = fork();
