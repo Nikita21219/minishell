@@ -33,7 +33,10 @@ void	minishell(t_data *data, char **env)
 			continue ;
 		add_history(data->instr);
 		if (parser(data))
+		{
+			freedata(data);
 			continue ;
+		}
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
 		add_ptr_prev_to_data(data->comm);

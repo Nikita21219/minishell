@@ -19,8 +19,6 @@ int	operand(t_comm	*data, char **s, int i)
 	}
 	if ((*s)[i] == '|')
 		data->oper = ft_substr(*s, i, ++a);
-	if (a > 0 && !data->oper)
-		error_mes_with_exit("Error malloc\n", data->data);
 	if (a > 0)
 	{
 		while (--a)
@@ -28,47 +26,6 @@ int	operand(t_comm	*data, char **s, int i)
 		return (0);
 	}
 	return (1);
-}
-
-int	takevar(char **s, char **str, t_comm *data)
-{
-	char	*tmp;
-	t_envr	*p;
-	int		i;
-
-	i = 0;
-	p = data->data->env;
-	(*s)++;
-	if (ft_isdigit(**s))
-	{
-		while ((**s) && ft_isdigit(**s))
-			(*s)++;
-		return (0);
-	}
-	while ((*s)[i] && ((*s)[i] == '_' || ft_isalnum((*s)[i])))
-		i++;
-	tmp = ft_substr(*s, 0, i);
-	if (!tmp)
-		error_mes_with_exit("Error malloc\n", data->data);
-	while (p && !is_same_lines(tmp, p->key))
-		p = p->next;
-	if (p)
-	{
-		if (*str)
-		{
-			free(tmp);
-			tmp = (*str);
-			*str = ft_strjoin(tmp, p->val);
-		}
-		else
-			*str = ft_strdup(p->val);
-		if (!(*str))
-			error_mes_with_exit("Error malloc\n", data->data);
-	}
-	while (i--)
-		(*s)++;
-	free(tmp);
-	return (0);
 }
 
 int	check_quote(char **s, char **str, char quote, t_comm *data)
@@ -81,14 +38,16 @@ int	check_quote(char **s, char **str, char quote, t_comm *data)
 		if (quote == 34 && (*s)[i] == '$')
 		{
 			if (write_arg(str, s, i))
-				error_mes_with_exit("Error malloc\n", data->data);
+				return (-1);
 			i = takevar(s, str, data);
+			if (i < 0)
+				return (-1);
 		}
 		else
 			i++;
 	}
 	if (write_arg(str, s, i))
-		error_mes_with_exit("Error malloc\n", data->data);
+		return (-1);
 	return (i);
 }
 

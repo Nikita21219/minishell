@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 OBJDIR = ./objs
 LIBFT = libft/libft.a
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g3 -Wall -Wextra -Werror
 HEADER = minishell.h
 SRCDIR = ./srcs
 HEADDIR = ./includes
@@ -13,10 +13,10 @@ LIBFT_DIR = libft/
 all:    $(LIBFT) $(NAME)
 
 $(OBJDIR)/%.o :	$(SRCDIR)/%.c $(HEADDIR)/$(HEADER)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -O3 -c $< -o $@
 
 $(NAME):	$(OBJDIR) $(OBJ)
-	@$(CC) $(CFLAGS) -o $(NAME) $(LIBFT_DIR)libft.a -I $(HEADER) $(OBJ) -lreadline
+	@$(CC) $(CFLAGS) -O3 -o $(NAME) $(LIBFT_DIR)libft.a -I $(HEADER) $(OBJ) -lreadline
 	@echo "\033[32mminishell compile"
 
 $(OBJDIR):
