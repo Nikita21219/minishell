@@ -63,7 +63,7 @@ int	ft_exit(t_data *data)
 		printf("exit: too many arguments\n");
 		return (1);
 	}
-	while (data->comm->args[1][i])
+	while (data->comm->args[1] && data->comm->args[1][i])
 	{
 		if (!(data->comm->args[1][i] >= 48 && data->comm->args[1][i++] <= 57))
 		{
@@ -81,7 +81,12 @@ int	ft_exit(t_data *data)
 
 int	ft_cd(t_comm *comm)
 {
-	if (chdir(comm->args[1]))
+	if (!(comm->args[1]))
+	{
+		if (chdir("/"))
+			return (printf("cd: %s: %s\n", comm->args[1], strerror(errno)));
+	}
+	else if (chdir(comm->args[1]))
 		return (printf("cd: %s: %s\n", comm->args[1], strerror(errno)));
 	return (0);
 }
