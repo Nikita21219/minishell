@@ -47,11 +47,6 @@ int	heredoc(t_comm *data)
 int	duplicate_fd_for_heredoc(t_comm *data)
 {
 	if (dup2(data->fd[0], STDIN_FILENO) == -1)
-	{
-		printf("FAIL from dup2 heredoc\n");
-		return (1);
-	}//FIXME
-	// if (close_fd(data))
-	// 	return (2);
+		return (DUP_ERR);
 	return (0);
 }

@@ -36,5 +36,7 @@ int	handle_error_executor(int error)
 		return (continue_with_print("Error: execve() returned fail\n"));
 	if (error == MALLOC_ERR)
 		return (continue_with_print("Error: malloc() returned fail\n"));
+	if (error == OPEN_ERR)
+		return (continue_with_print("Error: open() returned fail\n"));
 	return (0);
 }

@@ -75,5 +75,6 @@ int		is_redirect(char *op);
 char	*implement_redirections(t_comm *data);
 int		duplicate_fd_for_heredoc(t_comm *data);
 int		duplicate_fd(t_comm *data, int idx, int count_comm);
+int		redirect(t_comm *data);
 
 #endif

@@ -78,7 +78,7 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 			if (heredoc(data))
 				return (MALLOC_ERR);
 	}
-	if (data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<"))
+	else if (data->next && is_same_lines(data->next->oper, "|") && is_same_lines(data->oper, "<<"))
 		if (create_pipe(data->next))
 			return (PIPE_ERR);
 	pid = fork();
@@ -86,14 +86,19 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 		return (FORK_ERR);
 	else if (pid == 0)
 	{
-		if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
+		if (is_same_lines(data->oper, ">") || is_same_lines(data->oper, ">>"))
+		{
+			if (redirect(data) == DUP_ERR)
+				return (DUP_ERR);
+		}
+		else if (is_same_lines(data->oper, "|") || (data->prev && is_same_lines(data->prev->oper, "|")))
 		{
 			if (duplicate_fd(data, data->i, count_comm))
 				return (DUP_ERR);
 		}
 		else if (is_same_lines(data->oper, "<<"))
 		{
-			if (duplicate_fd_for_heredoc(data))
+			if (duplicate_fd_for_heredoc(data) == DUP_ERR)
 				return (DUP_ERR);
 			if (data->next && is_same_lines(data->next->oper, "|"))
 				if (duplicate_fd(data->next, data->next->i, count_comm))
@@ -134,7 +139,7 @@ int	launcher(t_comm *data, char **env)
 		path = get_path(data->comm);
 		if (!path && data->comm)
 			return (continue_with_print("Error: memory allocated failed\n"));
-		if (is_same_lines(path, "dir not found") && !is_same_lines(data->oper, "<<")) //TODO start builtins
+		if (is_same_lines(path, "dir not found") && !is_same_lines(data->oper, "<<") && !is_same_lines(data->oper, ">")) //TODO start builtins
 		{
 			printf("dir not found\n");
 			return (0);
@@ -146,7 +151,7 @@ int	launcher(t_comm *data, char **env)
 			if (error < 0)
 				return (handle_error_executor(error));
 		}
-		if (is_same_lines(data->oper, "<<"))
+		if (is_same_lines(data->oper, "<<") || is_same_lines(data->oper, ">") || is_same_lines(data->oper, ">>"))
 			data = data->next->next;
 		else
 			data = data->next;

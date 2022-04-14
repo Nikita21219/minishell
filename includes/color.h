@@ -32,5 +32,6 @@
 # define CLOSE_ERR			-4
 # define EXEC_ERR			-5
 # define MALLOC_ERR			-6
+# define OPEN_ERR			-7
 
 #endif
