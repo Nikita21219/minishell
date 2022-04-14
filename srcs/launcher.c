@@ -59,7 +59,7 @@ char	*get_path(char *comm)
 		if (correct_dir)
 			return (three_str_join(correct_dir, "/", comm, dirs));
 	}
-	return ("launch builtins");
+	return (ft_strdup("launch builtins"));
 }
 
 int	executor(t_comm *data, char *path, char **env, int count_comm)
@@ -116,7 +116,8 @@ int	executor(t_comm *data, char *path, char **env, int count_comm)
 				return (CLOSE_ERR);
 			if (is_same_lines("launch builtins", path))
 			{
-				launch_builtins(data);
+				if (launch_builtins(data))
+					exit(1);
 				exit(0);
 			}
 			else

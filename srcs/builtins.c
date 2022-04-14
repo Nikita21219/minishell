@@ -4,7 +4,6 @@ int	ft_echo(t_comm com)
 {
 	int	i;
 
-	printf("Hello from ft_echo!\n");
 	i = 1;
 	if (is_same_lines(com.args[i], "-n"))
 	{

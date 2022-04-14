@@ -24,14 +24,10 @@ int	launch_builtins(t_comm *data)
 	int	builtin;
 
 	builtin = is_builtins(data->comm);
-	if (builtin == 0)
-	{
-		printf("mini_hell: %s: command not found\n", data->comm);
-		return (0);
-	}
 	if (builtin == BUILTIN_ECHO)
-	{
-		ft_echo(*data);
-	}
+		return (ft_echo(*data));
+	if (builtin == BUILTIN_PWD)
+		return (ft_pwd());
+	printf("mini_hell: %s: command not found\n", data->comm);
 	return (0);
 }
