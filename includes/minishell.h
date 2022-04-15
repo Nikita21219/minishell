@@ -68,7 +68,6 @@ void	add_ptr_prev_to_data(t_comm *data);
 int		close_fd(t_comm *data);
 int		is_correct_comm(char *comm);
 void	free_arrs(char **arr);
-char	*ft_strjoin_mod(char const *s1, char const *s2);
 int		continue_with_print(char *err_str);
 int		handle_error_executor(int error);
 int		create_pipe(t_comm *data);

@@ -39,7 +39,6 @@ void	minishell(t_data *data, char **env)
 		}
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
-		ft_cd(data);
 		add_ptr_prev_to_data(data->comm);
 		launcher(data, env);
 		freedata(data);

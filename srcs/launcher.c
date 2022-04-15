@@ -19,15 +19,13 @@ char	*three_str_join(char *dir, char *sep, char *comm, char **dirs)
 	char	*res;
 	char	*dir_and_sep;
 
-	(void) dirs;
 	dir_and_sep = ft_strjoin(dir, sep);
 	if (!dir_and_sep)
 		return (NULL);
-	printf("dir_and_sep = %p\n", dir_and_sep);
 	res = ft_strjoin(dir_and_sep, comm);
 	free(comm);
 	free(dir_and_sep);
-	// free_arrs(dirs);
+	free_arrs(dirs);
 	return (res);
 }
 
