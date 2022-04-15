@@ -41,7 +41,7 @@ void	minishell(t_data *data, char **env)
 		// exit(0);
 		ft_cd(data);
 		add_ptr_prev_to_data(data->comm);
-		launcher(data->comm, env);
+		launcher(data, env);
 		freedata(data);
 		// sleep(10);
 		// break ;
@@ -57,5 +57,3 @@ int	main(int argc, char **argv, char **env)
 	minishell(&data, env);
 	return (0);
 }
-
-// cat test.txt | grep developer | wc

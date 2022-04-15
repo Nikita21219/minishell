@@ -38,15 +38,17 @@ int	ft_cd_with_arg(t_data *data, t_envr *pwd, t_envr *oldpwd)
 		path = ft_strjoin(getenv("HOME"), (path + 1));
 		if (path)
 			return (printf("Error malloc cd\n"));
+		if (chdir(path))
+		{
+			free (path);
+			return (printf("cd: %s: %s\n", \
+			data->comm->args[1], strerror(errno)));
+		}
 	}
 	if (data->comm->args[1][0] == '-')
 		return (ft_cd_prev_dir(data, pwd, oldpwd, path));
 	if (chdir(path))
-	{
-		free (path);
 		return (printf("cd: %s: %s\n", data->comm->args[1], strerror(errno)));
-	}
-	free (oldpwd->val);
 	oldpwd->val = pwd->val;
 	pwd->val = path;
 	return (0);

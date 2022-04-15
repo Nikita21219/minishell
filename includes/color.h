@@ -34,4 +34,12 @@
 # define MALLOC_ERR			-6
 # define OPEN_ERR			-7
 
+# define BUILTIN_ECHO		1
+# define BUILTIN_CD 		2
+# define BUILTIN_PWD		3
+# define BUILTIN_EXPORT		4
+# define BUILTIN_UNSET		5
+# define BUILTIN_ENV		6
+# define BUILTIN_EXIT		7
+
 #endif

@@ -61,14 +61,13 @@ void	delenv(t_envr **env);
 void	freedata(t_data *data);
 int		command_in_bin(char *command);
 void	exit_from_minishell(void);
-int		launcher(t_comm *data, char **env);
+int		launcher(t_data *data, char **env);
 int		get_count_comm(t_comm *data);
 int		ft_space(char str);
 void	add_ptr_prev_to_data(t_comm *data);
 int		close_fd(t_comm *data);
-int		is_correct_comm(char *comm, char **dirs);
+int		is_correct_comm(char *comm);
 void	free_arrs(char **arr);
-char	*get_path_to_comm(char	**comm_split);
 char	*ft_strjoin_mod(char const *s1, char const *s2);
 int		continue_with_print(char *err_str);
 int		handle_error_executor(int error);
@@ -84,5 +83,8 @@ int		ft_pwd(void);
 int		ft_env(t_envr *env);
 int		ft_exit(t_data *data);
 int		ft_cd(t_data *data);
+int		launch_builtins(t_data *data);
+int		is_builtins(char *comm);
+int		is_builtins_in_main_proc(char *comm);
 
 #endif

@@ -13,7 +13,9 @@ void	free_arrs(char **arr)
 			arr[i] = NULL;
 		}
 	}
-	free(arr);
+	if (arr)
+		free(arr);
+	arr = NULL;
 }
 
 int	continue_with_print(char *err_str)

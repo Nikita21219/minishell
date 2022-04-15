@@ -49,58 +49,9 @@ int	close_fd(t_comm *data)
 	return (0);
 }
 
-int	get_count_comm_split(char **comm_split)
+int	is_correct_comm(char *comm)
 {
-	int	i;
-	int	count_comm;
-
-	i = -1;
-	count_comm = 0;
-	if (comm_split && *comm_split)
-		while (comm_split[++i])
-			count_comm++;
-	return (count_comm);
-}
-
-int	is_correct_comm(char *comm, char **dirs)
-{
-	int		i;
-	int		counter;
-	int		count_comm_split;
-	char	**comm_split;
-	char	*path_to_comm;
-
-	i = -1;
-	counter = 0;
-	comm_split = ft_split(comm, '/');
-	if (!comm_split)
-	{
-		free_arrs(dirs);
-		free_arrs(comm_split);
-		return (-1);
-	}
-	count_comm_split = get_count_comm_split(comm_split);
-	free(comm_split[count_comm_split - 1]);
-	comm_split[count_comm_split - 1] = NULL;
-	path_to_comm = get_path_to_comm(comm_split);
-	if (!path_to_comm)
-	{
-		free_arrs(dirs);
-		free_arrs(comm_split);
-		return (-1);
-	}
-	free_arrs(comm_split);
-	i = -1;
-	while (dirs[++i])
-	{
-		if (is_same_lines(dirs[i], path_to_comm))
-		{
-			free(path_to_comm);
-			return (1);
-		}
-	}
-	free(path_to_comm);
+	if (!access(comm, 1))
+		return (1);
 	return (0);
 }
-
-// /usr/bin/grep

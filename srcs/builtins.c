@@ -76,5 +76,5 @@ int	ft_exit(t_data *data)
 		i = ft_atoi(data->comm->args[1]);
 	freedata(data);
 	delenv(&data->env);
-	exit (i);
+	exit(i);
 }
