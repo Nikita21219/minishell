@@ -55,3 +55,17 @@ int	is_correct_comm(char *comm)
 		return (1);
 	return (0);
 }
+
+int	is_correct_path(char *comm)
+{
+	DIR	*dir;
+
+	dir = opendir(comm);
+	if (dir)
+	{
+		free(dir);
+		free(dir->__dd_buf);
+		return (0);
+	}
+	return (1);
+}

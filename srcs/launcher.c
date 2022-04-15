@@ -37,7 +37,7 @@ char	*get_path(char *comm)
 	DIR		*dir;
 	int		i;
 
-	if (ft_strnstr(comm, "/", ft_strlen(comm)) && is_correct_comm(comm))
+	if (is_correct_comm(comm) && is_correct_path(comm))
 		return (ft_strdup(comm));
 	dirs = ft_split(getenv("PATH"), ':');
 	if (!dirs)

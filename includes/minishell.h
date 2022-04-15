@@ -86,5 +86,6 @@ int		launch_builtins(t_data *data);
 int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
 void	free_lists(t_comm *data);
+int		is_correct_path(char *comm);
 
 #endif
