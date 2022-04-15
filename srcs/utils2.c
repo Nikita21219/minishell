@@ -62,10 +62,6 @@ int	is_correct_path(char *comm)
 
 	dir = opendir(comm);
 	if (dir)
-	{
-		free(dir);
-		free(dir->__dd_buf);
-		return (0);
-	}
+		return (closedir(dir));
 	return (1);
 }

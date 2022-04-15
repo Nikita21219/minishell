@@ -87,5 +87,8 @@ int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
 void	free_lists(t_comm *data);
 int		is_correct_path(char *comm);
+int		initialize_dirs(char ***dirs);
+int		check_oper(t_data *data);
+int		handle_oper(t_data *data, int count_comm);
 
 #endif

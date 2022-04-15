@@ -37,10 +37,9 @@ char	*get_path(char *comm)
 	DIR		*dir;
 	int		i;
 
-	if (is_correct_comm(comm) && is_correct_path(comm))
+	if (is_correct_comm(comm) && is_correct_path(comm)) //FIXME
 		return (ft_strdup(comm));
-	dirs = ft_split(getenv("PATH"), ':');
-	if (!dirs)
+	if (initialize_dirs(&dirs))
 		return (NULL);
 	i = -1;
 	while (dirs[++i])
@@ -63,48 +62,19 @@ char	*get_path(char *comm)
 int	executor(t_data *data, char *path, char **env, int count_comm)
 {
 	int		pid;
+	int		error;
 
-	if (is_same_lines(data->comm->oper, "|") || is_same_lines(data->comm->oper, "<<"))
-	{
-		if (create_pipe(data->comm))
-			return (PIPE_ERR);
-		if (is_same_lines(data->comm->oper, "<<"))
-			if (heredoc(data->comm))
-				return (MALLOC_ERR);
-	}
-	if ((data->comm->next && is_same_lines(data->comm->next->oper, "|") && is_same_lines(data->comm->oper, "<<")) || (is_same_lines(data->comm->oper, "<")))
-	{
-		if (create_pipe(data->comm->next))
-			return (PIPE_ERR);
-	}
+	error = check_oper(data);
+	if (error)
+		return (error);
 	pid = fork();
 	if (pid < 0)
 		return (FORK_ERR);
 	else if (pid == 0)
 	{
-		if (is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->oper, ">>"))
-		{
-			if (redirect_out(data->comm) == DUP_ERR)
-				return (DUP_ERR);
-		}
-		else if (is_same_lines(data->comm->oper, "<"))
-		{
-			if (redirect_in(data->comm) == DUP_ERR)
-				return (DUP_ERR);
-		}
-		else if (is_same_lines(data->comm->oper, "|") || (data->comm->prev && is_same_lines(data->comm->prev->oper, "|")))
-		{
-			if (duplicate_fd(data->comm, data->comm->i, count_comm))
-				return (DUP_ERR);
-		}
-		else if (is_same_lines(data->comm->oper, "<<"))
-		{
-			if (duplicate_fd_for_heredoc(data->comm) == DUP_ERR)
-				return (DUP_ERR);
-			if (data->comm->next && is_same_lines(data->comm->next->oper, "|"))
-				if (duplicate_fd(data->comm->next, data->comm->next->i, count_comm))
-					return (DUP_ERR);
-		}
+		error = handle_oper(data, count_comm);
+		if (error)
+			return (error); //FIXME it is child proccess. return is not right
 		if (data->comm->comm)
 		{
 			if (data->comm->prev && data->comm->prev->prev && is_same_lines(data->comm->prev->prev->oper, "<<"))

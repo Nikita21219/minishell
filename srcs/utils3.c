@@ -41,3 +41,29 @@ int	duplicate_fd(t_comm *data, int idx, int count_comm)
 	}
 	return (0);
 }
+
+int	initialize_dirs(char ***dirs)
+{
+	*dirs = ft_split(getenv("PATH"), ':');
+	if (!(*dirs))
+		return (1);
+	return (0);
+}
+
+int	check_oper(t_data *data)
+{
+	if (is_same_lines(data->comm->oper, "|") || is_same_lines(data->comm->oper, "<<"))
+	{
+		if (create_pipe(data->comm))
+			return (PIPE_ERR);
+		if (is_same_lines(data->comm->oper, "<<"))
+			if (heredoc(data->comm))
+				return (MALLOC_ERR);
+	}
+	if ((data->comm->next && is_same_lines(data->comm->next->oper, "|") && is_same_lines(data->comm->oper, "<<")) || (is_same_lines(data->comm->oper, "<")))
+	{
+		if (create_pipe(data->comm->next))
+			return (PIPE_ERR);
+	}
+	return (0);
+}
