@@ -43,8 +43,11 @@ int	ft_env(t_envr *env)
 	t_envr	*p;
 
 	p = env;
-	if (!p)
+	if (!p || !take_path_env(&env, "PATH"))
+	{
+		printf("env: No such file or directory\n");
 		return (1);
+	}
 	while (p)
 	{
 		printf("%s=%s\n", p->key, p->val);
@@ -77,4 +80,33 @@ int	ft_exit(t_data *data)
 	freedata(data);
 	delenv(&data->env);
 	exit(i);
+}
+
+void	ft_unset(t_comm	*comm)
+{
+	t_envr	*p1;
+	t_envr	*p2;
+
+	p1 = comm->data->env;
+	p2 = take_path_env(&comm->data->env, comm->args[1]);
+	if (!p2)
+		return ;
+	if (is_same_lines(p1->key, comm->args[1]))
+	{
+		comm->data->env = comm->data->env->next;
+		free (p1);
+		return ;
+	}
+	while (p1->next != p2)
+		p1 = p1->next;
+	if (p2->next == NULL)
+	{
+		free(p2);
+		p1->next = NULL;
+	}
+	else
+	{
+		p1->next = p2->next;
+		free(p2);
+	}
 }
