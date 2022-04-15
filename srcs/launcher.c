@@ -18,15 +18,16 @@ char	*three_str_join(char *dir, char *sep, char *comm, char **dirs)
 {
 	char	*res;
 	char	*dir_and_sep;
-	char	*ptr_to_free;
 
+	(void) dirs;
 	dir_and_sep = ft_strjoin(dir, sep);
 	if (!dir_and_sep)
 		return (NULL);
-	ptr_to_free = dir_and_sep;
+	printf("dir_and_sep = %p\n", dir_and_sep);
 	res = ft_strjoin(dir_and_sep, comm);
-	free(ptr_to_free);
-	free_arrs(dirs);
+	free(comm);
+	free(dir_and_sep);
+	// free_arrs(dirs);
 	return (res);
 }
 
@@ -40,24 +41,27 @@ char	*get_path(char *comm)
 	dirs = ft_split(getenv("PATH"), ':');
 	if (!dirs)
 		return (NULL);
-	i = -1;
 	if (comm && comm[0] == '/' && is_correct_comm(comm))
 	{
 		free_arrs(dirs);
 		return (ft_strdup(comm));
 	}
+	i = -1;
 	while (dirs[++i])
 	{
 		correct_dir = NULL;
 		dir = opendir(dirs[i]);
-		if (!dir)
+		if (dir == NULL)
 			return (NULL);
 		if (read_directory(dir, comm))
 			correct_dir = dirs[i];
 		if (closedir(dir) == -1)
 			return (NULL);
 		if (correct_dir)
+		{
+			free_arrs(dirs);
 			return (three_str_join(correct_dir, "/", comm, dirs));
+		}
 	}
 	return (ft_strdup("launch builtins"));
 }
