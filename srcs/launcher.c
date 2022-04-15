@@ -19,15 +19,15 @@ char	*three_str_join(char *dir, char *sep, char *comm, char **dirs)
 	char	*res;
 	char	*dir_and_sep;
 
-	(void) dirs;
 	dir_and_sep = ft_strjoin(dir, sep);
 	if (!dir_and_sep)
 		return (NULL);
-	printf("dir_and_sep = %p\n", dir_and_sep);
 	res = ft_strjoin(dir_and_sep, comm);
+	if (!res)
+		return (NULL);
 	free(comm);
 	free(dir_and_sep);
-	// free_arrs(dirs);
+	free_arrs(dirs);
 	return (res);
 }
 
@@ -58,11 +58,10 @@ char	*get_path(char *comm)
 		if (closedir(dir) == -1)
 			return (NULL);
 		if (correct_dir)
-		{
-			free_arrs(dirs);
 			return (three_str_join(correct_dir, "/", comm, dirs));
-		}
 	}
+	free(comm);
+	free_arrs(dirs);
 	return (ft_strdup("launch builtins"));
 }
 
@@ -121,7 +120,9 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 			if (is_same_lines("launch builtins", path))
 			{
 				if (launch_builtins(data))
-					exit(1);
+				{
+					exit(127);
+				}
 				exit(0);
 			}
 			else
@@ -133,7 +134,7 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 		else
 			exit(0);
 	}
-	free(path);
+	
 	return (0);
 }
 
@@ -154,7 +155,7 @@ int	launcher(t_data *data, char **env)
 	{
 		if (is_builtins_in_main_proc(data->comm->comm))
 		{
-			launch_builtins(data);
+			launch_builtins(data); //FIXME if func return failed
 			data->comm = data->comm->next;
 			continue ;
 		}
@@ -172,6 +173,7 @@ int	launcher(t_data *data, char **env)
 			data->comm = data->comm->next->next;
 		else
 			data->comm = data->comm->next;
+		free(path);
 	}
 	if (close_fd(tmp_dt))
 		return (continue_with_print("Error: close() returned fail\n"));
@@ -180,5 +182,6 @@ int	launcher(t_data *data, char **env)
 		if (wait(NULL) == -1)
 			return (continue_with_print("Error: wait() returned fail\n"));
 	}
+	free_lists(tmp_dt);
 	return (0);
 }
