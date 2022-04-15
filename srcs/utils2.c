@@ -55,3 +55,17 @@ int	is_correct_comm(char *comm)
 		return (1);
 	return (0);
 }
+
+// int	is_directory(char *str)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	if (!str)
+// 		return (0);
+// 	while (str[i] == '/' || str[i] == '.')
+// 		i++;
+// 	if (str[i] != '\0')
+// 		return (0);
+// 	return (1);
+// }

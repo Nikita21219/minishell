@@ -35,12 +35,12 @@ int	heredoc(t_comm *data)
 		if (!result)
 		{
 			free(line);
-			free(ptr_to_free);
 			return (1);
 		}
 	}
 	free(line);
 	write(data->fd[1], result, ft_strlen(result));
+	free(result);
 	return (0);
 }
 

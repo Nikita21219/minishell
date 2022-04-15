@@ -67,7 +67,7 @@ char	*get_path(char *comm)
 
 int	executor(t_data *data, char *path, char **env, int count_comm)
 {
-	int	pid;
+	int		pid;
 
 	if (is_same_lines(data->comm->oper, "|") || is_same_lines(data->comm->oper, "<<"))
 	{
@@ -120,9 +120,7 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 			if (is_same_lines("launch builtins", path))
 			{
 				if (launch_builtins(data))
-				{
 					exit(127);
-				}
 				exit(0);
 			}
 			else
@@ -134,7 +132,8 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 		else
 			exit(0);
 	}
-	
+	if (is_builtins(data->comm->comm))
+		free(data->comm->comm);
 	return (0);
 }
 
@@ -170,7 +169,10 @@ int	launcher(t_data *data, char **env)
 		if (error < 0)
 			return (handle_error_executor(error));
 		if (is_same_lines(data->comm->oper, "<<") || is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->oper, ">>") || is_same_lines(data->comm->oper, "<"))
+		{
+			free(data->comm->next->comm);
 			data->comm = data->comm->next->next;
+		}
 		else
 			data->comm = data->comm->next;
 		free(path);
