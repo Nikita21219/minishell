@@ -25,7 +25,6 @@ char	*three_str_join(char *dir, char *sep, char *comm, char **dirs)
 	res = ft_strjoin(dir_and_sep, comm);
 	if (!res)
 		return (NULL);
-	free(comm);
 	free(dir_and_sep);
 	free_arrs(dirs);
 	return (res);
@@ -39,10 +38,7 @@ char	*get_path(char *comm)
 	int		i;
 
 	if (ft_strnstr(comm, "/", ft_strlen(comm)) && is_correct_comm(comm))
-	{
-		free(comm);
 		return (ft_strdup(comm));
-	}
 	dirs = ft_split(getenv("PATH"), ':');
 	if (!dirs)
 		return (NULL);
@@ -60,7 +56,6 @@ char	*get_path(char *comm)
 		if (correct_dir)
 			return (three_str_join(correct_dir, "/", comm, dirs));
 	}
-	free(comm);
 	free_arrs(dirs);
 	return (ft_strdup("launch builtins"));
 }
@@ -132,8 +127,6 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 		else
 			exit(0);
 	}
-	if (is_builtins(data->comm->comm))
-		free(data->comm->comm);
 	return (0);
 }
 
@@ -169,10 +162,7 @@ int	launcher(t_data *data, char **env)
 		if (error < 0)
 			return (handle_error_executor(error));
 		if (is_same_lines(data->comm->oper, "<<") || is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->oper, ">>") || is_same_lines(data->comm->oper, "<"))
-		{
-			free(data->comm->next->comm);
 			data->comm = data->comm->next->next;
-		}
 		else
 			data->comm = data->comm->next;
 		free(path);
