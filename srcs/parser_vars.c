@@ -11,13 +11,15 @@ int	varisdigit(char **s)
 	return (0);
 }
 
-int	writevar(char **str, char **tmp, t_envr p)
+int	writevar(char **str, t_envr p)
 {
+	char	*tmp;
+
 	if (*str)
 	{
-		free(*tmp);
-		tmp = str;
-		*str = ft_strjoin(*tmp, p.val);
+		tmp = *str;
+		*str = ft_strjoin(tmp, p.val);
+		free(tmp);
 	}
 	else
 		*str = ft_strdup(p.val);
@@ -58,7 +60,7 @@ int	takevar(char **s, char **str, t_comm *data)
 		return (-1);
 	p = search_var(tmp, p, data->data->vars);
 	if (p)
-		if (writevar(str, &tmp, *p))
+		if (writevar(str, *p))
 			return (-1);
 	while (i--)
 		(*s)++;
