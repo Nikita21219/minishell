@@ -78,15 +78,3 @@ int	ft_exit(t_data *data)
 	delenv(&data->env);
 	exit (i);
 }
-
-int	ft_cd(t_comm *comm)
-{
-	if (!(comm->args[1]))
-	{
-		if (chdir("/"))
-			return (printf("cd: %s: %s\n", comm->args[1], strerror(errno)));
-	}
-	else if (chdir(comm->args[1]))
-		return (printf("cd: %s: %s\n", comm->args[1], strerror(errno)));
-	return (0);
-}

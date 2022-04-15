@@ -83,6 +83,6 @@ int		ft_echo(t_comm com);
 int		ft_pwd(void);
 int		ft_env(t_envr *env);
 int		ft_exit(t_data *data);
-int		ft_cd(t_comm *comm);
+int		ft_cd(t_data *data);
 
 #endif
