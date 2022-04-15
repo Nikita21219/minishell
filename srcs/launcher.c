@@ -154,7 +154,7 @@ int	launcher(t_data *data, char **env)
 			data->comm = data->comm->next;
 			continue ;
 		}
-		if (is_builtins(data->comm->comm)) //TODO start builtins
+		if (is_builtins(data->comm->comm))
 			path = ft_strdup("launch builtins");
 		else
 			path = get_path(data->comm->comm);
