@@ -87,5 +87,7 @@ int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
 void	free_lists(t_comm *data);
 t_envr	*take_path_env(t_envr **env, char *s);
+int		ft_export(t_comm *comm);
+void	ft_unset(t_comm	*comm);
 
 #endif

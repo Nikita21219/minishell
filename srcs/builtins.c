@@ -86,27 +86,35 @@ void	ft_unset(t_comm	*comm)
 {
 	t_envr	*p1;
 	t_envr	*p2;
+	int		i;
 
-	p1 = comm->data->env;
-	p2 = take_path_env(&comm->data->env, comm->args[1]);
-	if (!p2)
-		return ;
-	if (is_same_lines(p1->key, comm->args[1]))
+	i = 1;
+	while (comm->args[i])
 	{
-		comm->data->env = comm->data->env->next;
-		free (p1);
-		return ;
-	}
-	while (p1->next != p2)
-		p1 = p1->next;
-	if (p2->next == NULL)
-	{
-		free(p2);
-		p1->next = NULL;
-	}
-	else
-	{
-		p1->next = p2->next;
-		free(p2);
+		p1 = comm->data->env;
+		p2 = take_path_env(&comm->data->env, comm->args[i]);
+		if (!p2)
+		{
+			i++;
+			continue ;
+		}
+		if (is_same_lines(p1->key, comm->args[i++]))
+		{
+			comm->data->env = comm->data->env->next;
+			free (p1);
+			continue ;
+		}
+		while (p1->next != p2)
+			p1 = p1->next;
+		if (p2->next == NULL)
+		{
+			free(p2);
+			p1->next = NULL;
+		}
+		else
+		{
+			p1->next = p2->next;
+			free(p2);
+		}
 	}
 }
