@@ -38,14 +38,14 @@ char	*get_path(char *comm)
 	DIR		*dir;
 	int		i;
 
+	if (ft_strnstr(comm, "/", ft_strlen(comm)) && is_correct_comm(comm))
+	{
+		free(comm);
+		return (ft_strdup(comm));
+	}
 	dirs = ft_split(getenv("PATH"), ':');
 	if (!dirs)
 		return (NULL);
-	if (comm && comm[0] == '/' && is_correct_comm(comm))
-	{
-		free_arrs(dirs);
-		return (ft_strdup(comm));
-	}
 	i = -1;
 	while (dirs[++i])
 	{
@@ -158,7 +158,7 @@ int	launcher(t_data *data, char **env)
 			data->comm = data->comm->next;
 			continue ;
 		}
-		if (is_builtins(data->comm->comm))
+		else if (is_builtins(data->comm->comm))
 			path = ft_strdup("launch builtins");
 		else
 			path = get_path(data->comm->comm);

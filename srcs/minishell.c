@@ -42,7 +42,7 @@ void	minishell(t_data *data, char **env)
 		add_ptr_prev_to_data(data->comm);
 		launcher(data, env);
 		freedata(data);
-		// sleep(10);
+		sleep(10);
 		// break ;
 	}
 }
