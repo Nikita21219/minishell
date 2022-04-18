@@ -89,10 +89,8 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 				exit(0);
 			}
 			else
-			{
 				if (execve(path, data->comm->args, env) == -1)
 					return (EXEC_ERR);
-			}
 		}
 		else
 			exit(0);
