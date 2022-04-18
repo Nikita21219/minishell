@@ -4,7 +4,7 @@ int	check_right_var(char *arg)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	if (!ft_isalpha(*arg))
 		return (1);
 	while (arg[i] && arg[i] != '=')
@@ -15,7 +15,7 @@ int	check_right_var(char *arg)
 	return (0);
 }
 
-int	add_list_env(t_envr *env, char *arg)
+int	add_list_env(t_envr **env, char *arg)
 {
 	t_envr	*p;
 	int		i;
@@ -36,24 +36,25 @@ int	add_list_env(t_envr *env, char *arg)
 		printf("Error malloc export\n");
 		return (1);
 	}
-	p->next = env;
-	env = p;
+	p->next = *env;
+	*env = p;
 	return (0);
 }
 
-int	ft_export(t_comm *comm)
+int	ft_export(t_data *data)
 {
 	int		i;
 
 	i = 1;
-	while (comm->args[i])
+	while (data->comm->args[i])
 	{
-		if (check_right_var(comm->args[i]))
+		if (check_right_var(data->comm->args[i]))
 		{
-			printf("export: '%s': not a valid identifier", comm->args[i++]);
+			printf("export: '%s': not a valid identifier", \
+			data->comm->args[i++]);
 			continue ;
 		}
-		if (add_list_env(comm->data->env, comm->args[i++]))
+		if (add_list_env(&data->env, data->comm->args[i++]))
 			return (1);
 	}
 	return (0);

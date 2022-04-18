@@ -91,7 +91,7 @@ int		initialize_dirs(char ***dirs);
 int		check_oper(t_data *data);
 int		handle_oper(t_data *data, int count_comm);
 t_envr	*take_path_env(t_envr **env, char *s);
-int		ft_export(t_comm *comm);
-void	ft_unset(t_comm	*comm);
+int		ft_export(t_data *data);
+void	ft_unset(t_data *data);
 
 #endif

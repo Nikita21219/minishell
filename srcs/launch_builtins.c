@@ -45,10 +45,10 @@ int	launch_builtins(t_data *data)
 	if (builtin == BUILTIN_CD)
 		return (ft_cd(data));
 	if (builtin == BUILTIN_EXPORT)
-		return (ft_export(data->comm));
+		return (ft_export(data));
 	if (builtin == BUILTIN_UNSET)
 	{
-		ft_unset(data->comm);
+		ft_unset(data);
 		return (0);
 	}
 	errno = 127;

@@ -82,25 +82,25 @@ int	ft_exit(t_data *data)
 	exit(i);
 }
 
-void	ft_unset(t_comm	*comm)
+void	ft_unset(t_data	*data)
 {
 	t_envr	*p1;
 	t_envr	*p2;
 	int		i;
 
 	i = 1;
-	while (comm->args[i])
+	while (data->comm->args[i])
 	{
-		p1 = comm->data->env;
-		p2 = take_path_env(&comm->data->env, comm->args[i]);
+		p1 = data->env;
+		p2 = take_path_env(&data->env, data->comm->args[i]);
 		if (!p2)
 		{
 			i++;
 			continue ;
 		}
-		if (is_same_lines(p1->key, comm->args[i++]))
+		if (is_same_lines(p1->key, data->comm->args[i++]))
 		{
-			comm->data->env = comm->data->env->next;
+			data->env = data->env->next;
 			free (p1);
 			continue ;
 		}
