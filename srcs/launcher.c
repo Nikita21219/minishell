@@ -52,7 +52,6 @@ int	close_fds_and_waiting(t_comm *data, int wait_count)
 			}
 		}
 	}
-	free_lists(data);
 	return (0);
 }
 
@@ -112,5 +111,6 @@ int	launcher(t_data *data, char **env)
 			return (handle_error_executor(error));
 		set_next_ptr_data_and_free_path(data, &path);
 	}
+	free_lists(tmp_dt);
 	return (close_fds_and_waiting(tmp_dt, wait_count));
 }
