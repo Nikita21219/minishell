@@ -42,14 +42,12 @@ int	close_fds_and_waiting(t_comm *data, int wait_count)
 		if (WIFEXITED(wstatus))
 		{
 			status_code = WEXITSTATUS(wstatus);
+			// printf("status_code = %d\n", status_code);
+			errno = status_code;
 			if (status_code == 0)
 				return (0);
 			else
-			{
-				errno = status_code;
-				if (kill_childs(data))
-					return (KILL_ERR);
-			}
+				kill_childs(data);
 		}
 	}
 	return (0);
@@ -108,7 +106,10 @@ int	launcher(t_data *data, char **env)
 		wait_count++;
 		error = executor(data, path, env, count_command);
 		if (error < 0)
+		{
+			errno = error;
 			return (handle_error_executor(error));
+		}
 		set_next_ptr_data_and_free_path(data, &path);
 	}
 	free_lists(tmp_dt);

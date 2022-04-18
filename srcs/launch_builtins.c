@@ -53,5 +53,5 @@ int	launch_builtins(t_data *data)
 	}
 	errno = 127;
 	printf("mini_hell: %s: command not found\n", data->comm->comm);
-	return (0);
+	return (127);
 }
