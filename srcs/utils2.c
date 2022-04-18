@@ -56,12 +56,17 @@ int	is_correct_comm(char *comm)
 	return (0);
 }
 
-int	is_correct_path(char *comm)
+int	is_same_lines(char *f_str, char *s_str)
 {
-	DIR	*dir;
+	int	i;
 
-	dir = opendir(comm);
-	if (dir)
-		return (closedir(dir));
+	if (!f_str || !s_str)
+		return (0);
+	if (ft_strlen(f_str) != ft_strlen(s_str))
+		return (0);
+	i = -1;
+	while (f_str[++i])
+		if (f_str[i] != s_str[i])
+			return (0);
 	return (1);
 }

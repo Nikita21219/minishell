@@ -27,6 +27,7 @@ typedef struct s_comm
 {
 	int				fd[2];
 	int				i;
+	pid_t			pid;
 	char			*comm;
 	char			**args;
 	char			*oper;
@@ -86,12 +87,12 @@ int		launch_builtins(t_data *data);
 int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
 void	free_lists(t_comm *data);
-int		is_correct_path(char *comm);
 int		initialize_dirs(char ***dirs);
 int		check_oper(t_data *data);
-int		handle_oper(t_data *data, int count_comm);
 t_envr	*take_path_env(t_envr **env, char *s);
 int		ft_export(t_data *data);
 void	ft_unset(t_data *data);
+int		executor(t_data *data, char *path, char **env, int count_comm);
+int		kill_childs(t_comm *data);
 
 #endif
