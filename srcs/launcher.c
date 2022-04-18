@@ -1,59 +1,28 @@
 #include "../includes/minishell.h"
 
-int	read_directory(DIR *dir, char *command)
-{
-	struct dirent	*sd;
-
-	sd = readdir(dir);
-	while (sd)
-	{
-		if (is_same_lines(sd->d_name, command))
-			return (1);
-		sd = readdir(dir);
-	}
-	return (0);
-}
-
-char	*three_str_join(char *dir, char *sep, char *comm, char **dirs)
-{
-	char	*res;
-	char	*dir_and_sep;
-
-	dir_and_sep = ft_strjoin(dir, sep);
-	if (!dir_and_sep)
-		return (NULL);
-	res = ft_strjoin(dir_and_sep, comm);
-	if (!res)
-		return (NULL);
-	free(dir_and_sep);
-	free_arrs(dirs);
-	return (res);
-}
-
 char	*get_path(char *comm)
 {
 	char	**dirs;
 	char	*correct_dir;
-	DIR		*dir;
+	char	*result;
 	int		i;
 
 	if (is_correct_comm(comm) && is_correct_path(comm)) //FIXME
 		return (ft_strdup(comm));
+	i = -1;
 	if (initialize_dirs(&dirs))
 		return (NULL);
-	i = -1;
 	while (dirs[++i])
 	{
-		correct_dir = NULL;
-		dir = opendir(dirs[i]);
-		if (dir == NULL)
-			return (NULL);
-		if (read_directory(dir, comm))
-			correct_dir = dirs[i];
-		if (closedir(dir) == -1)
-			return (NULL);
-		if (correct_dir)
-			return (three_str_join(correct_dir, "/", comm, dirs));
+		correct_dir = ft_strjoin(dirs[i], "/");
+		result = ft_strjoin(correct_dir, comm);
+		free(correct_dir);
+		if (!access(result, 1))
+		{
+			free_arrs(dirs);
+			return (result);
+		}
+		free(result);
 	}
 	free_arrs(dirs);
 	return (ft_strdup("launch builtins"));
@@ -74,14 +43,14 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 	{
 		error = handle_oper(data, count_comm);
 		if (error)
-			return (error); //FIXME it is child proccess. return is not right
+			exit(error);
 		if (data->comm->comm)
 		{
 			if (data->comm->prev && data->comm->prev->prev && is_same_lines(data->comm->prev->prev->oper, "<<"))
 				if (dup2(data->comm->prev->fd[0], STDIN_FILENO) == -1)
-					return (DUP_ERR);
+					exit(DUP_ERR);
 			if (close_fd(data->comm))
-				return (CLOSE_ERR);
+				exit(CLOSE_ERR);
 			if (is_same_lines("launch builtins", path))
 			{
 				if (launch_builtins(data))
@@ -90,7 +59,7 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 			}
 			else
 				if (execve(path, data->comm->args, env) == -1)
-					return (EXEC_ERR);
+					exit(EXEC_ERR);
 		}
 		else
 			exit(0);

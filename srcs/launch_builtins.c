@@ -44,6 +44,9 @@ int	launch_builtins(t_data *data)
 		return (ft_exit(data));
 	if (builtin == BUILTIN_CD)
 		return (ft_cd(data));
+	if (builtin == BUILTIN_EXPORT)
+		return (ft_expo);
+	errno = 127;
 	printf("mini_hell: %s: command not found\n", data->comm->comm);
 	return (0);
 }
