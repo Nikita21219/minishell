@@ -93,5 +93,7 @@ int		handle_oper(t_data *data, int count_comm);
 t_envr	*take_path_env(t_envr **env, char *s);
 int		ft_export(t_data *data);
 void	ft_unset(t_data *data);
+void	print_last_exit(void);
+t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
 
 #endif

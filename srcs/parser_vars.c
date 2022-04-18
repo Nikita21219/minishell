@@ -28,17 +28,22 @@ int	writevar(char **str, t_envr p)
 	return (0);
 }
 
-t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars)
+int	last_error(char **s, char **str)
 {
-	while (p && !is_same_lines(tmp, p->key))
-		p = p->next;
-	if (!p && vars)
+	char	*tmp;
+
+	(*s)++;
+	if (*str)
 	{
-		p = vars;
-		while (p && !is_same_lines(tmp, p->key))
-			p = p->next;
+		tmp = *str;
+		*str = ft_strjoin(tmp, ft_itoa(errno));
+		free(tmp);
 	}
-	return (p);
+	else
+		*str = ft_strdup(ft_itoa(errno));
+	if (!(*str))
+		return (1);
+	return (0);
 }
 
 int	takevar(char **s, char **str, t_comm *data)
@@ -53,6 +58,8 @@ int	takevar(char **s, char **str, t_comm *data)
 	(*s)++;
 	if (varisdigit(s))
 		return (0);
+	if (**s == '?')
+		return (last_error(s, str));
 	while ((*s)[i] && ((*s)[i] == '_' || ft_isalnum((*s)[i])))
 		i++;
 	tmp = ft_substr(*s, 0, i);
@@ -76,10 +83,16 @@ int	ft_create_var(t_data *data, char *var)
 		return (printf("%s: command not found\n", var));
 	p = malloc(sizeof(t_envr));
 	if (!p)
+	{
+		errno = 12;
 		return (printf("Error malloc in export\n"));
+	}
 	write_start_env(var, &p);
 	if (!p->key || !p->val)
+	{
+		errno = 12;
 		return (printf("Error malloc in export\n"));
+	}
 	p->next = data->vars;
 	data->vars = p;
 	return (0);

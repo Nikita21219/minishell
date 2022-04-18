@@ -18,7 +18,6 @@ void	tmp_print_arg_after_parser(t_comm *data)
 		data = data->next;
 	}
 }
-
 void	minishell(t_data *data, char **env)
 {
 	int TMP_TEST = 2;
@@ -42,7 +41,6 @@ void	minishell(t_data *data, char **env)
 		add_ptr_prev_to_data(data->comm);
 		launcher(data, env);
 		freedata(data);
-		ft_env(data->env);
 		// sleep(10);
 		// break ;
 	}

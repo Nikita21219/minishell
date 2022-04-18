@@ -11,3 +11,8 @@ int	check_argv(int argc, char **argv, char **env, t_data *data)
 	}
 	return (0);
 }
+
+void	print_last_exit(void)
+{
+	printf("mini_hell: %d: %s\n", errno, strerror(errno));
+}

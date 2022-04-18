@@ -6,6 +6,10 @@ int	is_builtins_in_main_proc(char *comm)
 		return (BUILTIN_CD);
 	if (is_same_lines(comm, "exit"))
 		return (BUILTIN_EXIT);
+	if (is_same_lines(comm, "export"))
+		return (BUILTIN_EXPORT);
+	if (is_same_lines(comm, "unset"))
+		return (BUILTIN_UNSET);
 	return (0);
 }
 
@@ -22,10 +26,6 @@ int	is_builtins(char *comm)
 		return (BUILTIN_ECHO);
 	if (is_same_lines(comm, "pwd"))
 		return (BUILTIN_PWD);
-	if (is_same_lines(comm, "export"))
-		return (BUILTIN_EXPORT);
-	if (is_same_lines(comm, "unset"))
-		return (BUILTIN_UNSET);
 	return (0);
 }
 

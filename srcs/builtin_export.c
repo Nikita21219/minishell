@@ -50,7 +50,7 @@ int	ft_export(t_data *data)
 	{
 		if (check_right_var(data->comm->args[i]))
 		{
-			printf("export: '%s': not a valid identifier", \
+			printf("export: '%s': not a valid identifier\n", \
 			data->comm->args[i++]);
 			continue ;
 		}
