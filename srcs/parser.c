@@ -40,6 +40,7 @@ int	takecommand(t_comm *data, char **s)
 	(*s)[i] == '<') && !data->oper) || write_arg(&data->comm, s, i))
 	{
 		printf("Error malloc in parse\n");
+		errno = 12;
 		return (1);
 	}
 	return (0);
@@ -83,6 +84,7 @@ int	checkallcommands(t_comm *p)
 		|| is_same_lines(p->oper, "<<"))) || (p->oper && !p->next))
 		{
 			printf("Parse error\n");
+			errno = 22;
 			return (1);
 		}
 		else
@@ -107,6 +109,7 @@ int	parser(t_data *data)
 		if (!p)
 		{
 			printf("Error malloc in parse\n");
+			errno = 12;
 			return (1);
 		}
 		if (takecommand(p, &str))

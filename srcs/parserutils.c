@@ -71,7 +71,10 @@ int	write_arg(char **arg, char **s, int i)
 		free(tmp2);
 	}
 	if (!(*arg))
+	{
+		errno = 12;
 		return (1);
+	}
 	while (i--)
 		(*s)++;
 	return (0);
@@ -83,4 +86,17 @@ int	check_second_qoute(char *s, int i, char quote)
 		if (s[i] == quote)
 			return (1);
 	return (0);
+}
+
+t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars)
+{
+	while (p && !is_same_lines(tmp, p->key))
+		p = p->next;
+	if (!p && vars)
+	{
+		p = vars;
+		while (p && !is_same_lines(tmp, p->key))
+			p = p->next;
+	}
+	return (p);
 }

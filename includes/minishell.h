@@ -94,5 +94,7 @@ int		ft_export(t_data *data);
 void	ft_unset(t_data *data);
 int		executor(t_data *data, char *path, char **env, int count_comm);
 int		kill_childs(t_comm *data);
+void	print_last_exit(void);
+t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
 
 #endif

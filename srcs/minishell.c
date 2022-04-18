@@ -18,7 +18,6 @@ void	tmp_print_arg_after_parser(t_comm *data)
 		data = data->next;
 	}
 }
-
 void	minishell(t_data *data, char **env)
 {
 	int TMP_TEST = 2;
@@ -30,6 +29,8 @@ void	minishell(t_data *data, char **env)
 		data->instr = readline(READLINE_RED "mini_hell$ " TERM_RESET);
 		// data->instr = ft_strdup("grep hello << h | wc");
 		if (!data->instr)
+			break ;
+		if (data->instr[0] == 0)
 			continue ;
 		add_history(data->instr);
 		if (parser(data))
@@ -44,14 +45,30 @@ void	minishell(t_data *data, char **env)
 		freedata(data);
 		// sleep(10);
 	}
+	delenv(&data->env);
+	freedata(data);
 }
+
+// void	ft_takesig(int signum)
+// {
+// 	if (signum == SIGINT)
+// 		write(1, "\nminishell: ", 13);
+// 	return ;
+// }
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data	data;
+	t_data				data;
+	// struct sigaction	sig;
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
+	// sig.sa_handler = &ft_takesig;
+	// sig.sa_flags = SA_USERSPACE_MASK;
+	// if (sigaction(SIGINT, &sig, NULL) < 0)
+	// 	perror("Minishell: Sigactoin");
+	// if (sigaction(SIGQUIT, &sig, NULL) < 0)
+	// 	perror("Minishell: Sigactoin");
 	minishell(&data, env);
 	return (0);
 }
