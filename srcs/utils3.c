@@ -52,19 +52,28 @@ int	initialize_dirs(char ***dirs)
 
 int	check_oper(t_data *data)
 {
-	if (is_same_lines(data->comm->oper, "|") || is_same_lines(data->comm->oper, "<<"))
+	t_comm	*dt;
+
+	dt = data->comm;
+	if (is_same_lines(dt->oper, "|") || is_same_lines(dt->oper, "<<"))
 	{
-		if (create_pipe(data->comm))
+		if (create_pipe(dt))
 			return (PIPE_ERR);
-		if (is_same_lines(data->comm->oper, "<<"))
-			if (heredoc(data->comm))
-				return (MALLOC_ERR);
+		if (is_same_lines(dt->oper, "<<"))
+		{
+			while (dt && is_same_lines(dt->oper, "<<"))
+			{
+				if (heredoc(dt))
+					return (MALLOC_ERR);
+				dt = dt->next;
+			}
+		}
 	}
-	if ((data->comm->next && is_same_lines(data->comm->next->oper, "|") \
-	&& is_same_lines(data->comm->oper, "<<")) \
-	|| (is_same_lines(data->comm->oper, "<")))
+	if ((dt->next && is_same_lines(dt->next->oper, "|") \
+	&& is_same_lines(dt->oper, "<<")) \
+	|| (is_same_lines(dt->oper, "<")))
 	{
-		if (create_pipe(data->comm->next))
+		if (create_pipe(dt->next))
 			return (PIPE_ERR);
 	}
 	return (0);

@@ -81,14 +81,16 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 		while (data->comm && (is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->prev->oper, ">")))
 			data->comm = data->comm->next;
 	}
-	else if (is_same_lines(data->comm->oper, "<<") || is_same_lines(data->comm->oper, "<"))
+	else if (is_same_lines(data->comm->oper, "<"))
 	{
 		while ((data->comm && is_same_lines(data->comm->oper, "<")) || (data->comm && is_same_lines(data->comm->prev->oper, "<")))
 			data->comm = data->comm->next;
 	}
-	else if (is_same_lines(data->comm->oper, "<<"))
-		data->comm = data->comm->next;
-		// (void) data; // FIXME handle heredoc
+	else if (data && data->comm && is_same_lines(data->comm->oper, "<<"))
+	{
+		while ((data->comm && is_same_lines(data->comm->oper, "<<")) || (data->comm && is_same_lines(data->comm->prev->oper, "<<")))
+			data->comm = data->comm->next;
+	}
 	else
 		data->comm = data->comm->next;
 	free(path);
@@ -113,6 +115,7 @@ int	launcher(t_data *data, char **env)
 			continue ;
 		wait_count++;
 		result = executor(data, path, env, count_command);
+		// fprintf(stderr, "Hello from launcher\n");
 		if (result < 0)
 			return (handle_error_executor(result));
 		set_next_ptr_data_and_free_path(data, path);

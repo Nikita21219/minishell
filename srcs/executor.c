@@ -18,6 +18,20 @@ int	check_pipe(t_data *data)
 	return (0);
 }
 
+int	handle_heredoc(t_comm *data, int count_comm)
+{
+	while (data && is_same_lines(data->oper, "<<"))
+	{
+		if (duplicate_fd_for_heredoc(data) == DUP_ERR)
+			return (DUP_ERR);
+		data = data->next;
+	}
+	if (data && data->next && is_same_lines(data->next->oper, "|"))
+		if (duplicate_fd(data->next, data->next->i, count_comm))
+			return (DUP_ERR);
+	return (0);
+}
+
 int	handle_oper(t_data *data, int count_comm)
 {
 	if (check_redirect(data))
@@ -37,11 +51,7 @@ int	handle_oper(t_data *data, int count_comm)
 	}
 	else if (is_same_lines(data->comm->oper, "<<"))
 	{
-		if (duplicate_fd_for_heredoc(data->comm) == DUP_ERR)
-			return (DUP_ERR);
-		if (data->comm->next && is_same_lines(data->comm->next->oper, "|"))
-			if (duplicate_fd(data->comm->next, data->comm->next->i, count_comm))
-				return (DUP_ERR);
+		handle_heredoc(data->comm, count_comm);
 	}
 	return (0);
 }
@@ -79,7 +89,7 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 		error = handle_oper(data, count_comm);
 		if (error)
 			exit(error);
-		// fprintf(stderr, "data->comm->comm = %p\n", data->comm->comm);
+		// fprintf(stderr, "test\n");
 		if (data->comm->comm)
 			exec_command(data, path, env);
 		else
