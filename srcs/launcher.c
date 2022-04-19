@@ -42,7 +42,6 @@ int	close_fds_and_waiting(t_comm *data, int wait_count)
 		if (WIFEXITED(wstatus))
 		{
 			status_code = WEXITSTATUS(wstatus);
-			// printf("status_code = %d\n", status_code);
 			errno = status_code;
 			if (status_code == 0)
 				return (0);
