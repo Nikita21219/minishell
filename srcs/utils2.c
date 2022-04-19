@@ -2,9 +2,6 @@
 
 int	create_pipes(t_comm *data)
 {
-	int	i;
-
-	i = 0;
 	while (data->next)
 	{
 		if (pipe(data->fd) == -1)

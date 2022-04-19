@@ -48,8 +48,7 @@ int	handle_oper(t_data *data, int count_comm)
 
 void	exec_command(t_data *data, char *path, char **env)
 {
-	if (data->comm->prev && data->comm->prev->prev \
-	&& is_same_lines(data->comm->prev->prev->oper, "<<"))
+	if (data->comm->prev && data->comm->prev->prev && is_same_lines(data->comm->prev->prev->oper, "<<"))
 		if (dup2(data->comm->prev->fd[0], STDIN_FILENO) == -1)
 			exit(DUP_ERR);
 	if (close_fd(data->comm))
@@ -80,6 +79,7 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 		error = handle_oper(data, count_comm);
 		if (error)
 			exit(error);
+		// fprintf(stderr, "data->comm->comm = %p\n", data->comm->comm);
 		if (data->comm->comm)
 			exec_command(data, path, env);
 		else
