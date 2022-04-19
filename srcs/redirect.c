@@ -13,16 +13,18 @@ int	redirect_out(t_comm *data)
 			fd = open(data->next->comm, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
 		else
 			fd = open(data->next->comm, O_CREAT | O_WRONLY | O_APPEND, S_IRWXU);
+		if (fd == -1)
+			return (OPEN_ERR);
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			return (DUP_ERR);
+		if (data && data->prev && is_same_lines(data->prev->oper, "|"))
+		{
+			if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
+				return (DUP_ERR);
+		}
 		data = data->next;
 	}
-	data = data->next;
-	if (fd == -1)
-		return (OPEN_ERR);
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		return (DUP_ERR);
-	if (data && data->prev && is_same_lines(data->prev->oper, "|"))
-		if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
-			return (DUP_ERR);
+	// data = data->next;
 	return (0);
 }
 

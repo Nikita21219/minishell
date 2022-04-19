@@ -118,6 +118,8 @@ int	launcher(t_data *data, char **env)
 		// fprintf(stderr, "Hello from launcher\n");
 		if (result < 0)
 			return (handle_error_executor(result));
+		else if (result == 1)
+			return (handle_error_executor(result));
 		set_next_ptr_data_and_free_path(data, path);
 	}
 	result = close_fds_and_waiting(tmp_dt, wait_count);
