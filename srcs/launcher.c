@@ -31,7 +31,7 @@ char	*get_path(char *comm)
 int	close_fds_and_waiting(t_comm *data, int wait_count)
 {
 	int	wstatus;
-	int	status_code;
+	// int	status_code;
 
 	if (close_fd(data))
 		return (continue_with_print("Error: close() returned fail\n"));
@@ -39,15 +39,16 @@ int	close_fds_and_waiting(t_comm *data, int wait_count)
 	{
 		if (wait(&wstatus) == -1)
 			return (continue_with_print("Error: wait() returned fail\n"));
-		if (WIFEXITED(wstatus))
-		{
-			status_code = WEXITSTATUS(wstatus);
-			errno = status_code;
-			if (status_code == 0)
-				return (0);
-			else
-				kill_childs(data);
-		}
+		// if (WIFEXITED(wstatus))
+		// {
+		// 	printf("HELLO\n");
+		// 	status_code = WEXITSTATUS(wstatus);
+		// 	errno = status_code;
+		// 	if (status_code == 0)
+		// 		return (0);
+		// 	else
+		// 		kill_childs(data);
+		// }
 	}
 	return (0);
 }
@@ -73,7 +74,7 @@ int	check_builtins(t_data *data, char **path)
 	return (0);
 }
 
-void	set_next_ptr_data_and_free_path(t_data *data, char **path)
+void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 {
 	if (is_same_lines(data->comm->oper, "<<") \
 	|| is_same_lines(data->comm->oper, ">") \
@@ -82,7 +83,7 @@ void	set_next_ptr_data_and_free_path(t_data *data, char **path)
 		data->comm = data->comm->next->next;
 	else
 		data->comm = data->comm->next;
-	free(*path);
+	free(path);
 }
 
 int	launcher(t_data *data, char **env)
@@ -90,7 +91,7 @@ int	launcher(t_data *data, char **env)
 	char	*path;
 	int		count_command;
 	int		wait_count;
-	int		error;
+	int		result;
 	t_comm	*tmp_dt;
 
 	tmp_dt = data->comm;
@@ -103,14 +104,12 @@ int	launcher(t_data *data, char **env)
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;
-		error = executor(data, path, env, count_command);
-		if (error < 0)
-		{
-			errno = error;
-			return (handle_error_executor(error));
-		}
-		set_next_ptr_data_and_free_path(data, &path);
+		result = executor(data, path, env, count_command);
+		if (result < 0)
+			return (handle_error_executor(result));
+		set_next_ptr_data_and_free_path(data, path);
 	}
+	result = close_fds_and_waiting(tmp_dt, wait_count);
 	free_lists(tmp_dt);
-	return (close_fds_and_waiting(tmp_dt, wait_count));
+	return (result);
 }
