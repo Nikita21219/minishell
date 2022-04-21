@@ -45,6 +45,12 @@ typedef struct s_data
 	char			*instr;
 }	t_data;
 
+typedef struct s_wild
+{
+	char			*file;
+	struct s_wild	*next;
+}	t_wild;
+
 int		check_argv(int argc, char **argv, char **env, t_data *data);
 void	error_mes_with_exit(char *err_mes, t_data *data);
 void	take_start_env(t_data *data, char **envar);
