@@ -34,6 +34,7 @@ typedef struct s_comm
 	struct s_data	*data;
 	struct s_comm	*next;
 	struct s_comm	*prev;
+	int				status;
 }	t_comm;
 
 typedef struct s_data

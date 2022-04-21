@@ -89,7 +89,6 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 		error = handle_oper(data, count_comm);
 		if (error)
 			exit(error);
-		// fprintf(stderr, "test\n");
 		if (data->comm->comm)
 			exec_command(data, path, env);
 		else

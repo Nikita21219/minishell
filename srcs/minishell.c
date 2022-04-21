@@ -23,7 +23,6 @@ void	minishell(t_data *data, char **env)
 {
 	int TMP_TEST = 2;
 	take_start_env(data, env);
-	// data->status = 0;
 	while (TMP_TEST)
 	{
 		if (!data->env)

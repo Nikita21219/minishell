@@ -31,7 +31,7 @@ char	*get_path(char *comm)
 int	close_fds_and_waiting(t_comm *data, int wait_count)
 {
 	int	wstatus;
-	// int	status_code;
+	int	status_code;
 
 	if (close_fd(data))
 		return (continue_with_print("Error: close() returned fail\n"));
@@ -39,16 +39,11 @@ int	close_fds_and_waiting(t_comm *data, int wait_count)
 	{
 		if (wait(&wstatus) == -1)
 			return (continue_with_print("Error: wait() returned fail\n"));
-		// if (WIFEXITED(wstatus))
-		// {
-		// 	printf("HELLO\n");
-		// 	status_code = WEXITSTATUS(wstatus);
-		// 	errno = status_code;
-		// 	if (status_code == 0)
-		// 		return (0);
-		// 	else
-		// 		kill_childs(data);
-		// }
+		if (WIFEXITED(wstatus))
+		{
+			status_code = WEXITSTATUS(wstatus);
+			errno = status_code;
+		}
 	}
 	return (0);
 }
@@ -115,7 +110,6 @@ int	launcher(t_data *data, char **env)
 			continue ;
 		wait_count++;
 		result = executor(data, path, env, count_command);
-		// fprintf(stderr, "Hello from launcher\n");
 		if (result < 0)
 			return (handle_error_executor(result));
 		else if (result == 1)
