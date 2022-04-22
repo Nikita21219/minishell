@@ -76,10 +76,13 @@ int	ft_exit(t_data *data)
 		}
 	}
 	if (i != 0)
-		i = ft_atoi(data->comm->args[1]);
+	{
+		errno = ft_atoi(data->comm->args[1]);
+		printf("exit\n");
+	}
 	freedata(data);
 	delenv(&data->env);
-	exit(i);
+	exit(errno);
 }
 
 void	ft_unset(t_data	*data)
