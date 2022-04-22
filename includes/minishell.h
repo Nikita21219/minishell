@@ -51,6 +51,13 @@ typedef struct s_wild
 	struct s_wild	*next;
 }	t_wild;
 
+typedef struct s_finfo
+{
+	char	*start;
+	char	*finish;
+	char	**between;
+}	t_finfo;
+
 int		check_argv(int argc, char **argv, char **env, t_data *data);
 void	error_mes_with_exit(char *err_mes, t_data *data);
 void	take_start_env(t_data *data, char **envar);
@@ -103,5 +110,11 @@ int		executor(t_data *data, char *path, char **env, int count_comm);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
+
+/* wildcard */
+int		check_start(t_finfo *dt, char *filename);
+int		check_finish(t_finfo *dt, char *filename);
+int		check_between(t_finfo *dt, char *filename);
+int		free_dt(t_finfo *dt);
 
 #endif
