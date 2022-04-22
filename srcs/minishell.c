@@ -42,10 +42,9 @@ void	minishell(t_data *data, char **env)
 		add_ptr_prev_to_data(data->comm);
 		launcher(data, env);
 		freedata(data);
-		break ;
 	}
 	delenv(&data->env);
-	// freedata(data);
+	freedata(data);
 }
 
 void	ft_takesig(int signum)
