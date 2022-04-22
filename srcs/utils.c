@@ -9,7 +9,7 @@ void	error_mes_with_exit(char *err_mes, t_data *data)
 		delenv(&data->env);
 	if (data->instr)
 		free(data->instr);
-	exit(1);
+	exit(errno);
 }
 
 int	is_same_lines(char *f_str, char *s_str)

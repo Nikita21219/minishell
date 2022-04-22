@@ -28,7 +28,7 @@ void	minishell(t_data *data, char **env)
 			error_mes_with_exit("Error environment\n", data);
 		data->instr = readline(READLINE_RED "mini_hell$ " TERM_RESET);
 		if (!data->instr)
-			break ;
+			error_mes_with_exit("\nExit\n", data);
 		if (data->instr[0] == 0)
 			continue ;
 		add_history(data->instr);
