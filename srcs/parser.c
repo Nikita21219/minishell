@@ -17,7 +17,6 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 		{
 			if (write_arg(str, s, i))
 				return (-1);
-			i = 0;
 			(*s)++;
 			i = check_quote(s, str, quote, data);
 			if (i < 0)

@@ -27,13 +27,12 @@ void	minishell(t_data *data, char **env)
 		if (!data->env)
 			error_mes_with_exit("Error environment\n", data);
 		data->instr = readline(READLINE_RED "mini_hell$ " TERM_RESET);
-		// data->instr = ft_strdup("grep hello << h | wc");
 		if (!data->instr)
 			break ;
 		if (data->instr[0] == 0)
 			continue ;
 		add_history(data->instr);
-		if (parser(data))
+		if (parser(data) || check_tilda(&data->comm))
 		{
 			freedata(data);
 			continue ;
@@ -43,33 +42,35 @@ void	minishell(t_data *data, char **env)
 		add_ptr_prev_to_data(data->comm);
 		launcher(data, env);
 		freedata(data);
-		// sleep(10);
-		// break ;
+		break ;
 	}
 	delenv(&data->env);
-	freedata(data);
+	// freedata(data);
 }
 
-// void	ft_takesig(int signum)
-// {
-// 	if (signum == SIGINT)
-// 		write(1, "\nminishell: ", 13);
-// 	return ;
-// }
+void	ft_takesig(int signum)
+{
+	if (signum == SIGINT)
+	{
+		printf("\n");
+	}
+	return ;
+}
 
 int	main(int argc, char **argv, char **env)
 {
 	t_data				data;
-	// struct sigaction	sig;
+	struct sigaction	sig;
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
-	// sig.sa_handler = &ft_takesig;
-	// sig.sa_flags = SA_USERSPACE_MASK;
-	// if (sigaction(SIGINT, &sig, NULL) < 0)
-	// 	perror("Minishell: Sigactoin");
-	// if (sigaction(SIGQUIT, &sig, NULL) < 0)
-	// 	perror("Minishell: Sigactoin");
+	errno = 0;
+	sig.sa_handler = &ft_takesig;
+	sig.sa_flags = SA_USERSPACE_MASK;
+	if (sigaction(SIGINT, &sig, NULL) < 0)
+		perror("Minishell: Sigactoin");
+	if (sigaction(SIGQUIT, &sig, NULL) < 0)
+		perror("Minishell: Sigactoin");
 	minishell(&data, env);
 	return (0);
 }
