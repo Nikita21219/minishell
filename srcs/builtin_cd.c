@@ -24,7 +24,7 @@ int	ft_cd_with_home(t_data *data)
 	oldpwd = take_path_env(&data->env, "OLDPWD");
 	path = data->comm->args[1];
 	path = ft_strjoin(getenv("HOME"), (path + 1));
-	if (path)
+	if (!path)
 		return (printf("Error malloc cd\n"));
 	if (chdir(path))
 	{

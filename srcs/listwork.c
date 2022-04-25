@@ -100,10 +100,16 @@ void	take_start_env(t_data *data, char **envar)
 	{
 		temp = (t_envr *)malloc(sizeof(t_envr));
 		if (!temp)
+		{
+			errno = 12;
 			error_mes_with_exit("Error malloc\n", data);
+		}
 		write_start_env(envar[a], &temp);
 		if (!temp->key || !temp->val)
+		{
+			errno = 12;
 			error_mes_with_exit("Error malloc\n", data);
+		}
 		temp->next = data->env;
 		data->env = temp;
 	}

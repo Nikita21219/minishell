@@ -95,21 +95,21 @@ t_wild  *wildcard(char *template)
 	return (data);
 }
 
-int	main()
-{
-	wildcard("s*s");
-	// sleep(10);
-	// char *answer = malloc(256);
-	// t_wild	*test;
+// int	main()
+// {
+// 	wildcard("s*s");
+// 	// sleep(10);
+// 	// char *answer = malloc(256);
+// 	// t_wild	*test;
 
-	// while (answer)
-	// {
-	// 	answer = readline("Enter command with wildcard: ");
-	// 	add_history(answer);
-	// 	test = wildcard(answer);
-	// 	free(answer);
-	// 	free(test);
-	// 	sleep(10);
-	// }
-	return (0);
-}
+// 	// while (answer)
+// 	// {
+// 	// 	answer = readline("Enter command with wildcard: ");
+// 	// 	add_history(answer);
+// 	// 	test = wildcard(answer);
+// 	// 	free(answer);
+// 	// 	free(test);
+// 	// 	sleep(10);
+// 	// }
+// 	return (0);
+// }

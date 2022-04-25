@@ -110,6 +110,7 @@ int		executor(t_data *data, char *path, char **env, int count_comm);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
+int		check_tilda(t_comm **comm);
 
 /* wildcard */
 int		check_start(t_finfo *dt, char *filename);
