@@ -1,5 +1,15 @@
 #include "../includes/minishell.h"
 
+int	len(char **template)
+{
+	int	count;
+
+	count = 0;
+	while (template && template[count])
+		count++;
+	return (count);
+}
+
 int	read_directory(DIR *dir, struct dirent **entry)
 {
 	*entry = readdir(dir);
@@ -44,9 +54,13 @@ int	init_dt(t_finfo *dt, char *template)
 		split_template[last_idx_str] = NULL;
 	}
 	j = 0;
-	dt->between = malloc(100000);
-	while (split_template[i])
-		dt->between[j++] = ft_strdup(split_template[i++]);
+	if (split_template[i])
+	{
+		dt->between = malloc(sizeof(char *) * (len(split_template) + 1)); //FIXME check if not allocated
+		while (split_template[i])
+			dt->between[j++] = ft_strdup(split_template[i++]); //FIXME check if not allocated
+		dt->between[j] = NULL;
+	}
 	free_arrs(split_template);
 	return (0);
 }
@@ -66,19 +80,19 @@ int	is_right_file(char *filename, char *template)
 		return (free_dt(dt));
 	i = 0;
 	count = 0;
-	// while (dt->between && dt->between[i])
-	// 	count += ft_strlen(dt->between[i++]);
-	// if (ft_strlen(filename) < ft_strlen(dt->start) + ft_strlen(dt->finish) + count)
-	// 	return (0);
-	// if (dt->start)
-	// 	if (check_start(dt, filename))
-	// 		return (free_dt(dt));
-	// if (dt->finish)
-	// 	if (check_finish(dt, filename))
-	// 		return (free_dt(dt));
-	// if (dt->between)
-	// 	if (check_between(dt, filename))
-	// 		return (free_dt(dt));
+	while (dt->between && i < len(dt->between) && dt->between[i])
+		count += ft_strlen(dt->between[i++]);
+	if (ft_strlen(filename) < ft_strlen(dt->start) + ft_strlen(dt->finish) + count)
+		return (free_dt(dt));
+	if (dt->start)
+		if (check_start(dt, filename))
+			return (free_dt(dt));
+	if (dt->finish)
+		if (check_finish(dt, filename))
+			return (free_dt(dt));
+	if (dt->between)
+		if (check_between(dt, filename))
+			return (free_dt(dt));
 	free_dt(dt);
 	return (1);
 }
@@ -100,23 +114,26 @@ t_wild  *wildcard(char *template)
 	}
 	while (read_directory(dir, &entry))
 	{
+		// if (is_same_lines(entry->d_name, "aaa1file"))
+		// {
 		if (is_right_file(entry->d_name, template))
 			printf("%s\n", entry->d_name);
+		// }
 	}
-	closedir(dir);
+	closedir(dir); // FIXME if returned fail
 	return (data);
 }
 
 int	main()
 {
-	// t_wild *test = wildcard("*est.txt");
+	// t_wild *test = wildcard("*.txt");
 	// free(test);
 	// sleep(10);
 
-	char *answer = malloc(256);
+	char *answer;
 	t_wild	*test;
 
-	while (answer)
+	while (1)
 	{
 		answer = readline("Enter command with wildcard: ");
 		add_history(answer);
