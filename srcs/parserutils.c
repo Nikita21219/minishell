@@ -1,28 +1,28 @@
 #include "../includes/minishell.h"
 
-int	operand(t_comm	*data, char **s, int i)
+int	operand(t_comm	*data, char **s, int *i, char **arg)
 {
 	int	a;
 
 	a = 0;
-	if ((*s)[i] == '<')
+	if ((*s)[*i] == '<' || (*s)[*i] == '>' || (*s)[*i] == '|')
 	{
-		if ((*s)[i] == (*s)[i + 1])
+		if ((*s)[*i] == (*s)[*i + 1])
 			a++;
-		data->oper = ft_substr(*s, i, ++a);
+		data->oper = ft_substr(*s, *i, ++a);
 	}
-	if ((*s)[i] == '>')
+	if ((*s)[*i] == '&' && (*s)[*i + 1] == '&')
 	{
-		if ((*s)[i] == (*s)[i + 1])
-			a++;
-		data->oper = ft_substr(*s, i, ++a);
+		a = 2;
+		data->oper = ft_substr(*s, *i, a);
 	}
-	if ((*s)[i] == '|')
-		data->oper = ft_substr(*s, i, ++a);
 	if (a > 0)
 	{
-		while (--a)
+		if (write_arg(arg, s, *i))
+			*i = -1;
+		while (a--)
 			(*s)++;
+		*i = 0;
 		return (0);
 	}
 	return (1);

@@ -33,10 +33,10 @@ int	takecommand(t_comm *data, char **s)
 	int		i;
 
 	i = 0;
-	while ((*s)[i] && i >= 0 && !ft_space((*s)[i]) && operand(data, s, i))
+	while ((*s)[i] && i >= 0 && !ft_space((*s)[i]) \
+		&& operand(data, s, &i, &data->comm))
 		i = vars_quote_check(&data->comm, s, i, data);
-	if (i < 0 || (((*s)[i] == '|' || (*s)[i] == '>' || \
-	(*s)[i] == '<') && !data->oper) || write_arg(&data->comm, s, i))
+	if (i < 0 || write_arg(&data->comm, s, i))
 	{
 		printf("Error malloc in parse\n");
 		errno = 12;
@@ -52,13 +52,13 @@ int	takeargs(t_comm *data, char **s)
 
 	a = 1;
 	data->args[a] = NULL;
-	i = 0;
-	while ((*s)[i] && !data->oper)
+	while ((*s)[0] && !data->oper)
 	{
-		while ((*s)[i] && i >= 0 && !ft_space((*s)[i]) && operand(data, s, i))
+		i = 0;
+		while ((*s)[i] && i >= 0 && !ft_space((*s)[i]) \
+			&& operand(data, s, &i, &data->args[a]))
 			i = vars_quote_check(&data->args[a], s, i, data);
-		if (i < 0 || (((*s)[i] == '|' || (*s)[i] == '>' || \
-		(*s)[i] == '<') && !data->oper) || write_arg(&data->args[a], s, i))
+		if (i < 0 || write_arg(&data->args[a], s, i))
 		{
 			printf("Error malloc in parse\n");
 			return (1);
@@ -67,10 +67,7 @@ int	takeargs(t_comm *data, char **s)
 			(*s)++;
 		a++;
 		data->args[a] = NULL;
-		i = 0;
 	}
-	if (data->oper)
-		(*s)++;
 	return (0);
 }
 
