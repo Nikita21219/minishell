@@ -55,9 +55,9 @@ int	check_builtins(t_data *data, char **path)
 	if (is_builtins_in_main_proc(data->comm->comm))
 	{
 		error = launch_builtins(data);
+		data->comm = data->comm->next;
 		if (error)
 			return (error);
-		data->comm = data->comm->next;
 		return (-1);
 	}
 	else if (is_builtins(data->comm->comm))

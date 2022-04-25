@@ -42,7 +42,6 @@ int	init_dt(t_finfo *dt, char *template)
 		split_template[last_idx_str] = NULL;
 	}
 	dt->between = &split_template[i];
-	free_arrs(split_template);
 	return (0);
 }
 
@@ -59,14 +58,15 @@ int	is_right_file(char *filename, char *template)
 		return (free_dt(dt));
 	if (dt->start)
 		if (check_start(dt, filename))
+			return (0);
+	if (dt->finish)
+		if (check_finish(dt, filename))
 			return (free_dt(dt));
-	// if (dt->finish)
-	// 	if (check_finish(dt, filename))
-	// 		return (free_dt(dt));
-	// if (dt->between)
-	// 	if (check_between(dt, filename))
-	// 		return (free_dt(dt));
+	if (dt->between)
+		if (check_between(dt, filename))
+			return (free_dt(dt));
 	free_dt(dt);
+	// sleep(10);
 	return (1);
 }
 
@@ -89,27 +89,32 @@ t_wild  *wildcard(char *template)
 	{
 		if (is_right_file(entry->d_name, template))
 			printf("%s\n", entry->d_name);
-			// wild_add_elem(&data, entry->d_name);
+		// break ;
 	}
 	closedir(dir);
 	return (data);
 }
 
-// int	main()
-// {
-// 	wildcard("s*s");
-// 	// sleep(10);
-// 	// char *answer = malloc(256);
-// 	// t_wild	*test;
+int	main()
+{
+	t_wild *test = wildcard("s*s");
+	free(test);
+	sleep(10);
 
-// 	// while (answer)
-// 	// {
-// 	// 	answer = readline("Enter command with wildcard: ");
-// 	// 	add_history(answer);
-// 	// 	test = wildcard(answer);
-// 	// 	free(answer);
-// 	// 	free(test);
-// 	// 	sleep(10);
-// 	// }
-// 	return (0);
-// }
+	// sleep(10);
+	// char *answer = malloc(256);
+	// t_wild	*test;
+
+	// while (answer)
+	// {
+	// 	answer = readline("Enter command with wildcard: ");
+	// 	add_history(answer);
+	// 	test = wildcard(answer);
+	// 	free(answer);
+	// 	free(test);
+	// 	sleep(10);
+	// }
+	return (0);
+}
+
+// c && cc srcs/wild*.c libft/libft.a srcs/utils2.c srcs/free_utils.c && ./a.out

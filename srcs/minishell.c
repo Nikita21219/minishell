@@ -17,7 +17,7 @@ void	tmp_print_arg_after_parser(t_comm *data)
 		i++;
 		data = data->next;
 	}
-}
+} //FIXME delete this func
 
 void	minishell(t_data *data, char **env)
 {
