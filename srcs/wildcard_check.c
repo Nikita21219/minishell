@@ -29,7 +29,7 @@ int	check_finish(t_finfo *dt, char *filename)
 
 int	check_one_between(char *template, char *filename, int *j)
 {
-	int	i;
+	int	i = 0;
 	int	flag;
 
 	i = 0;
@@ -40,13 +40,14 @@ int	check_one_between(char *template, char *filename, int *j)
 	flag = 0;
 	while (template[i] && filename[*j])
 	{
-		if (template[i] == filename[*j])
-			flag = 1;
-		if (template[i++] != filename[*j])
+		// if (template[i] == filename[*j])
+		// 	flag = 1;
+		if (template[i++] != filename[(*j)++])
 			return (1);
+		// (*j)++;
 	}
-	if (!flag)
-		return (1);
+	// if (!flag)
+	// 	return (1);
 	return (0);
 }
 
@@ -59,7 +60,6 @@ char	*get_fname_without_start_and_finish(char *fname, t_finfo *dt)
 	if (start == NULL)
 		return (NULL);
 	finish = ft_strtrim(start, dt->finish); //FIXME leaks
-	free(start);
 	return (finish);
 }
 
@@ -72,12 +72,12 @@ int	check_between(t_finfo *dt, char *filename)
 	j = 0;
 	while (dt->between[i])
 	{
-		j++;
 		filename = get_fname_without_start_and_finish(filename, dt);
 		if (filename == NULL)
 			return (1);
 		if (check_one_between(dt->between[i++], filename, &j))
 			return (1);
+		// j++;
 	}
 	return (0);
 }
@@ -106,6 +106,8 @@ int	free_dt(t_finfo *dt)
 				free(dt->between[i]);
 				dt->between[i++] = NULL;
 			}
+			free(dt->between);
+			dt->between = NULL;
 		}
 		free(dt);
 		dt = NULL;

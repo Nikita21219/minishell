@@ -24,6 +24,7 @@ int	init_dt(t_finfo *dt, char *template)
 	int		i;
 	int		last_idx_str;
 	int		last_idx_char;
+	int		j;
 
 	split_template = ft_split(template, '*');
 	if (split_template == NULL)
@@ -33,21 +34,28 @@ int	init_dt(t_finfo *dt, char *template)
 	dt->between = NULL;
 	i = 0;
 	if (template[i] != '*')
-		dt->start = split_template[i++];
+		dt->start = ft_strdup(split_template[i++]); //FIXME check if not allocated
 	last_idx_char = ft_strlen(template) - 1;
 	last_idx_str = get_last_idx_str(split_template);
 	if (template[last_idx_char] != '*')
 	{
-		dt->finish = split_template[last_idx_str];
+		dt->finish = ft_strdup(split_template[last_idx_str]); //FIXME check if not allocated
+		free(split_template[last_idx_str]);
 		split_template[last_idx_str] = NULL;
 	}
-	dt->between = &split_template[i];
+	j = 0;
+	dt->between = malloc(100000);
+	while (split_template[i])
+		dt->between[j++] = ft_strdup(split_template[i++]);
+	free_arrs(split_template);
 	return (0);
 }
 
 int	is_right_file(char *filename, char *template)
 {
 	t_finfo	*dt;
+	int		i;
+	int		count;
 
 	if (filename[0] == '.' && template[0] != '.')
 		return (0);
@@ -56,17 +64,22 @@ int	is_right_file(char *filename, char *template)
 		return (free_dt(dt));
 	if (init_dt(dt, template))
 		return (free_dt(dt));
-	if (dt->start)
-		if (check_start(dt, filename))
-			return (0);
-	if (dt->finish)
-		if (check_finish(dt, filename))
-			return (free_dt(dt));
-	if (dt->between)
-		if (check_between(dt, filename))
-			return (free_dt(dt));
+	i = 0;
+	count = 0;
+	// while (dt->between && dt->between[i])
+	// 	count += ft_strlen(dt->between[i++]);
+	// if (ft_strlen(filename) < ft_strlen(dt->start) + ft_strlen(dt->finish) + count)
+	// 	return (0);
+	// if (dt->start)
+	// 	if (check_start(dt, filename))
+	// 		return (free_dt(dt));
+	// if (dt->finish)
+	// 	if (check_finish(dt, filename))
+	// 		return (free_dt(dt));
+	// if (dt->between)
+	// 	if (check_between(dt, filename))
+	// 		return (free_dt(dt));
 	free_dt(dt);
-	// sleep(10);
 	return (1);
 }
 
@@ -89,7 +102,6 @@ t_wild  *wildcard(char *template)
 	{
 		if (is_right_file(entry->d_name, template))
 			printf("%s\n", entry->d_name);
-		// break ;
 	}
 	closedir(dir);
 	return (data);
@@ -97,23 +109,22 @@ t_wild  *wildcard(char *template)
 
 int	main()
 {
-	t_wild *test = wildcard("s*s");
-	free(test);
-	sleep(10);
-
+	// t_wild *test = wildcard("*est.txt");
+	// free(test);
 	// sleep(10);
-	// char *answer = malloc(256);
-	// t_wild	*test;
 
-	// while (answer)
-	// {
-	// 	answer = readline("Enter command with wildcard: ");
-	// 	add_history(answer);
-	// 	test = wildcard(answer);
-	// 	free(answer);
-	// 	free(test);
-	// 	sleep(10);
-	// }
+	char *answer = malloc(256);
+	t_wild	*test;
+
+	while (answer)
+	{
+		answer = readline("Enter command with wildcard: ");
+		add_history(answer);
+		test = wildcard(answer);
+		free(answer);
+		free(test);
+		// sleep(10);
+	}
 	return (0);
 }
 
