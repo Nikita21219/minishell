@@ -84,6 +84,7 @@ void	delenv(t_envr **env);
 int		command_in_bin(char *command);
 void	exit_from_minishell(void);
 t_envr	*take_path_env(t_envr **env, char *s);
+int		check_wildcard_arg(char ***args);
 
 /* launcher */
 int		launcher(t_data *data, char **env);
