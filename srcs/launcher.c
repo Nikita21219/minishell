@@ -100,7 +100,7 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	free(path);
 }
 
-int	launcher(t_data *data, char **env)
+int	launcher(t_data *data)
 {
 	char	*path;
 	int		count_command;
@@ -115,7 +115,7 @@ int	launcher(t_data *data, char **env)
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;
-		result = executor(data, path, env, count_command);
+		result = executor(data, path, count_command);
 		if (result < 0)
 			return (handle_error_executor(result));
 		else if (result == 1)
