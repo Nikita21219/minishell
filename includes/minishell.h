@@ -56,7 +56,6 @@ typedef struct s_finfo
 int		is_same_lines(char *f_str, char *s_str);
 void	freedata(t_data *data);
 void	free_arrs(char **arr);
-void	free_lists(t_comm *data);
 int		continue_with_print(char *err_str);
 
 /* parser */

@@ -123,6 +123,5 @@ int	launcher(t_data *data)
 		set_next_ptr_data_and_free_path(data, path);
 	}
 	result = close_fds_and_waiting(tmp_dt, wait_count);
-	free_lists(tmp_dt);
 	return (result);
 }

@@ -12,6 +12,7 @@ void	tmp_print_arg_after_parser(t_comm *data)
 		printf("command: %s\n", data->comm);
 		while (data->args[++j])
 			printf("data args %d: %s\n", j, data->args[j]);
+		printf("data args %d: %s\n", j, data->args[j]);
 		printf("oper: %s\n", data->oper);
 		printf("\n\n");
 		i++;

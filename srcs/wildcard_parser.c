@@ -10,16 +10,16 @@ int	connect_arrays(int i, char ***temp, char ***args, char ***wild)
 	while (++j < i)
 		(*temp)[j] = (*args)[j];
 	while ((*wild)[++x])
-		(*temp)[j] = (*wild)[x];
-	x = i;
+		(*temp)[j++] = (*wild)[x];
+	x = ++i;
+	i = j - 1;
 	while ((*args)[x])
-	{
-		(*temp)[j] = (*args)[x];
-		j++;
-		x++;
-	}
+		(*temp)[j++] = (*args)[x++];
 	(*temp)[j] = NULL;
-	free((*wild));
+	free(*wild);
+	free(*args);
+	*args = *temp;
+	return (i);
 }
 
 int	check_wild(char ***args, char **wild, int i)
@@ -41,15 +41,12 @@ int	check_wild(char ***args, char **wild, int i)
 	temp = malloc(sizeof(char *) * (x + j + 1));
 	if (!temp)
 	{
-		j = 0;
-		while (wild[j])
-			free(wild[j++]);
-		free(wild);
+		free_arrs(wild);
 		printf("Error malloc in parse\n");
 		errno = 12;
 		return (-1);
 	}
-	return (connect_arrays);
+	return (connect_arrays(i, &temp, args, &wild));
 }
 
 int	check_wildcard_arg(char ***args)
@@ -59,7 +56,7 @@ int	check_wildcard_arg(char ***args)
 	i = 0;
 	while ((*args)[i])
 	{
-		if (ft_strchr((*args)[i], '*'))
+		if ((*args)[i][0] == '*' || ft_strchr((*args)[i], '*') != NULL)
 			i = check_wild(args, wildcard((*args)[i]), i);
 		if (i < 0)
 			return (1);
