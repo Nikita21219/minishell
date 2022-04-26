@@ -2,9 +2,6 @@
 
 int	create_pipes(t_comm *data)
 {
-	int	i;
-
-	i = 0;
 	while (data->next)
 	{
 		if (pipe(data->fd) == -1)
@@ -33,7 +30,7 @@ void	add_ptr_prev_to_data(t_comm *data)
 
 int	close_fd(t_comm *data)
 {
-	while (data->prev)
+	while (data && data->prev)
 		data = data->prev;
 	while (data->next)
 	{
@@ -44,6 +41,7 @@ int	close_fd(t_comm *data)
 			if (close(data->fd[1]) == -1)
 				return (1);
 		}
+		// kill(data->pid, SIGKILL);
 		data = data->next;
 	}
 	return (0);
@@ -56,12 +54,17 @@ int	is_correct_comm(char *comm)
 	return (0);
 }
 
-int	is_correct_path(char *comm)
+int	is_same_lines(char *f_str, char *s_str)
 {
-	DIR	*dir;
+	int	i;
 
-	dir = opendir(comm);
-	if (dir)
-		return (closedir(dir));
+	if (!f_str || !s_str)
+		return (0);
+	if (ft_strlen(f_str) != ft_strlen(s_str))
+		return (0);
+	i = -1;
+	while (f_str[++i])
+		if (f_str[i] != s_str[i])
+			return (0);
 	return (1);
 }

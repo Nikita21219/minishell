@@ -27,12 +27,14 @@ typedef struct s_comm
 {
 	int				fd[2];
 	int				i;
+	pid_t			pid;
 	char			*comm;
 	char			**args;
 	char			*oper;
 	struct s_data	*data;
 	struct s_comm	*next;
 	struct s_comm	*prev;
+	int				status;
 }	t_comm;
 
 typedef struct s_data
@@ -42,6 +44,19 @@ typedef struct s_data
 	struct s_envr	*vars;
 	char			*instr;
 }	t_data;
+
+typedef struct s_wild
+{
+	char			*file;
+	struct s_wild	*next;
+}	t_wild;
+
+typedef struct s_finfo
+{
+	char	*start;
+	char	*finish;
+	char	**between;
+}	t_finfo;
 
 int		check_argv(int argc, char **argv, char **env, t_data *data);
 void	error_mes_with_exit(char *err_mes, t_data *data);
@@ -86,15 +101,29 @@ int		launch_builtins(t_data *data);
 int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
 void	free_lists(t_comm *data);
-int		is_correct_path(char *comm);
 int		initialize_dirs(char ***dirs);
 int		check_oper(t_data *data);
-int		handle_oper(t_data *data, int count_comm);
 t_envr	*take_path_env(t_envr **env, char *s);
 int		ft_export(t_data *data);
 void	ft_unset(t_data *data);
+int		executor(t_data *data, char *path, char **env, int count_comm);
+int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
 int		check_tilda(t_comm **comm);
+
+/* wildcard */
+t_wild	*wildcard(char *template);
+int		check_start(t_finfo *dt, char *filename);
+int		check_finish(t_finfo *dt, char *filename);
+int		check_between(t_finfo *dt, char *filename);
+int		free_dt(t_finfo *dt);
+int		len(char **template);
+int		initial_var(char ***split_template, t_finfo *dt, char *template);
+int		init_dt_start(t_finfo *dt, char *str, char ***split_template);
+int		init_dt_finish(t_finfo *dt, char *str, char ***temp, int last_idx_str);
+int		init_dt_between(t_finfo *dt, char ***split_template, int *i);
+int		check_parts(t_finfo *dt, char *filename);
+int		wild_add_elem(t_wild **dt, char *file);
 
 #endif

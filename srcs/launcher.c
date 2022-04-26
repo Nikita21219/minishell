@@ -7,7 +7,7 @@ char	*get_path(char *comm)
 	char	*result;
 	int		i;
 
-	if (is_correct_comm(comm) && is_correct_path(comm)) //FIXME
+	if (is_correct_comm(comm))
 		return (ft_strdup(comm));
 	i = -1;
 	if (initialize_dirs(&dirs))
@@ -28,43 +28,67 @@ char	*get_path(char *comm)
 	return (ft_strdup("launch builtins"));
 }
 
-int	executor(t_data *data, char *path, char **env, int count_comm)
+int	close_fds_and_waiting(t_comm *data, int wait_count)
 {
-	int		pid;
-	int		error;
+	int	wstatus;
+	int	status_code;
 
-	error = check_oper(data);
-	if (error)
-		return (error);
-	pid = fork();
-	if (pid < 0)
-		return (FORK_ERR);
-	else if (pid == 0)
+	if (close_fd(data))
+		return (continue_with_print("Error: close() returned fail\n"));
+	while (wait_count-- > 0)
 	{
-		error = handle_oper(data, count_comm);
-		if (error)
-			exit(error);
-		if (data->comm->comm)
+		if (wait(&wstatus) == -1)
+			return (continue_with_print("Error: wait() returned fail\n"));
+		if (WIFEXITED(wstatus))
 		{
-			if (data->comm->prev && data->comm->prev->prev && is_same_lines(data->comm->prev->prev->oper, "<<"))
-				if (dup2(data->comm->prev->fd[0], STDIN_FILENO) == -1)
-					exit(DUP_ERR);
-			if (close_fd(data->comm))
-				exit(CLOSE_ERR);
-			if (is_same_lines("launch builtins", path))
-			{
-				if (launch_builtins(data))
-					exit(127);
-				exit(0);
-			}
-			else
-				if (execve(path, data->comm->args, env) == -1)
-					exit(EXEC_ERR);
+			status_code = WEXITSTATUS(wstatus);
+			errno = status_code;
 		}
-		else
-			exit(0);
 	}
 	return (0);
+}
+
+int	check_builtins(t_data *data, char **path)
+{
+	int	error;
+
+	if (is_builtins_in_main_proc(data->comm->comm))
+	{
+		error = launch_builtins(data);
+		data->comm = data->comm->next;
+		if (error)
+			return (error);
+		return (-1);
+	}
+	else if (is_builtins(data->comm->comm))
+		*path = ft_strdup("launch builtins");
+	else
+		*path = get_path(data->comm->comm);
+	if (!(*path) && data->comm->comm)
+		return (continue_with_print("Error: memory allocated failed\n"));
+	return (0);
+}
+
+void	set_next_ptr_data_and_free_path(t_data *data, char *path)
+{
+	if (is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->oper, ">>"))
+	{
+		while (data->comm && (is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->prev->oper, ">")))
+			data->comm = data->comm->next;
+	}
+	else if (is_same_lines(data->comm->oper, "<"))
+	{
+		while ((data->comm && is_same_lines(data->comm->oper, "<")) || (data->comm && is_same_lines(data->comm->prev->oper, "<")))
+			data->comm = data->comm->next;
+	}
+	else if (data && data->comm && is_same_lines(data->comm->oper, "<<"))
+	{
+		while ((data->comm && is_same_lines(data->comm->oper, "<<")) || (data->comm && is_same_lines(data->comm->prev->oper, "<<")))
+			data->comm = data->comm->next;
+	}
+	else
+		data->comm = data->comm->next;
+	free(path);
 }
 
 int	launcher(t_data *data, char **env)
@@ -72,7 +96,7 @@ int	launcher(t_data *data, char **env)
 	char	*path;
 	int		count_command;
 	int		wait_count;
-	int		error;
+	int		result;
 	t_comm	*tmp_dt;
 
 	tmp_dt = data->comm;
@@ -82,35 +106,17 @@ int	launcher(t_data *data, char **env)
 		return (0);
 	while (data->comm)
 	{
-		if (is_builtins_in_main_proc(data->comm->comm))
-		{
-			launch_builtins(data); //FIXME if func return failed
-			data->comm = data->comm->next;
+		if (check_builtins(data, &path))
 			continue ;
-		}
-		else if (is_builtins(data->comm->comm))
-			path = ft_strdup("launch builtins");
-		else
-			path = get_path(data->comm->comm);
-		if (!path && data->comm->comm)
-			return (continue_with_print("Error: memory allocated failed\n"));
 		wait_count++;
-		error = executor(data, path, env, count_command);
-		if (error < 0)
-			return (handle_error_executor(error));
-		if (is_same_lines(data->comm->oper, "<<") || is_same_lines(data->comm->oper, ">") || is_same_lines(data->comm->oper, ">>") || is_same_lines(data->comm->oper, "<"))
-			data->comm = data->comm->next->next;
-		else
-			data->comm = data->comm->next;
-		free(path);
+		result = executor(data, path, env, count_command);
+		if (result < 0)
+			return (handle_error_executor(result));
+		else if (result == 1)
+			return (handle_error_executor(result));
+		set_next_ptr_data_and_free_path(data, path);
 	}
-	if (close_fd(tmp_dt))
-		return (continue_with_print("Error: close() returned fail\n"));
-	while (wait_count-- > 0)
-	{
-		if (wait(NULL) == -1)
-			return (continue_with_print("Error: wait() returned fail\n"));
-	}
+	result = close_fds_and_waiting(tmp_dt, wait_count);
 	free_lists(tmp_dt);
-	return (0);
+	return (result);
 }

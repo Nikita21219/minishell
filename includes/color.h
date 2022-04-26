@@ -33,6 +33,7 @@
 # define EXEC_ERR			-5
 # define MALLOC_ERR			-6
 # define OPEN_ERR			-7
+# define KILL_ERR			-8
 
 # define BUILTIN_ECHO		1
 # define BUILTIN_CD 		2

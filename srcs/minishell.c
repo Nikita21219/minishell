@@ -17,7 +17,8 @@ void	tmp_print_arg_after_parser(t_comm *data)
 		i++;
 		data = data->next;
 	}
-}
+} //FIXME delete this func
+
 void	minishell(t_data *data, char **env)
 {
 	int TMP_TEST = 2;
@@ -42,6 +43,7 @@ void	minishell(t_data *data, char **env)
 		add_ptr_prev_to_data(data->comm);
 		launcher(data, env);
 		freedata(data);
+		// sleep(10);
 	}
 	delenv(&data->env);
 	freedata(data);
@@ -64,13 +66,12 @@ int	main(int argc, char **argv, char **env)
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
-	errno = 0;
 	sig.sa_handler = &ft_takesig;
 	sig.sa_flags = SA_USERSPACE_MASK;
-	if (sigaction(SIGINT, &sig, NULL) < 0)
-		perror("Minishell: Sigactoin");
-	if (sigaction(SIGQUIT, &sig, NULL) < 0)
-		perror("Minishell: Sigactoin");
+	// if (sigaction(SIGINT, &sig, NULL) < 0)
+	// 	perror("Minishell: Sigactoin");
+	// if (sigaction(SIGQUIT, &sig, NULL) < 0)
+	// 	perror("Minishell: Sigactoin");
 	minishell(&data, env);
 	return (0);
 }
