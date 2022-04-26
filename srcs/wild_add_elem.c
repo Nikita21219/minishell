@@ -1,29 +1,10 @@
 #include "../includes/minishell.h"
 
-int	wild_add_elem(t_wild **dt, char *file)
+int	wild_add_elem(char ***arr, char *file, int i)
 {
-	t_wild	*tmp_dt;
-	t_wild	*new;
-
-	new = malloc(sizeof(t_wild));
-	if (new == NULL)
-		return (1);
-	new->file = ft_strdup(file);
-	if (new->file == NULL)
-	{
-		free(new);
-		return (1);
-	}
-	new->next = NULL;
-	if (*dt == NULL)
-		*dt = new;
-	else
-	{
-		tmp_dt = *dt;
-		while (tmp_dt->next)
-			tmp_dt = tmp_dt->next;
-		tmp_dt->next = new;
-	}
+	take_arg_mass(arr, i);
+	(*arr)[i] = ft_strdup(file);
+	take_arg_mass(arr, i + 1);
 	return (0);
 }
 

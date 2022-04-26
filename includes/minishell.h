@@ -45,12 +45,6 @@ typedef struct s_data
 	char			*instr;
 }	t_data;
 
-typedef struct s_wild
-{
-	char			*file;
-	struct s_wild	*next;
-}	t_wild;
-
 typedef struct s_finfo
 {
 	char	*start;
@@ -126,7 +120,7 @@ void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
 
 /* wildcard */
-t_wild	*wildcard(char *template);
+char	**wildcard(char *template);
 int		check_start(t_finfo *dt, char *filename);
 int		check_finish(t_finfo *dt, char *filename);
 int		check_between(t_finfo *dt, char *filename);
@@ -137,6 +131,6 @@ int		init_dt_start(t_finfo *dt, char *str, char ***split_template);
 int		init_dt_finish(t_finfo *dt, char *str, char ***temp, int last_idx_str);
 int		init_dt_between(t_finfo *dt, char ***split_template, int *i);
 int		check_parts(t_finfo *dt, char *filename);
-int		wild_add_elem(t_wild **dt, char *file);
+int		wild_add_elem(char ***arr, char *file, int i);
 
 #endif

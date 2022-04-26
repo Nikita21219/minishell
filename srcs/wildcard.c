@@ -67,20 +67,21 @@ int	is_right_file(char *filename, char *template)
 	return (check_parts(dt, filename));
 }
 
-t_wild	*wildcard(char *template)
+char	**wildcard(char *template)
 {
-	t_wild			*data;
+	char			**arr;
 	DIR				*dir;
 	struct dirent	*entry;
+	int				i;
 
 	dir = opendir(".");
 	if (dir == NULL)
 		return (NULL);
-	data = NULL;
+	arr = NULL;
+	i = 0;
 	while (read_directory(dir, &entry))
 		if (is_right_file(entry->d_name, template))
-			if (wild_add_elem(&data, entry->d_name))
-				continue ;
+			wild_add_elem(&arr, entry->d_name, i++);
 	closedir(dir);
-	return (data);
+	return (arr);
 }
