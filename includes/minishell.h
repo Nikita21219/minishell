@@ -68,6 +68,7 @@ t_comm	*addelem(t_data *data);
 void	delcommand(t_comm **comm);
 int		check_quote(char **s, char **str, char quote, t_comm *data);
 int		write_arg(char **arg, char **s, int i);
+int		take_arg_mass(char ***args, int a);
 int		check_second_qoute(char *s, int i, char quote);
 int		takevar(char **s, char **str, t_comm *data);
 int		operand(t_comm	*data, char **s, int *i, char **arg);

@@ -66,7 +66,8 @@ int	takeargs(t_comm *data, char **s)
 		while ((**s) && ft_space(**s))
 			(*s)++;
 		a++;
-		data->args[a] = NULL;
+		if (take_arg_mass(&data->args, a))
+			return (1);
 	}
 	return (0);
 }

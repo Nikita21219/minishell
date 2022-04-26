@@ -16,7 +16,7 @@ t_comm	*addelem(t_data *data)
 	temp = (t_comm *)malloc(sizeof(t_comm));
 	if (!temp)
 		return (NULL);
-	temp->args = (char **)ft_calloc(sizeof(char *), 100);
+	temp->args = ft_calloc(sizeof(char *), 2);
 	if (!temp->args)
 		return (NULL);
 	temp->args[0] = ft_strdup("./minishell");

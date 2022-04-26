@@ -44,3 +44,24 @@ int	ft_space(char str)
 		return (1);
 	return (0);
 }
+
+int	take_arg_mass(char ***args, int a)
+{
+	int		i;
+	char	**mass;
+
+	i = -1;
+	mass = ft_calloc(sizeof(char *), a + 1);
+	if (!mass)
+	{
+		printf("Error malloc in parse\n");
+		errno = 12;
+		return (1);
+	}
+	while (++i != a)
+		mass[i] = (*args)[i];
+	mass[i] = NULL;
+	free(*args);
+	*args = mass;
+	return (0);
+}
