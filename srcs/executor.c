@@ -49,6 +49,7 @@ int	handle_oper(t_data *data, int count_comm)
 
 void	exec_command(t_data *data, char *path, char **env)
 {
+	(void) env;
 	if (data->comm->prev && data->comm->prev->prev \
 	&& is_same_lines(data->comm->prev->prev->oper, "<<"))
 		if (dup2(data->comm->prev->fd[0], STDIN_FILENO) == -1)
@@ -62,7 +63,7 @@ void	exec_command(t_data *data, char *path, char **env)
 		exit(0);
 	}
 	else
-		if (execve(path, data->comm->args, env) == -1)
+		if (execve(path, data->comm->args, get_env(data->env)) == -1)
 			exit(EXEC_ERR);
 }
 

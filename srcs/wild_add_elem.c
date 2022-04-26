@@ -2,9 +2,9 @@
 
 int	wild_add_elem(char ***arr, char *file, int i)
 {
-	take_arg_mass(arr, i);
+	take_arg_mass(arr, i); //FIXME if returned fail
 	(*arr)[i] = ft_strdup(file);
-	take_arg_mass(arr, i + 1);
+	take_arg_mass(arr, i + 1); //FIXME if returned fail
 	return (0);
 }
 

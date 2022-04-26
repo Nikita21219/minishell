@@ -118,6 +118,7 @@ int		executor(t_data *data, char *path, char **env, int count_comm);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
+char	**get_env(t_envr *dt_env);
 
 /* wildcard */
 char	**wildcard(char *template);
