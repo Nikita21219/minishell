@@ -83,5 +83,11 @@ char	**wildcard(char *template)
 		if (is_right_file(entry->d_name, template))
 			wild_add_elem(&arr, entry->d_name, i++);
 	closedir(dir);
+	if (arr == NULL)
+	{
+		arr = malloc(sizeof(char *));
+		arr[0] = template;
+		arr[1] = NULL;
+	}
 	return (arr);
 }
