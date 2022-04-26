@@ -70,7 +70,7 @@ int		check_quote(char **s, char **str, char quote, t_comm *data);
 int		write_arg(char **arg, char **s, int i);
 int		check_second_qoute(char *s, int i, char quote);
 int		takevar(char **s, char **str, t_comm *data);
-int		operand(t_comm	*data, char **s, int i);
+int		operand(t_comm	*data, char **s, int *i, char **arg);
 int		is_same_lines(char *f_str, char *s_str);
 void	delenv(t_envr **env);
 void	freedata(t_data *data);

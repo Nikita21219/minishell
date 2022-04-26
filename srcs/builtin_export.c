@@ -41,11 +41,22 @@ int	add_list_env(t_envr **env, char *arg)
 	return (0);
 }
 
+void	print_env(t_envr *env)
+{
+	while (env)
+	{
+		printf("declare -x %s=\"%s\"\n", env->key, env->val);
+		env = env->next;
+	}
+}
+
 int	ft_export(t_data *data)
 {
 	int		i;
 
 	i = 1;
+	if (!data->comm->args[i])
+		print_env(data->env);
 	while (data->comm->args[i])
 	{
 		if (check_right_var(data->comm->args[i]))

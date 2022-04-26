@@ -27,9 +27,9 @@ void	minishell(t_data *data, char **env)
 	{
 		if (!data->env)
 			error_mes_with_exit("Error environment\n", data);
-		data->instr = readline(READLINE_RED "mini_hell$ " TERM_RESET);
+		data->instr = readline("mini_hell$ ");
 		if (!data->instr)
-			error_mes_with_exit("\nExit\n", data);
+			error_mes_with_exit("\b\bexit\n", data);
 		if (data->instr[0] == 0)
 			continue ;
 		add_history(data->instr);
@@ -52,8 +52,9 @@ void	minishell(t_data *data, char **env)
 void	ft_takesig(int signum)
 {
 	if (signum == SIGINT)
-		write(1, "\nminishell: ", 13);
-	return ;
+		printf("\r\n");
+	else
+		return ;
 }
 
 int	main(int argc, char **argv, char **env)
