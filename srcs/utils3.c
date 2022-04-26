@@ -66,10 +66,12 @@ int	check_oper(t_data *data)
 			dt = dt->next;
 		}
 	}
-	if ((dt->next && is_same_lines(dt->next->oper, "|")	&& is_same_lines(dt->oper, "<<"))\
+	if ((dt->next && is_same_lines(dt->next->oper, "|") \
+	&& is_same_lines(dt->oper, "<<")) \
 	|| is_same_lines(dt->oper, "<") || is_same_lines(dt->oper, ">"))
 	{
-		if (is_same_lines(dt->oper, "<") && dt->next && access(dt->next->comm, 0))
+		if (is_same_lines(dt->oper, "<") && \
+		dt->next && access(dt->next->comm, 0))
 			return (1);
 		if (create_pipe(dt->next))
 			return (PIPE_ERR);

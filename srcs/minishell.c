@@ -52,9 +52,7 @@ void	minishell(t_data *data, char **env)
 void	ft_takesig(int signum)
 {
 	if (signum == SIGINT)
-	{
 		printf("\r\n");
-	}
 	else
 		return ;
 }

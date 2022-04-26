@@ -1,5 +1,37 @@
 #include "../includes/minishell.h"
 
+int	init_result_and_line(char **line, char **result)
+{
+	*result = ft_calloc(1, sizeof(char));
+	if (*result == NULL)
+		return (1);
+	*line = ft_calloc(1, sizeof(char));
+	if (*line == NULL)
+		return (1);
+	return (0);
+}
+
+int	readline_and_free(char **line)
+{
+	free(*line);
+	*line = readline("> ");
+	if (*line == NULL)
+		return (1);
+	return (0);
+}
+
+int	init_line_with_nl(char **line_with_nl, char **line, char **result)
+{
+	*line_with_nl = ft_strjoin(*line, "\n");
+	if (*line_with_nl == NULL)
+	{
+		free(*line);
+		free(*result);
+		return (1);
+	}
+	return (0);
+}
+
 int	heredoc(t_comm *data)
 {
 	char	*line;
@@ -7,36 +39,19 @@ int	heredoc(t_comm *data)
 	char	*result;
 	char	*line_with_nl;
 
-	result = ft_calloc(1, sizeof(char));
-	if (!result)
-		return (1);
-	line = ft_calloc(1, sizeof(char));
-	if (!line)
+	if (init_result_and_line(&result, &line))
 		return (1);
 	while (1)
 	{
-		free(line);
-		line = readline("> ");
-		if (!line)
+		if (readline_and_free(&line))
 			return (1);
 		if (is_same_lines(data->next->comm, line))
 			break ;
-		line_with_nl = ft_strjoin(line, "\n");
-		if (!line_with_nl)
-		{
-			free(line);
-			free(result);
+		if (init_line_with_nl(&line_with_nl, &line, &result))
 			return (1);
-		}
-		ptr_to_free = result;
-		result = ft_strjoin(result, line_with_nl);
-		free(line_with_nl);
-		free(ptr_to_free);
-		if (!result)
-		{
-			free(line);
+		if (init_result(\
+		&ptr_to_free, &line_with_nl, &line, &result))
 			return (1);
-		}
 	}
 	free(line);
 	write(data->fd[1], result, ft_strlen(result));

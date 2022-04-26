@@ -41,3 +41,16 @@ int	get_count_comm(t_comm *data)
 	}
 	return (count);
 }
+
+int	kill_childs(t_comm *data)
+{
+	while (data->prev)
+		data = data->prev;
+	while (data)
+	{
+		if (kill(data->pid, SIGKILL))
+			return (1);
+		data = data->next;
+	}
+	return (0);
+}
