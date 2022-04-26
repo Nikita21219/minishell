@@ -1,5 +1,23 @@
 #include "../includes/minishell.h"
 
+int	syntx_oper(char **arg, char **s, int *i, int a)
+{
+	if (write_arg(arg, s, *i))
+	{
+		*i = -1;
+		return (0);
+	}
+	while (a--)
+		(*s)++;
+	*i = 0;
+	if (**s == '<' || **s == '>' || **s == '|' || **s == '&')
+	{
+		printf("mini_hell: syntax error near unexpected token `%c\'\n", **s);
+		*i = -2;
+	}
+	return (0);
+}
+
 int	operand(t_comm	*data, char **s, int *i, char **arg)
 {
 	int	a;
@@ -17,14 +35,7 @@ int	operand(t_comm	*data, char **s, int *i, char **arg)
 		data->oper = ft_substr(*s, *i, a);
 	}
 	if (a > 0)
-	{
-		if (write_arg(arg, s, *i))
-			*i = -1;
-		while (a--)
-			(*s)++;
-		*i = 0;
-		return (0);
-	}
+		return (syntx_oper(arg, s, i, a));
 	return (1);
 }
 
@@ -86,17 +97,4 @@ int	check_second_qoute(char *s, int i, char quote)
 		if (s[i] == quote)
 			return (1);
 	return (0);
-}
-
-t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars)
-{
-	while (p && !is_same_lines(tmp, p->key))
-		p = p->next;
-	if (!p && vars)
-	{
-		p = vars;
-		while (p && !is_same_lines(tmp, p->key))
-			p = p->next;
-	}
-	return (p);
 }

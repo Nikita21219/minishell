@@ -65,3 +65,16 @@ int	take_arg_mass(char ***args, int a)
 	*args = mass;
 	return (0);
 }
+
+t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars)
+{
+	while (p && !is_same_lines(tmp, p->key))
+		p = p->next;
+	if (!p && vars)
+	{
+		p = vars;
+		while (p && !is_same_lines(tmp, p->key))
+			p = p->next;
+	}
+	return (p);
+}
