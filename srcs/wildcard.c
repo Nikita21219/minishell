@@ -1,15 +1,5 @@
 #include "../includes/minishell.h"
 
-int	len(char **template)
-{
-	int	count;
-
-	count = 0;
-	while (template && template[count])
-		count++;
-	return (count);
-}
-
 int	read_directory(DIR *dir, struct dirent **entry)
 {
 	*entry = readdir(dir);
@@ -34,32 +24,22 @@ int	init_dt(t_finfo *dt, char *template)
 	int		i;
 	int		last_idx_str;
 	int		last_idx_char;
-	int		j;
 
-	split_template = ft_split(template, '*');
-	if (split_template == NULL)
+	if (initial_var(&split_template, dt, template))
 		return (1);
-	dt->start = NULL;
-	dt->finish = NULL;
-	dt->between = NULL;
 	i = 0;
 	if (template[i] != '*')
-		dt->start = ft_strdup(split_template[i++]); //FIXME check if not allocated
+		if (init_dt_start(dt, split_template[i++], &split_template))
+			return (1);
 	last_idx_char = ft_strlen(template) - 1;
 	last_idx_str = get_last_idx_str(split_template);
 	if (template[last_idx_char] != '*')
-	{
-		dt->finish = ft_strdup(split_template[last_idx_str]); //FIXME check if not allocated
-		free(split_template[last_idx_str]);
-		split_template[last_idx_str] = NULL;
-	}
-	j = 0;
+		if (init_dt_finish(dt, split_template[last_idx_str], &split_template, last_idx_str))
+			return (1);
 	if (split_template[i])
 	{
-		dt->between = malloc(sizeof(char *) * (len(split_template) + 1)); //FIXME check if not allocated
-		while (split_template[i])
-			dt->between[j++] = ft_strdup(split_template[i++]); //FIXME check if not allocated
-		dt->between[j] = NULL;
+		if (init_dt_between(dt, &split_template, &i))
+			return (1);
 	}
 	free_arrs(split_template);
 	return (0);
@@ -145,4 +125,4 @@ int	main()
 	return (0);
 }
 
-// c && cc srcs/wild*.c libft/libft.a srcs/utils2.c srcs/free_utils.c && ./a.out
+// c && cc srcs/wild*.c libft/libft.a srcs/utils2.c srcs/free_utils.c -lreadline && ./a.out

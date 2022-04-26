@@ -63,10 +63,11 @@ char	*get_fname_without_start_and_finish(char *fname, t_finfo *dt)
 	char	*start;
 	char	*finish;
 
-	start = ft_strtrim(fname, dt->start); //FIXME if not allocated
+	start = ft_strtrim(fname, dt->start);
 	if (start == NULL)
 		return (NULL);
-	finish = ft_strtrim(start, dt->finish); //FIXME if not allocated
+	finish = ft_strtrim(start, dt->finish);
+	free(start);
 	return (finish);
 }
 
@@ -77,21 +78,21 @@ int	check_between(t_finfo *dt, char *filename)
 
 	i = 0;
 	j = 0;
+	filename = get_fname_without_start_and_finish(filename, dt);
+	if (filename == NULL)
+		return (1);
 	while (dt->between[i])
 	{
-		filename = get_fname_without_start_and_finish(filename, dt);
-		if (filename == NULL)
-			return (1);
 		if (check_one_between(dt->between[i++], filename, &j))
 		{
 			free(filename);
 			filename = NULL;
 			return (1);
 		}
-		free(filename);
-		filename = NULL;
 		// j++;
 	}
+	free(filename);
+	filename = NULL;
 	return (0);
 }
 
