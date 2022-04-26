@@ -55,3 +55,13 @@ int	launch_builtins(t_data *data)
 	printf("mini_hell: %s: command not found\n", data->comm->comm);
 	return (127);
 }
+
+int	init_var(t_comm **tmp_dt, t_data *dt, int *wait_c, int *count_comm)
+{
+	*tmp_dt = dt->comm;
+	*wait_c = 0;
+	*count_comm = get_count_comm(dt->comm);
+	if (*count_comm == 0)
+		return (1);
+	return (0);
+}

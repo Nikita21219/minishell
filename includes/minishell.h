@@ -58,6 +58,14 @@ typedef struct s_finfo
 	char	**between;
 }	t_finfo;
 
+/* general */
+int		is_same_lines(char *f_str, char *s_str);
+void	freedata(t_data *data);
+void	free_arrs(char **arr);
+void	free_lists(t_comm *data);
+int		continue_with_print(char *err_str);
+
+/* parser */
 int		check_argv(int argc, char **argv, char **env, t_data *data);
 void	error_mes_with_exit(char *err_mes, t_data *data);
 void	take_start_env(t_data *data, char **envar);
@@ -71,46 +79,50 @@ int		write_arg(char **arg, char **s, int i);
 int		check_second_qoute(char *s, int i, char quote);
 int		takevar(char **s, char **str, t_comm *data);
 int		operand(t_comm	*data, char **s, int *i, char **arg);
-int		is_same_lines(char *f_str, char *s_str);
 void	delenv(t_envr **env);
-void	freedata(t_data *data);
 int		command_in_bin(char *command);
 void	exit_from_minishell(void);
+t_envr	*take_path_env(t_envr **env, char *s);
+
+/* launcher */
 int		launcher(t_data *data, char **env);
+int		init_var(t_comm **tmp_dt, t_data *dt, int *wait_c, int *count_comm);
 int		get_count_comm(t_comm *data);
-int		ft_space(char str);
 void	add_ptr_prev_to_data(t_comm *data);
 int		close_fd(t_comm *data);
+int		check_redirect(t_data *data);
 int		is_correct_comm(char *comm);
-void	free_arrs(char **arr);
-int		continue_with_print(char *err_str);
 int		handle_error_executor(int error);
 int		create_pipe(t_comm *data);
 int		heredoc(t_comm *data);
+int		init_result(char **free_ptr, char **nl, char **line, char **res);
 int		is_redirect(char *op);
 int		duplicate_fd_for_heredoc(t_comm *data);
 int		duplicate_fd(t_comm *data, int idx, int count_comm);
 int		redirect_out(t_comm *data);
 int		redirect_in(t_comm *data);
+int		initialize_dirs(char ***dirs);
+int		check_oper(t_data *data);
+int		check_tilda(t_comm **comm);
+
+/* builtins */
+int		ft_export(t_data *data);
+void	ft_unset(t_data *data);
 int		ft_echo(t_comm com);
 int		ft_pwd(void);
 int		ft_env(t_envr *env);
 int		ft_exit(t_data *data);
 int		ft_cd(t_data *data);
+int		ft_space(char str);
 int		launch_builtins(t_data *data);
 int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
-void	free_lists(t_comm *data);
-int		initialize_dirs(char ***dirs);
-int		check_oper(t_data *data);
-t_envr	*take_path_env(t_envr **env, char *s);
-int		ft_export(t_data *data);
-void	ft_unset(t_data *data);
+
+/* executor */
 int		executor(t_data *data, char *path, char **env, int count_comm);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
-int		check_tilda(t_comm **comm);
 
 /* wildcard */
 t_wild	*wildcard(char *template);

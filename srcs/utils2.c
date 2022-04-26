@@ -41,7 +41,6 @@ int	close_fd(t_comm *data)
 			if (close(data->fd[1]) == -1)
 				return (1);
 		}
-		// kill(data->pid, SIGKILL);
 		data = data->next;
 	}
 	return (0);
