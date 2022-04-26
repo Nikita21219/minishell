@@ -45,12 +45,6 @@ typedef struct s_data
 	char			*instr;
 }	t_data;
 
-typedef struct s_wild
-{
-	char			*file;
-	struct s_wild	*next;
-}	t_wild;
-
 typedef struct s_finfo
 {
 	char	*start;
@@ -87,7 +81,7 @@ t_envr	*take_path_env(t_envr **env, char *s);
 int		check_wildcard_arg(char ***args);
 
 /* launcher */
-int		launcher(t_data *data, char **env);
+int		launcher(t_data *data);
 int		init_var(t_comm **tmp_dt, t_data *dt, int *wait_c, int *count_comm);
 int		get_count_comm(t_comm *data);
 void	add_ptr_prev_to_data(t_comm *data);
@@ -121,13 +115,14 @@ int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
 
 /* executor */
-int		executor(t_data *data, char *path, char **env, int count_comm);
+int		executor(t_data *data, char *path, int count_comm);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
+char	**get_env(t_envr *dt_env);
 
 /* wildcard */
-t_wild	*wildcard(char *template);
+char	**wildcard(char *template);
 int		check_start(t_finfo *dt, char *filename);
 int		check_finish(t_finfo *dt, char *filename);
 int		check_between(t_finfo *dt, char *filename);
@@ -138,6 +133,6 @@ int		init_dt_start(t_finfo *dt, char *str, char ***split_template);
 int		init_dt_finish(t_finfo *dt, char *str, char ***temp, int last_idx_str);
 int		init_dt_between(t_finfo *dt, char ***split_template, int *i);
 int		check_parts(t_finfo *dt, char *filename);
-int		wild_add_elem(t_wild **dt, char *file);
+int		wild_add_elem(char ***arr, char *file, int i);
 
 #endif

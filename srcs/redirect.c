@@ -50,3 +50,26 @@ int	redirect_in(t_comm *data)
 			return (DUP_ERR);
 	return (0);
 }
+
+char	**get_env(t_envr *dt_env)
+{
+	int		i;
+	char	**env;
+	char	*key_with_equel;
+	char	*pair;
+
+	i = 0;
+	env = NULL;
+	while (dt_env)
+	{
+		if (take_arg_mass(&env, i))
+			continue ;
+		key_with_equel = ft_strjoin(dt_env->key, "=");
+		pair = ft_strjoin(key_with_equel, dt_env->val);
+		free(key_with_equel);
+		env[i] = pair;
+		i++;
+		dt_env = dt_env->next;
+	}
+	return (env);
+}

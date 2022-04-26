@@ -74,9 +74,14 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	if (is_same_lines(data->comm->oper, ">") || \
 	is_same_lines(data->comm->oper, ">>"))
 	{
-		while (data->comm && (is_same_lines(data->comm->oper, ">") || \
-		is_same_lines(data->comm->prev->oper, ">")))
-			data->comm = data->comm->next;
+		if (is_same_lines(data->comm->oper, ">>"))
+			data->comm = data->comm->next->next;
+		else
+		{
+			while (data->comm && (is_same_lines(data->comm->oper, ">") || \
+			(data->comm->prev && is_same_lines(data->comm->prev->oper, ">"))))
+				data->comm = data->comm->next;
+		}
 	}
 	else if (is_same_lines(data->comm->oper, "<"))
 	{
@@ -95,7 +100,7 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	free(path);
 }
 
-int	launcher(t_data *data, char **env)
+int	launcher(t_data *data)
 {
 	char	*path;
 	int		count_command;
@@ -110,7 +115,7 @@ int	launcher(t_data *data, char **env)
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;
-		result = executor(data, path, env, count_command);
+		result = executor(data, path, count_command);
 		if (result < 0)
 			return (handle_error_executor(result));
 		else if (result == 1)
