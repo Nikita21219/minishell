@@ -5,6 +5,10 @@ minishell
 .vscode
 test.txt
 test.c
+wild_main.c
+hello.txt
+fileee
+file
 
 # Prerequisites
 *.d

@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int check_start(t_finfo *dt, char *filename)
+int	check_start(t_finfo *dt, char *filename)
 {
 	int	i;
 
@@ -21,7 +21,9 @@ int	check_finish(t_finfo *dt, char *filename)
 
 	last_idx_filename = ft_strlen(filename) - 1;
 	dt_finish_idx = ft_strlen(dt->finish) - 1;
-	while (last_idx_filename >= 0 && dt_finish_idx >= 0 && filename[last_idx_filename] && dt->finish[dt_finish_idx] && dt->finish[dt_finish_idx] != '*')
+	while (last_idx_filename >= 0 && dt_finish_idx >= 0 && \
+	filename[last_idx_filename] && dt->finish[dt_finish_idx] && \
+	dt->finish[dt_finish_idx] != '*')
 		if (filename[last_idx_filename--] != dt->finish[dt_finish_idx--])
 			return (1);
 	return (0);
@@ -30,31 +32,15 @@ int	check_finish(t_finfo *dt, char *filename)
 int	check_one_between(char *template, char *filename, int *j)
 {
 	int	i;
-	int	flag; //FIXME need to delete
 
 	i = 0;
 	while (filename[*j] && template[i] != filename[*j])
 		(*j)++;
 	if (!filename[*j])
 		return (1);
-	// while (filename[*j] && template[i] == filename[(*j) + 1])
-	// 	(*j)++;
-	// if (!filename[*j])
-	// 	return (1);
-	flag = 0; //FIXME need to delete
-	// printf("template = %s\n", template);
 	while (template[i] && filename[*j])
-	{
-		// if (template[i] == filename[*j])
-		// 	flag = 1;
 		if (template[i++] != filename[(*j)++])
-		{
 			return (1);
-		}
-		// (*j)++;
-	}
-	// if (!flag)
-	// 	return (1);
 	return (0);
 }
 
@@ -89,42 +75,8 @@ int	check_between(t_finfo *dt, char *filename)
 			filename = NULL;
 			return (1);
 		}
-		// j++;
 	}
 	free(filename);
 	filename = NULL;
-	return (0);
-}
-
-int	free_dt(t_finfo *dt)
-{
-	int	i;
-
-	i = 0;
-	if (dt)
-	{
-		if (dt->finish)
-		{
-			free(dt->finish);
-			dt->finish = NULL;
-		}
-		if (dt->start)
-		{
-			free(dt->start);
-			dt->start = NULL;
-		}
-		if (dt->between)
-		{
-			while (dt->between[i])
-			{
-				free(dt->between[i]);
-				dt->between[i++] = NULL;
-			}
-			free(dt->between);
-			dt->between = NULL;
-		}
-		free(dt);
-		dt = NULL;
-	}
 	return (0);
 }
