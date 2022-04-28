@@ -46,8 +46,15 @@ int	redirect_in(t_comm *data)
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (DUP_ERR);
 	if (data && data->next && is_same_lines(data->next->oper, "|"))
+	{
 		if (dup2(data->next->fd[1], STDOUT_FILENO) == -1)
 			return (DUP_ERR);
+	}
+	else if (is_same_lines(data->prev->oper, ">"))
+	{
+		fprintf(stderr, "TEST data->comm: %s\n", data->prev->next->comm);
+		redirect_out(data->prev);
+	}
 	return (0);
 }
 

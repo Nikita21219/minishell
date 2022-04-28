@@ -11,7 +11,7 @@ int	check_pipe(t_data *data)
 
 int	handle_heredoc(t_comm *data, int count_comm)
 {
-	while (data && is_same_lines(data->oper, "<<"))
+	if (data && is_same_lines(data->oper, "<<"))
 	{
 		if (duplicate_fd_for_heredoc(data) == DUP_ERR)
 			return (DUP_ERR);
