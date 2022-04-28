@@ -38,7 +38,7 @@ void	minishell(t_data *data, char **env)
 	{
 		if (!data->env)
 			error_mes_with_exit("Error environment\n", data);
-		data->instr = readline("mini_hell$ ");
+		data->instr = readline("🔥mini_hell🔥$ ");
 		if (!data->instr)
 			error_mes_with_exit("\b\bexit\n", data);
 		if (data->instr[0] == 0)

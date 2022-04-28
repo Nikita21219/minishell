@@ -17,7 +17,7 @@ $(OBJDIR)/%.o :	$(SRCDIR)/%.c $(HEADDIR)/$(HEADER)
 
 $(NAME):	$(OBJDIR) $(OBJ)
 	@$(CC) $(CFLAGS) -o $(NAME) $(LIBFT_DIR)libft.a -I $(HEADER) $(OBJ) -lreadline
-	@echo "\033[32mminishell compile"
+	@echo "minishell compile"
 
 $(OBJDIR):
 	@if [ ! -d $(OBJDIR) ] ; then mkdir $(OBJDIR); fi
@@ -28,7 +28,7 @@ $(LIBFT):
 clean:
 	@if [ -d $(OBJDIR) ] ; then rm -r $(OBJDIR); fi
 	@make fclean -C $(LIBFT_DIR)
-	@echo "\033[32mclean minishell done"
+	@echo "clean minishell done"
 
 fclean: clean
 	@rm -f $(NAME)

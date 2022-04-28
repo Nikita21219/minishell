@@ -119,6 +119,10 @@ int		executor(t_data *data, char *path, int count_comm);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
+int		check_operator(t_comm *dt);
+int		exec_heredoc_and_pipes(t_comm **data);
+int		next_oper(char *oper);
+int		curr_oper(char *oper);
 
 /* wildcard */
 char	**wildcard(char *template);
