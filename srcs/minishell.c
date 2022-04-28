@@ -20,6 +20,18 @@ void	tmp_print_arg_after_parser(t_comm *data)
 	}
 } //FIXME delete this func
 
+void	tmp_print_env(t_envr *env)
+{
+	t_envr	*envr;
+
+	envr = env;
+	while (envr)
+	{
+		printf("%s=%s\n", envr->key, envr->val);
+		envr = envr->next;
+	}
+} //FIXME delete this func
+
 void	minishell(t_data *data, char **env)
 {
 	int TMP_TEST = 2;
@@ -39,6 +51,7 @@ void	minishell(t_data *data, char **env)
 			freedata(data);
 			continue ;
 		}
+		tmp_print_env(data->env);
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
 		add_ptr_prev_to_data(data->comm);
