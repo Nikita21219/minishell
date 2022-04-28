@@ -50,3 +50,44 @@ int	redirect_in(t_comm *data)
 			return (DUP_ERR);
 	return (0);
 }
+
+// void	*free_env_and_return_null()
+// {
+
+// }
+
+char	**get_env(t_envr *dt_env)
+{
+	int		i;
+	char	**env;
+	char	*key_with_equel;
+	char	*pair;
+
+	i = 0;
+	env = NULL;
+	while (dt_env)
+	{
+		if (take_arg_mass(&env, i))
+		{
+			free_arrs(env);
+			return (NULL);
+		}
+		key_with_equel = ft_strjoin(dt_env->key, "=");
+		if (key_with_equel == NULL)
+		{
+			free_arrs(env);
+			return (NULL);
+		}
+		pair = ft_strjoin(key_with_equel, dt_env->val);
+		if (pair == NULL)
+		{
+			free_arrs(env);
+			free(key_with_equel);
+			return (NULL);
+		}
+		free(key_with_equel);
+		env[i++] = pair;
+		dt_env = dt_env->next;
+	}
+	return (env);
+}
