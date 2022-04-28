@@ -56,6 +56,19 @@ int	redirect_in(t_comm *data)
 
 // }
 
+int	count_dict(t_envr *dt_env)
+{
+	int	i;
+
+	i = 0;
+	while (dt_env)
+	{
+		i++;
+		dt_env = dt_env->next;
+	}
+	return (i + 1);
+}
+
 char	**get_env(t_envr *dt_env)
 {
 	int		i;
@@ -64,14 +77,9 @@ char	**get_env(t_envr *dt_env)
 	char	*pair;
 
 	i = 0;
-	env = NULL;
+	env = malloc(sizeof(char *) * count_dict(dt_env)); //FIXME check if not allocated
 	while (dt_env)
 	{
-		if (take_arg_mass(&env, i))
-		{
-			free_arrs(env);
-			return (NULL);
-		}
 		key_with_equel = ft_strjoin(dt_env->key, "=");
 		if (key_with_equel == NULL)
 		{
@@ -89,5 +97,6 @@ char	**get_env(t_envr *dt_env)
 		env[i++] = pair;
 		dt_env = dt_env->next;
 	}
+	env[i] = NULL;
 	return (env);
 }
