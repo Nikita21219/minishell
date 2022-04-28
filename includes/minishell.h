@@ -80,7 +80,7 @@ void	exit_from_minishell(void);
 t_envr	*take_path_env(t_envr **env, char *s);
 
 /* launcher */
-int		launcher(t_data *data, char **env);
+int		launcher(t_data *data);
 int		init_var(t_comm **tmp_dt, t_data *dt, int *wait_c, int *count_comm);
 int		get_count_comm(t_comm *data);
 void	add_ptr_prev_to_data(t_comm *data);
@@ -115,7 +115,7 @@ int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
 
 /* executor */
-int		executor(t_data *data, char *path, char **env, int count_comm);
+int		executor(t_data *data, char *path, int count_comm);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);

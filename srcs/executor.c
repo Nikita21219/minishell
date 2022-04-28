@@ -47,9 +47,8 @@ int	handle_oper(t_data *data, int count_comm)
 	return (0);
 }
 
-void	exec_command(t_data *data, char *path, char **env)
+void	exec_command(t_data *data, char *path)
 {
-	(void) env;
 	if (data->comm->prev && data->comm->prev->prev \
 	&& is_same_lines(data->comm->prev->prev->oper, "<<"))
 		if (dup2(data->comm->prev->fd[0], STDIN_FILENO) == -1)
@@ -67,7 +66,7 @@ void	exec_command(t_data *data, char *path, char **env)
 			exit(EXEC_ERR);
 }
 
-int	executor(t_data *data, char *path, char **env, int count_comm)
+int	executor(t_data *data, char *path, int count_comm)
 {
 	int		error;
 
@@ -83,7 +82,7 @@ int	executor(t_data *data, char *path, char **env, int count_comm)
 		if (error)
 			exit(error);
 		if (data->comm->comm)
-			exec_command(data, path, env);
+			exec_command(data, path);
 		else
 			exit(0);
 	}
