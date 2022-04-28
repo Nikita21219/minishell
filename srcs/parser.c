@@ -25,6 +25,7 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 			(*s)++;
 		}
 	}
+	i = check_wildcard_arg(str, s, i, data);
 	return (++i);
 }
 
@@ -66,7 +67,8 @@ int	takeargs(t_comm *data, char **s)
 		}
 		while ((**s) && ft_space(**s))
 			(*s)++;
-		a++;
+		while (data->args[a])
+			a++;
 		if (take_arg_mass(&data->args, a))
 			return (1);
 	}
@@ -85,12 +87,7 @@ int	checkallcommands(t_comm *p)
 			errno = 22;
 			return (1);
 		}
-		else
-		{
-			if (check_wildcard_arg(&p->args))
-				return (1);
-			p = p->next;
-		}
+		p = p->next;
 	}
 	return (0);
 }
