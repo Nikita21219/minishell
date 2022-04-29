@@ -25,7 +25,7 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 			(*s)++;
 		}
 	}
-	i = check_wildcard_arg(str, s, i, data);
+	// i = check_wildcard_arg(str, s, i, data);
 	return (++i);
 }
 

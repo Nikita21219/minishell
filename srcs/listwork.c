@@ -113,4 +113,7 @@ void	take_start_env(t_data *data, char **envar)
 		temp->next = data->env;
 		data->env = temp;
 	}
+	data->comm = NULL;
+	data->instr = NULL;
+	data->vars = NULL;
 }

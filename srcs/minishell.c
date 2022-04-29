@@ -65,32 +65,34 @@ void	minishell(t_data *data, char **env)
 
 void	ft_takesig(int sig)
 {
-	sig = 0;
-	// if (signum == SIGINT)
-	// {
-		printf("\n");
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
 		rl_on_new_line();
-		// rl_replace_line();
 		rl_redisplay();
-	// }
-	// else
-		return ;
+	}
+	return ;
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_data				data;
 	// struct sigaction	sig;
+	// sigset_t			newset;
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
 	// sig.sa_handler = &ft_takesig;
-	// sig.sa_flags = SA_USERSPACE_MASK;
+	// sig.sa_flags = SA_RESTART;
+	// sigemptyset(&newset);
+	// sigaddset(&newset, SIGQUIT);
+	// if (sigprocmask(SIG_BLOCK, &newset, 0) < 0)
+	// 	perror("Minishell: Sigactoin");
 	// if (sigaction(SIGINT, &sig, NULL) < 0)
 	// 	perror("Minishell: Sigactoin");
-	// if (sigaction(SIGQUIT, &sig, NULL) < 0)
-	// 	perror("Minishell: Sigactoin");
-	signal(SIGINT, &ft_takesig);
+	signal(SIGINT, ft_takesig);
+	signal(SIGQUIT, SIG_IGN);
 	minishell(&data, env);
 	return (0);
 }

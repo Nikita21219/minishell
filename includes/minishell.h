@@ -12,6 +12,7 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <fcntl.h>
+# include <termios.h>
 
 # include "color.h"
 # include "../libft/includes/libft.h"
