@@ -51,7 +51,7 @@ int	take_arg_mass(char ***args, int a)
 	char	**mass;
 
 	i = -1;
-	mass = ft_calloc(sizeof(char *), a + 1);
+	mass = ft_calloc(sizeof(char *), a + 2);
 	if (!mass)
 	{
 		printf("Error malloc in parse\n");
@@ -61,6 +61,7 @@ int	take_arg_mass(char ***args, int a)
 	while (++i != a)
 		mass[i] = (*args)[i];
 	mass[i] = NULL;
+	mass[i + 1] = NULL;
 	free(*args);
 	*args = mass;
 	return (0);
