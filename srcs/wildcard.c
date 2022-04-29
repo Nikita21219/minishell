@@ -18,14 +18,14 @@ int	get_last_idx_str(char **split_template)
 	return (i);
 }
 
-int	init_dt(t_finfo *dt, char *template)
+int	init_dt(t_finfo *dt, char *template, int *arr_int)
 {
 	char	**split_template;
 	int		i;
 	int		last_idx_str;
 	int		last_idx_char;
 
-	if (initial_var(&split_template, dt, template))
+	if (initial_var(&split_template, dt, template, arr_int))
 		return (1);
 	i = 0;
 	if (template[i] != '*')
@@ -44,7 +44,7 @@ int	init_dt(t_finfo *dt, char *template)
 	return (0);
 }
 
-int	is_right_file(char *filename, char *template)
+int	is_right_file(char *filename, char *template, int *arr_int)
 {
 	t_finfo	*dt;
 	int		i;
@@ -55,7 +55,7 @@ int	is_right_file(char *filename, char *template)
 	dt = malloc(sizeof(t_finfo));
 	if (dt == NULL)
 		return (free_dt(dt));
-	if (init_dt(dt, template))
+	if (init_dt(dt, template, arr_int))
 		return (free_dt(dt));
 	i = 0;
 	count = 0;
@@ -67,7 +67,7 @@ int	is_right_file(char *filename, char *template)
 	return (check_parts(dt, filename));
 }
 
-char	**wildcard(char *template)
+char	**wildcard(char *template, int *arr_int)
 {
 	char			**arr;
 	DIR				*dir;
@@ -80,7 +80,7 @@ char	**wildcard(char *template)
 	arr = NULL;
 	i = 0;
 	while (read_directory(dir, &entry))
-		if (is_right_file(entry->d_name, template))
+		if (is_right_file(entry->d_name, template, arr_int))
 			wild_add_elem(&arr, entry->d_name, i++);
 	closedir(dir);
 	if (arr == NULL)
@@ -90,4 +90,19 @@ char	**wildcard(char *template)
 		arr[1] = NULL;
 	}
 	return (arr);
+}
+
+int	main()
+{
+	int *arr = malloc(100);
+	int i = 0;
+	arr[i++] = 6;
+	arr[i++] = -1;
+	char *template = ft_strdup("test*.*");
+	char **result = wildcard(template, arr);
+	i = 0;
+	while (result[i])
+		printf("%s\n", result[i++]);
+	(void)result;
+	return (0);
 }
