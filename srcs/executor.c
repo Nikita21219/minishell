@@ -41,9 +41,6 @@ int	handle_oper(t_data *data, int count_comm)
 	{
 		if (redirect_in(data->comm) == DUP_ERR)
 			return (DUP_ERR);
-		// if (data->comm->next && is_same_lines(data->comm->next->oper, "|"))
-		// 	if (duplicate_fd(data->comm->next, data->comm->next->i, count_comm))
-		// 		return (DUP_ERR);
 	}
 	else if (check_pipe(data))
 	{
@@ -58,6 +55,11 @@ int	handle_oper(t_data *data, int count_comm)
 	{
 		if (duplicate_fd(data->comm->next, data->comm->next->i, count_comm))
 			return (DUP_ERR);
+	}
+	else if (data->comm->next && (is_same_lines(data->comm->next->oper, ">") || is_same_lines(data->comm->next->oper, ">>")))
+	{
+		if (!is_same_lines(data->comm->oper, "|"))
+			redirect_out(data->comm->next);
 	}
 	return (0);
 }

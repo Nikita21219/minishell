@@ -55,8 +55,8 @@ int	next_oper(char *oper)
 {
 	// if (is_same_lines(oper, "<"))
 	// 	return (1);
-	if (is_same_lines(oper, ">"))
-		return (1);
+	// if (is_same_lines(oper, ">"))
+	// 	return (1);
 	if (is_same_lines(oper, "<<"))
 		return (1);
 	if (is_same_lines(oper, "|"))

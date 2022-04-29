@@ -22,8 +22,13 @@ int	redirect_out(t_comm *data)
 		if (data && data->prev && is_same_lines(data->prev->oper, "|"))
 			if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
 				return (DUP_ERR);
+		if (data && data->prev && is_same_lines(data->prev->oper, "<"))
+			if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
+				return (DUP_ERR);
 		data = data->next;
 	}
+	if (close(fd) == -1)
+		return (CLOSE_ERR);
 	return (0);
 }
 
@@ -50,18 +55,8 @@ int	redirect_in(t_comm *data)
 		if (dup2(data->next->fd[1], STDOUT_FILENO) == -1)
 			return (DUP_ERR);
 	}
-	else if (is_same_lines(data->prev->oper, ">"))
-	{
-		fprintf(stderr, "TEST data->comm: %s\n", data->prev->next->comm);
-		redirect_out(data->prev);
-	}
 	return (0);
 }
-
-// void	*free_env_and_return_null()
-// {
-
-// }
 
 int	count_dict(t_envr *dt_env)
 {
