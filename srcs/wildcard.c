@@ -91,18 +91,3 @@ char	**wildcard(char *template, int *arr_int)
 	}
 	return (arr);
 }
-
-int	main()
-{
-	int *arr = malloc(100);
-	int i = 0;
-	arr[i++] = 6;
-	arr[i++] = -1;
-	char *template = ft_strdup("test*.*");
-	char **result = wildcard(template, arr);
-	i = 0;
-	while (result[i])
-		printf("%s\n", result[i++]);
-	(void)result;
-	return (0);
-}
