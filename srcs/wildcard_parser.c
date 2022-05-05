@@ -1,65 +1,31 @@
 #include "../includes/minishell.h"
 
-int	connect_arrays(char ***temp, char ***args, char ***wild)
+int	take_pos_for_wild(char **str, int *qoute, int **pos)
 {
-	int	j;
-	int	x;
+	char	qt;
+	int		n;
+	int		i;
 
-	j = -1;
-	x = -1;
-	while ((*args)[++j])
-		(*temp)[j] = (*args)[j];
-	while ((*wild)[++x])
-		(*temp)[j++] = (*wild)[x];
-	(*temp)[j] = NULL;
-	(*temp)[j + 1] = NULL;
-	free(*wild);
-	free(*args);
-	*args = *temp;
-	return (-1);
-}
-
-int	check_wild(char ***args, char **wild)
-{
-	int		j;
-	int		x;
-	char	**temp;
-
-	j = 0;
-	x = 0;
-	if (!wild)
-		return (-3);
-	while (wild[j])
-		j++;
-	while ((*args)[x])
-		x++;
-	temp = malloc(sizeof(char *) * (x + j + 2));
-	if (!temp)
-		return (-3);
-	return (connect_arrays(&temp, args, &wild));
-}
-
-int	write_pos_wild(int **pos, int i, int a)
-{
-	int	*tmp;
-	int	x;
-
-	x = 0;
-	tmp = malloc(sizeof(int) * (a + 1));
-	if (!tmp)
-		return (1);
-	if (a > 1)
+	n = 0;
+	i = -1;
+	while ((*str)[++i])
 	{
-		x = -1;
-		while (++x < a - 1)
-			tmp[x] = (*pos)[x];
+		if (((*str)[i] == 34 || (*str)[i] == 39) \
+			&& check_second_qoute(*str, i, (*str)[i]))
+		{
+			qt = (*str)[i++];
+			while ((*str)[i] != qt)
+				i++;
+			(*qoute) += 2;
+		}
+		if ((*str)[i] == '*')
+		{
+			if (write_pos_wild(pos, i - (*qoute), n))
+				return (-1);
+			n++;
+		}
 	}
-	tmp[x] = i;
-	tmp[x + 1] = -1;
-	if (*pos)
-		free(*pos);
-	*pos = tmp;
-	return (0);
+	return (i);
 }
 
 int	write_str_to_wild(char **str, int **pos)
@@ -69,24 +35,10 @@ int	write_str_to_wild(char **str, int **pos)
 	int		n;
 	int		qoute;
 
-	i = -1;
 	qoute = 0;
-	while ((*str)[++i])
-	{
-		if ((*str)[i] == 34 || (*str)[i] == 39)
-		{
-			qoute++;
-			n = 0;
-			if (qoute % 2 == 0)
-			{
-				while ((*pos)[n] != -1 && (*pos)[n] <= i)
-					n++;
-				n--;
-				while ((*pos)[++n] != -1)
-					(*pos)[n] -= 2;
-			}
-		}
-	}
+	i = take_pos_for_wild(str, &qoute, pos);
+	if (i < 0)
+		return (1);
 	tmp = malloc(sizeof(char) * (i - qoute + 1));
 	if (!tmp)
 		return (1);
@@ -130,9 +82,6 @@ int	check_wildcard_arg(char **str, char **s, int i, t_comm *data)
 	{
 		if ((*s)[i] == 34 || (*s)[i] == 39)
 			i = skipping_quotes(s, i);
-		if ((*s)[i] == '*')
-			if (write_pos_wild(&pos, i, ++a))
-				return (-3);
 		i++;
 	}
 	if (write_arg(str, s, i) || write_str_to_wild(str, &pos))

@@ -79,6 +79,9 @@ int		command_in_bin(char *command);
 void	exit_from_minishell(void);
 t_envr	*take_path_env(t_envr **env, char *s);
 int		check_wildcard_arg(char **str, char **s, int i, t_comm *data);
+int		write_pos_wild(int **pos, int i, int a);
+int		check_wild(char ***args, char **wild);
+int		connect_arrays(char ***temp, char ***args, char ***wild);
 
 /* launcher */
 int		launcher(t_data *data);
