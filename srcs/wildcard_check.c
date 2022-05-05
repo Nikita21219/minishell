@@ -99,48 +99,26 @@ int	check_in_word(int start, char *fname, char *template)
 
 int	check_between(t_finfo *dt, char *filename)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
 	j = 0;
-	filename = get_fname_without_start_and_finish(filename, dt);
-	if (filename == NULL)
-		return (1);
+	// filename = get_fname_without_start_and_finish(filename, dt);
+	// if (filename == NULL)
+	// 	return (1);
 	while (dt->between[i])
 	{
-		j = check_in_word(j, filename, dt->between[i]);
-		if (j == -1)
+		tmp = filename;
+		filename = ft_strnstr(filename, dt->between[i], ft_strlen(filename));
+		// free(tmp);
+		if (filename == NULL)
 			return (1);
+		filename = filename + ft_strlen(dt->between[i]);
 		i++;
-		if (!filename[j] && dt->between[i])
-			return (1);
 	}
-	free(filename);
+	// free(filename);
 	filename = NULL;
 	return (0);
 }
-
-// int	check_between(t_finfo *dt, char *filename)
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i = 0;
-// 	j = 0;
-// 	filename = get_fname_without_start_and_finish(filename, dt);
-// 	if (filename == NULL)
-// 		return (1);
-// 	while (dt->between[i])
-// 	{
-// 		if (check_one_between(dt->between[i++], filename, &j))
-// 		{
-// 			free(filename);
-// 			filename = NULL;
-// 			return (1);
-// 		}
-// 	}
-// 	free(filename);
-// 	filename = NULL;
-// 	return (0);
-// }
