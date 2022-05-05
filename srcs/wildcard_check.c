@@ -30,8 +30,8 @@ int	check_finish(t_finfo *dt, char *filename, int *arr_int)
 
 char	*get_fname_without_start_and_finish(char **fname, t_finfo *dt)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*res;
 
 	i = 0;
@@ -53,21 +53,22 @@ int	check_between(t_finfo *dt, char *filename)
 {
 	int		i;
 	int		j;
+	char	*fname;
 
 	i = 0;
 	j = 0;
-	filename = get_fname_without_start_and_finish(&filename, dt);
-	if (filename == NULL)
+	fname = get_fname_without_start_and_finish(&filename, dt);
+	if (fname == NULL)
 		return (1);
 	while (dt->between[i])
 	{
-		filename = ft_strnstr(filename, dt->between[i], ft_strlen(filename));
-		if (filename == NULL)
+		fname = ft_strnstr(fname, dt->between[i], ft_strlen(fname));
+		if (fname == NULL)
 			return (1);
-		filename = filename + ft_strlen(dt->between[i]);
+		fname = fname + ft_strlen(dt->between[i]);
 		i++;
 	}
-	// free(filename);
-	filename = NULL;
+	fname = NULL;
+	sleep(10);
 	return (0);
 }
