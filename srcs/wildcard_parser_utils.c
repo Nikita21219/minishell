@@ -48,10 +48,10 @@ int	write_pos_wild(int **pos, int i, int a)
 	tmp = malloc(sizeof(int) * (a + 1));
 	if (!tmp)
 		return (1);
-	if (a > 0)
+	if (a > 1)
 	{
 		x = -1;
-		while (++x <= a - 1)
+		while (++x < a - 1)
 			tmp[x] = (*pos)[x];
 	}
 	tmp[x] = i;
