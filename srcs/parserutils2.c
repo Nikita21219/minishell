@@ -19,13 +19,13 @@ int	check_tilda(t_comm **comm)
 	int		i;
 
 	tmp = *comm;
-	while (tmp)
+	while (tmp && tmp->comm)
 	{
 		i = 0;
 		if (is_same_lines(tmp->comm, "~"))
 			if (write_tilda(&tmp->comm))
 				return (1);
-		while (tmp->args[++i])
+		while (tmp->args && tmp->args[++i])
 		{
 			if (is_same_lines(tmp->args[i], "~"))
 				if (write_tilda(&tmp->args[i]))
@@ -51,7 +51,7 @@ int	take_arg_mass(char ***args, int a)
 	char	**mass;
 
 	i = -1;
-	mass = ft_calloc(sizeof(char *), a + 1);
+	mass = ft_calloc(sizeof(char *), a + 2);
 	if (!mass)
 	{
 		printf("Error malloc in parse\n");
@@ -61,7 +61,21 @@ int	take_arg_mass(char ***args, int a)
 	while (++i != a)
 		mass[i] = (*args)[i];
 	mass[i] = NULL;
+	mass[i + 1] = NULL;
 	free(*args);
 	*args = mass;
 	return (0);
+}
+
+t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars)
+{
+	while (p && !is_same_lines(tmp, p->key))
+		p = p->next;
+	if (!p && vars)
+	{
+		p = vars;
+		while (p && !is_same_lines(tmp, p->key))
+			p = p->next;
+	}
+	return (p);
 }

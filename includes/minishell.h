@@ -12,6 +12,7 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <fcntl.h>
+# include <termios.h>
 
 # include "color.h"
 # include "../libft/includes/libft.h"
@@ -56,7 +57,6 @@ typedef struct s_finfo
 int		is_same_lines(char *f_str, char *s_str);
 void	freedata(t_data *data);
 void	free_arrs(char **arr);
-void	free_lists(t_comm *data);
 int		continue_with_print(char *err_str);
 
 /* parser */
@@ -78,6 +78,7 @@ void	delenv(t_envr **env);
 int		command_in_bin(char *command);
 void	exit_from_minishell(void);
 t_envr	*take_path_env(t_envr **env, char *s);
+int		check_wildcard_arg(char **str, char **s, int i, t_comm *data);
 
 /* launcher */
 int		launcher(t_data *data);
@@ -119,6 +120,7 @@ int		executor(t_data *data, char *path, int count_comm);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
+char	**get_env(t_envr *dt_env);
 int		check_operator(t_comm *dt);
 int		exec_heredoc_and_pipes(t_comm **data);
 int		next_oper(char *oper);

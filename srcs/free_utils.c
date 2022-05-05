@@ -42,18 +42,3 @@ int	handle_error_executor(int error)
 		return (continue_with_print("Error: open() returned fail\n"));
 	return (0);
 }
-
-void	free_lists(t_comm *data)
-{
-	while (data)
-	{
-		if (data->oper)
-			free(data->oper);
-		if (data->comm)
-			free(data->comm);
-		if (data->args)
-			free_arrs(data->args);
-		free(data);
-		data = data->next;
-	}
-}

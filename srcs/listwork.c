@@ -6,6 +6,8 @@ void	take_data_in_list(t_comm **temp, t_data *data)
 	(*temp)->oper = NULL;
 	(*temp)->data = data;
 	(*temp)->next = NULL;
+	(*temp)->args[1] = NULL;
+	(*temp)->args[2] = NULL;
 }
 
 t_comm	*addelem(t_data *data)
@@ -16,7 +18,7 @@ t_comm	*addelem(t_data *data)
 	temp = (t_comm *)malloc(sizeof(t_comm));
 	if (!temp)
 		return (NULL);
-	temp->args = ft_calloc(sizeof(char *), 2);
+	temp->args = malloc(sizeof(char *) * 3);
 	if (!temp->args)
 		return (NULL);
 	temp->args[0] = ft_strdup("./mini_hell");
@@ -113,4 +115,7 @@ void	take_start_env(t_data *data, char **envar)
 		temp->next = data->env;
 		data->env = temp;
 	}
+	data->comm = NULL;
+	data->instr = NULL;
+	data->vars = NULL;
 }

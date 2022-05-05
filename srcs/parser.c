@@ -25,6 +25,7 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 			(*s)++;
 		}
 	}
+	i = check_wildcard_arg(str, s, i, data);
 	return (++i);
 }
 
@@ -43,6 +44,7 @@ int	takecommand(t_comm *data, char **s)
 		return (1);
 	}
 	return (0);
+	printf("comm\n");
 }
 
 int	takeargs(t_comm *data, char **s)
@@ -60,16 +62,19 @@ int	takeargs(t_comm *data, char **s)
 			i = vars_quote_check(&data->args[a], s, i, data);
 		if (i < 0 || write_arg(&data->args[a], s, i))
 		{
-			printf("Error malloc in parse\n");
+			if (i != -2)
+				printf("Error malloc in parse\n");
 			return (1);
 		}
 		while ((**s) && ft_space(**s))
 			(*s)++;
-		a++;
+		while (data->args[a])
+			a++;
 		if (take_arg_mass(&data->args, a))
 			return (1);
 	}
 	return (0);
+	printf("arg\n");
 }
 
 int	checkallcommands(t_comm *p)
@@ -84,8 +89,7 @@ int	checkallcommands(t_comm *p)
 			errno = 22;
 			return (1);
 		}
-		else
-			p = p->next;
+		p = p->next;
 	}
 	return (0);
 }

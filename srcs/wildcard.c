@@ -85,7 +85,7 @@ char	**wildcard(char *template, int *arr_int)
 	closedir(dir);
 	if (arr == NULL)
 	{
-		arr = malloc(sizeof(char *));
+		arr = malloc(sizeof(char *) * 2);
 		arr[0] = template;
 		arr[1] = NULL;
 	}

@@ -17,14 +17,14 @@ $(OBJDIR)/%.o :	$(SRC_DIR)/%.c $(HEADDIR)/$(HEADER)
 $(NAME): $(OBJDIR) $(OBJ)
 	@ar rcs $(NAME) $(OBJ)
 	@ranlib $(NAME)
-	@echo "libft compile"
+	@echo "\033[32mlibft compile\033[0m"
 
 $(OBJDIR):
 	@if [ ! -d $(OBJDIR) ] ; then mkdir $(OBJDIR); fi;
 
 clean:
 	@if [ -d $(OBJDIR) ] ; then rm -r $(OBJDIR); fi
-	@echo "clean libft done"
+	@echo "\033[32mclean libft done\033[0m"
 
 fclean: clean
 	@rm -f $(NAME)

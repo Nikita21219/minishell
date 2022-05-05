@@ -12,6 +12,7 @@ void	tmp_print_arg_after_parser(t_comm *data)
 		printf("command: %s\n", data->comm);
 		while (data->args[++j])
 			printf("data args %d: %s\n", j, data->args[j]);
+		printf("data args %d: %s\n", j, data->args[j]);
 		printf("oper: %s\n", data->oper);
 		printf("\n\n");
 		i++;
@@ -49,6 +50,7 @@ void	minishell(t_data *data, char **env)
 			freedata(data);
 			continue ;
 		}
+		// tmp_print_env(data->env);
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
 		add_ptr_prev_to_data(data->comm);
@@ -61,27 +63,36 @@ void	minishell(t_data *data, char **env)
 	freedata(data);
 }
 
-void	ft_takesig(int signum)
+void	ft_takesig(int sig)
 {
-	if (signum == SIGINT)
-		printf("\r\n");
-	else
-		return ;
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	return ;
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_data				data;
-	struct sigaction	sig;
+	// struct sigaction	sig;
+	// sigset_t			newset;
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
-	sig.sa_handler = &ft_takesig;
-	sig.sa_flags = SA_USERSPACE_MASK;
+	// sig.sa_handler = &ft_takesig;
+	// sig.sa_flags = SA_RESTART;
+	// sigemptyset(&newset);
+	// sigaddset(&newset, SIGQUIT);
+	// if (sigprocmask(SIG_BLOCK, &newset, 0) < 0)
+	// 	perror("Minishell: Sigactoin");
 	// if (sigaction(SIGINT, &sig, NULL) < 0)
 	// 	perror("Minishell: Sigactoin");
-	// if (sigaction(SIGQUIT, &sig, NULL) < 0)
-	// 	perror("Minishell: Sigactoin");
+	signal(SIGINT, ft_takesig);
+	signal(SIGQUIT, SIG_IGN);
 	minishell(&data, env);
 	return (0);
 }
