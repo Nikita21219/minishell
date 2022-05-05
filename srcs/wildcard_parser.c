@@ -19,11 +19,8 @@ int	take_pos_for_wild(char **str, int *qoute, int **pos)
 			(*qoute) += 2;
 		}
 		if ((*str)[i] == '*')
-		{
-			if (write_pos_wild(pos, i - (*qoute), n))
+			if (write_pos_wild(pos, i - (*qoute), ++n))
 				return (-1);
-			n++;
-		}
 	}
 	return (i);
 }
