@@ -32,6 +32,7 @@ clean:
 	@make fclean -C $(LIBFT_DIR)
 	@echo "\033[32mclean minishell done\033[0m"
 
+
 fclean: clean
 	@rm -f $(NAME)
 

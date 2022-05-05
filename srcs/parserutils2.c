@@ -19,13 +19,13 @@ int	check_tilda(t_comm **comm)
 	int		i;
 
 	tmp = *comm;
-	while (tmp)
+	while (tmp && tmp->comm)
 	{
 		i = 0;
 		if (is_same_lines(tmp->comm, "~"))
 			if (write_tilda(&tmp->comm))
 				return (1);
-		while (tmp->args[++i])
+		while (tmp->args && tmp->args[++i])
 		{
 			if (is_same_lines(tmp->args[i], "~"))
 				if (write_tilda(&tmp->args[i]))

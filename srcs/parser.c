@@ -25,7 +25,7 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 			(*s)++;
 		}
 	}
-	// i = check_wildcard_arg(str, s, i, data);
+	i = check_wildcard_arg(str, s, i, data);
 	return (++i);
 }
 
@@ -44,6 +44,7 @@ int	takecommand(t_comm *data, char **s)
 		return (1);
 	}
 	return (0);
+	printf("comm\n");
 }
 
 int	takeargs(t_comm *data, char **s)
@@ -73,6 +74,7 @@ int	takeargs(t_comm *data, char **s)
 			return (1);
 	}
 	return (0);
+	printf("arg\n");
 }
 
 int	checkallcommands(t_comm *p)

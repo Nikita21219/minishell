@@ -10,10 +10,10 @@ int	len(char **template)
 	return (count);
 }
 
-int	initial_var(char ***split_template, t_finfo *dt, char *template)
+int	initial_var(char ***split_template, t_finfo *dt, char *template, int *arr_int)
 {
-	*split_template = ft_split(template, '*');
-	if (split_template == NULL)
+	*split_template = split_wild(template, arr_int);
+	if (*split_template == NULL)
 		return (1);
 	dt->start = NULL;
 	dt->finish = NULL;

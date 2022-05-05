@@ -100,6 +100,7 @@ int		redirect_in(t_comm *data);
 int		initialize_dirs(char ***dirs);
 int		check_oper(t_data *data);
 int		check_tilda(t_comm **comm);
+char	**get_env(t_envr *dt_env);
 
 /* builtins */
 int		ft_export(t_data *data);
@@ -120,19 +121,24 @@ int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
 char	**get_env(t_envr *dt_env);
+int		check_operator(t_comm *dt);
+int		exec_heredoc_and_pipes(t_comm **data);
+int		next_oper(char *oper);
+int		curr_oper(char *oper);
 
 /* wildcard */
-char	**wildcard(char *template);
+char	**wildcard(char *template, int *arr);
 int		check_start(t_finfo *dt, char *filename);
 int		check_finish(t_finfo *dt, char *filename);
 int		check_between(t_finfo *dt, char *filename);
 int		free_dt(t_finfo *dt);
 int		len(char **template);
-int		initial_var(char ***split_template, t_finfo *dt, char *template);
+int		initial_var(char ***split_template, t_finfo *dt, char *template, int *arr_int);
 int		init_dt_start(t_finfo *dt, char *str, char ***split_template);
 int		init_dt_finish(t_finfo *dt, char *str, char ***temp, int last_idx_str);
 int		init_dt_between(t_finfo *dt, char ***split_template, int *i);
 int		check_parts(t_finfo *dt, char *filename);
 int		wild_add_elem(char ***arr, char *file, int i);
+char	**split_wild(char *str, int *arr);
 
 #endif

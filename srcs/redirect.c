@@ -22,8 +22,13 @@ int	redirect_out(t_comm *data)
 		if (data && data->prev && is_same_lines(data->prev->oper, "|"))
 			if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
 				return (DUP_ERR);
+		if (data && data->prev && is_same_lines(data->prev->oper, "<"))
+			if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
+				return (DUP_ERR);
 		data = data->next;
 	}
+	if (close(fd) == -1)
+		return (CLOSE_ERR);
 	return (0);
 }
 
@@ -46,9 +51,24 @@ int	redirect_in(t_comm *data)
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (DUP_ERR);
 	if (data && data->next && is_same_lines(data->next->oper, "|"))
+	{
 		if (dup2(data->next->fd[1], STDOUT_FILENO) == -1)
 			return (DUP_ERR);
+	}
 	return (0);
+}
+
+int	count_dict(t_envr *dt_env)
+{
+	int	i;
+
+	i = 0;
+	while (dt_env)
+	{
+		i++;
+		dt_env = dt_env->next;
+	}
+	return (i + 1);
 }
 
 char	**get_env(t_envr *dt_env)
@@ -59,17 +79,26 @@ char	**get_env(t_envr *dt_env)
 	char	*pair;
 
 	i = 0;
-	env = NULL;
+	env = malloc(sizeof(char *) * count_dict(dt_env)); //FIXME check if not allocated
 	while (dt_env)
 	{
-		if (take_arg_mass(&env, i))
-			continue ;
 		key_with_equel = ft_strjoin(dt_env->key, "=");
+		if (key_with_equel == NULL)
+		{
+			free_arrs(env);
+			return (NULL);
+		}
 		pair = ft_strjoin(key_with_equel, dt_env->val);
+		if (pair == NULL)
+		{
+			free_arrs(env);
+			free(key_with_equel);
+			return (NULL);
+		}
 		free(key_with_equel);
-		env[i] = pair;
-		i++;
+		env[i++] = pair;
 		dt_env = dt_env->next;
 	}
+	env[i] = NULL;
 	return (env);
 }

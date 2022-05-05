@@ -12,7 +12,7 @@ int	connect_arrays(char ***temp, char ***args, char ***wild)
 	while ((*wild)[++x])
 		(*temp)[j++] = (*wild)[x];
 	(*temp)[j] = NULL;
-	(*temp[j + 1]) = NULL;
+	(*temp)[j + 1] = NULL;
 	free(*wild);
 	free(*args);
 	*args = *temp;
@@ -109,7 +109,6 @@ int	check_wildcard_arg(char **str, char **s, int i, t_comm *data)
 	int		a;
 
 	pos = NULL;
-	wild = NULL; //////
 	a = 0;
 	if ((*s)[i] != '*' || !data->comm)
 		return (i);
@@ -125,7 +124,8 @@ int	check_wildcard_arg(char **str, char **s, int i, t_comm *data)
 	}
 	if (write_arg(str, s, i) || write_str_to_wild(str))
 		return (-3);
-	// wild = wildcard(str, pos);
+	wild = wildcard(*str, pos);
+	*str = NULL;
 	free (pos);
 	return (check_wild(&data->args, wild));
 }
