@@ -62,7 +62,7 @@ int	write_pos_wild(int **pos, int i, int a)
 	return (0);
 }
 
-int	write_str_to_wild(char **str)
+int	write_str_to_wild(char **str, int **pos)
 {
 	char	*tmp;
 	int		i;
@@ -72,8 +72,21 @@ int	write_str_to_wild(char **str)
 	i = -1;
 	qoute = 0;
 	while ((*str)[++i])
+	{
 		if ((*str)[i] == 34 || (*str)[i] == 39)
+		{
 			qoute++;
+			n = 0;
+			if (qoute % 2 == 0)
+			{
+				while ((*pos)[n] != -1 && (*pos)[n] <= i)
+					n++;
+				n--;
+				while ((*pos)[++n] != -1)
+					(*pos)[n] -= 2;
+			}
+		}
+	}
 	tmp = malloc(sizeof(char) * (i - qoute + 1));
 	if (!tmp)
 		return (1);
@@ -122,8 +135,12 @@ int	check_wildcard_arg(char **str, char **s, int i, t_comm *data)
 				return (-3);
 		i++;
 	}
-	if (write_arg(str, s, i) || write_str_to_wild(str))
+	if (write_arg(str, s, i) || write_str_to_wild(str, &pos))
 		return (-3);
+	printf("str to wild: %s\n", *str);
+	i = 0;
+	while (pos[i] != -1)
+		printf("index: %d\n", pos[i++]);
 	wild = wildcard(*str, pos);
 	*str = NULL;
 	free (pos);
