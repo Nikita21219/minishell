@@ -132,7 +132,7 @@ int		curr_oper(char *oper);
 /* wildcard */
 char	**wildcard(char *template, int *arr);
 int		check_start(t_finfo *dt, char *filename);
-int		check_finish(t_finfo *dt, char *filename);
+int		check_finish(t_finfo *dt, char *filename, int *arr_int);
 int		check_between(t_finfo *dt, char *filename);
 int		free_dt(t_finfo *dt);
 int		len(char **template);
@@ -140,7 +140,8 @@ int		initial_var(char ***split_template, t_finfo *dt, char *template, int *arr_i
 int		init_dt_start(t_finfo *dt, char *str, char ***split_template);
 int		init_dt_finish(t_finfo *dt, char *str, char ***temp, int last_idx_str);
 int		init_dt_between(t_finfo *dt, char ***split_template, int *i);
-int		check_parts(t_finfo *dt, char *filename);
+int		check_parts(t_finfo *dt, char *filename, int *arr_int);
+int		in_arr(int *arr, int i);
 int		wild_add_elem(char ***arr, char *file, int i);
 char	**split_wild(char *str, int *arr);
 
