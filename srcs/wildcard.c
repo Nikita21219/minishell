@@ -80,6 +80,7 @@ char	**wildcard(char *template, int *arr_int)
 	arr = NULL;
 	i = 0;
 	while (read_directory(dir, &entry))
+		// if (is_same_lines(entry->d_name, "Makefile"))
 		if (is_right_file(entry->d_name, template, arr_int))
 			wild_add_elem(&arr, entry->d_name, i++);
 	closedir(dir);

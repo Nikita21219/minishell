@@ -47,6 +47,7 @@ char	**split_wild(char *str, int *arr)
 	j = 0;
 	k = 0;
 	res = malloc(len_words_wild(arr) * (sizeof(char *) + 1));
+	res[j] = NULL;
 	while (i < ft_strlen(str))
 	{
 		if (in_arr(arr, i))
@@ -59,8 +60,13 @@ char	**split_wild(char *str, int *arr)
 		i += ft_strlen(res[j++]);
 	}
 	j--;
-	if (arr[--k] == (int)ft_strlen(res[j]))
-		res[j][ft_strlen(res[j])] = 0;
+	if (j < 0)
+		j = 0;
+	else
+	{
+		if (arr[--k] == (int)ft_strlen(res[j]))
+			res[j][ft_strlen(res[j])] = 0;
+	}
 	res[j + 1] = NULL;
 	return (res);
 }
