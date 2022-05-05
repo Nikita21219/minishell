@@ -94,22 +94,22 @@ char	**wildcard(char *template, int *arr_int)
 	return (arr);
 }
 
-int	main()
-{
-	char **res;
-	int	*arr = malloc(100);
-	arr[0] = 0;
-	arr[1] = -1;
-	int i = 0;
-	res = wildcard(ft_strdup("**.txt"), arr);
-	while (res[i])
-		printf("%s\n", res[i++]);
-	i = 0;
-	while (res[i])
-		free(res[i++]);
-	free(res);
-	free(arr);
-	return (0);
-}
+// int	main()
+// {
+// 	char **res;
+// 	int	*arr = malloc(100);
+// 	arr[0] = 0;
+// 	arr[1] = -1;
+// 	int i = 0;
+// 	res = wildcard(ft_strdup("**.txt"), arr);
+// 	while (res[i])
+// 		printf("%s\n", res[i++]);
+// 	i = 0;
+// 	while (res[i])
+// 		free(res[i++]);
+// 	free(res);
+// 	free(arr);
+// 	return (0);
+// }
 
-// c && cc -g -fsanitize=address srcs/free_utils.c libft/libft.a srcs/wild* srcs/parserutils2.c srcs/utils2.c && ./a.out
+// // c && cc -g -fsanitize=address srcs/free_utils.c libft/libft.a srcs/wild* srcs/parserutils2.c srcs/utils2.c && ./a.out

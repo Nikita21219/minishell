@@ -19,7 +19,7 @@ t_comm	*addelem(t_data *data)
 	temp->args = ft_calloc(sizeof(char *), 2);
 	if (!temp->args)
 		return (NULL);
-	temp->args[0] = ft_strdup("./minishell");
+	temp->args[0] = ft_strdup("./mini_hell");
 	if (!temp->args[0])
 		return (NULL);
 	take_data_in_list(&temp, data);
