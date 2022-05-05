@@ -14,16 +14,18 @@ int	check_start(t_finfo *dt, char *filename)
 	return (0);
 }
 
-int	check_finish(t_finfo *dt, char *filename)
+int	check_finish(t_finfo *dt, char *filename, int *arr_int)
 {
 	int	last_idx_filename;
 	int	dt_finish_idx;
+	(void) arr_int;
 
 	last_idx_filename = ft_strlen(filename) - 1;
 	dt_finish_idx = ft_strlen(dt->finish) - 1;
 	while (last_idx_filename >= 0 && dt_finish_idx >= 0 && \
 	filename[last_idx_filename] && dt->finish[dt_finish_idx] && \
-	dt->finish[dt_finish_idx] != '*')
+	(dt->finish[dt_finish_idx] != '*' || \
+	(dt->finish[dt_finish_idx] == '*' && in_arr(arr_int, dt_finish_idx))))
 		if (filename[last_idx_filename--] != dt->finish[dt_finish_idx--])
 			return (1);
 	return (0);
