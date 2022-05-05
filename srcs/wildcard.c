@@ -80,8 +80,9 @@ char	**wildcard(char *template, int *arr_int)
 	arr = NULL;
 	i = 0;
 	while (read_directory(dir, &entry))
-		if (is_right_file(entry->d_name, template, arr_int))
-			wild_add_elem(&arr, entry->d_name, i++);
+		// if (is_same_lines(entry->d_name, "Makefile"))
+			if (is_right_file(entry->d_name, template, arr_int))
+				wild_add_elem(&arr, entry->d_name, i++);
 	closedir(dir);
 	if (arr == NULL)
 	{
@@ -93,3 +94,23 @@ char	**wildcard(char *template, int *arr_int)
 		free(template);
 	return (arr);
 }
+
+// int	main()
+// {
+// 	char **res;
+// 	int	*arr = malloc(100);
+// 	arr[0] = 0;
+// 	arr[1] = -1;
+// 	int i = 0;
+// 	res = wildcard(ft_strdup("**.txt"), arr);
+// 	while (res[i])
+// 		printf("%s\n", res[i++]);
+// 	i = 0;
+// 	while (res[i])
+// 		free(res[i++]);
+// 	free(res);
+// 	free(arr);
+// 	return (0);
+// }
+
+// // c && cc -g -fsanitize=address srcs/free_utils.c libft/libft.a srcs/wild* srcs/parserutils2.c srcs/utils2.c && ./a.out

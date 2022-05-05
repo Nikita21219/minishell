@@ -32,15 +32,31 @@ int	check_finish(t_finfo *dt, char *filename)
 int	check_one_between(char *template, char *filename, int *j)
 {
 	int	i;
+	int	idx;
 
 	i = 0;
-	while (filename[*j] && template[i] != filename[*j])
-		(*j)++;
-	if (!filename[*j])
+	idx = 0;
+	while (filename[*j])
+	{
+		while (filename[*j] && template[i] != filename[*j])
+			(*j)++;
+		while (template[i] && filename[*j])
+		{
+			if (template[i] == filename[(*j)])
+				idx = (*j);
+			// if (idx > (int)ft_strlen(template) + 1)
+			// 	return (1);
+			if (template[i] != filename[(*j)])
+			{
+				i = idx;
+				break ;
+			}
+			if (template[i] == filename[(*j)++] && i++ == (int)ft_strlen(template) - 1)
+				return (0);
+		}
+	}
+	if (template[i])
 		return (1);
-	while (template[i] && filename[*j])
-		if (template[i++] != filename[(*j)++])
-			return (1);
 	return (0);
 }
 
@@ -57,26 +73,52 @@ char	*get_fname_without_start_and_finish(char *fname, t_finfo *dt)
 	return (finish);
 }
 
+int	check_in_word(int start, char *fname, char *template)
+{
+	int	j;
+
+	while (fname[start])
+	{
+		if (start > (int) ft_strlen(fname) - 1)
+			return (-1);
+		j = 0;
+		while (fname[start] && fname[start] != template[j])
+			start++;
+		if (!fname[start] || (start == (int) ft_strlen(fname) - 1 && j < (int) ft_strlen(template) - 1))
+			return (-1);
+		while (fname[start] && template[j] && fname[start] == template[j])
+		{
+			start++;
+			j++;
+		}
+	}
+	// if (!fname[start])
+	// 	return (-1);
+	return (start);
+}
+
 int	check_between(t_finfo *dt, char *filename)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
 	j = 0;
-	filename = get_fname_without_start_and_finish(filename, dt);
-	if (filename == NULL)
-		return (1);
+	// filename = get_fname_without_start_and_finish(filename, dt);
+	// if (filename == NULL)
+	// 	return (1);
 	while (dt->between[i])
 	{
-		if (check_one_between(dt->between[i++], filename, &j))
-		{
-			free(filename);
-			filename = NULL;
+		tmp = filename;
+		filename = ft_strnstr(filename, dt->between[i], ft_strlen(filename));
+		// free(tmp);
+		if (filename == NULL)
 			return (1);
-		}
+		filename = filename + ft_strlen(dt->between[i]);
+		i++;
 	}
-	free(filename);
+	// free(filename);
 	filename = NULL;
 	return (0);
 }

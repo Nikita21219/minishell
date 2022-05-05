@@ -42,6 +42,9 @@ int	redirect_in(t_comm *data)
 		if (fd)
 			if (close(fd) == -1)
 				return (CLOSE_ERR);
+		fprintf(stderr, "test\n");
+		if (!access(data->next->comm, 0))
+			fprintf(stderr, "mini_hell: %s: No such file or directory\n", data->next->comm);
 		fd = open(data->next->comm, O_RDONLY);
 		data = data->next;
 	}

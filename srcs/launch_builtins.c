@@ -52,7 +52,7 @@ int	launch_builtins(t_data *data)
 		return (0);
 	}
 	errno = 127;
-	fprintf(stderr, "mini_hell: %s: command not found\n", data->comm->comm);
+	fprintf(stderr, "mini_hell: %s: command not found\n", data->comm->comm); // FIXME fprintf is not allow
 	// printf("mini_hell: %s: command not found\n", data->comm->comm);
 	// perror(data->comm->comm);
 	return (127);
