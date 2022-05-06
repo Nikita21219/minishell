@@ -53,7 +53,6 @@ int	takeargs(t_comm *data, char **s)
 	int	a;
 
 	a = 1;
-	data->args[a] = NULL;
 	while ((*s)[0] && !data->oper)
 	{
 		i = 0;
