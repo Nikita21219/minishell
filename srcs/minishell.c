@@ -87,8 +87,8 @@ int	main(int argc, char **argv, char **env)
 	// 	perror("Minishell: Sigactoin");
 	// if (sigaction(SIGINT, &sig, NULL) < 0)
 	// 	perror("Minishell: Sigactoin");
-	signal(SIGINT, ft_takesig);
-	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGINT, ft_takesig);
+	// signal(SIGQUIT, SIG_IGN);
 	minishell(&data, env);
 	return (0);
 }

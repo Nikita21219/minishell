@@ -18,109 +18,76 @@ int	check_finish(t_finfo *dt, char *filename, int *arr_int)
 {
 	int	last_idx_filename;
 	int	dt_finish_idx;
-	(void) arr_int;
 
+	(void) arr_int;
 	last_idx_filename = ft_strlen(filename) - 1;
 	dt_finish_idx = ft_strlen(dt->finish) - 1;
-	while (last_idx_filename >= 0 && dt_finish_idx >= 0 && \
-	filename[last_idx_filename] && dt->finish[dt_finish_idx] && \
-	(dt->finish[dt_finish_idx] != '*' || \
-	(dt->finish[dt_finish_idx] == '*' && in_arr(arr_int, dt_finish_idx))))
+	while (last_idx_filename >= 0 && dt_finish_idx >= 0)
 		if (filename[last_idx_filename--] != dt->finish[dt_finish_idx--])
 			return (1);
 	return (0);
 }
 
-int	check_one_between(char *template, char *filename, int *j)
+char	*get_fname_without_start(char *fname, t_finfo *dt)
 {
 	int	i;
-	int	idx;
 
 	i = 0;
-	idx = 0;
-	while (filename[*j])
+	while (dt->start && *fname == dt->start[i])
 	{
-		while (filename[*j] && template[i] != filename[*j])
-			(*j)++;
-		while (template[i] && filename[*j])
-		{
-			if (template[i] == filename[(*j)])
-				idx = (*j);
-			// if (idx > (int)ft_strlen(template) + 1)
-			// 	return (1);
-			if (template[i] != filename[(*j)])
-			{
-				i = idx;
-				break ;
-			}
-			if (template[i] == filename[(*j)++] && i++ == (int)ft_strlen(template) - 1)
-				return (0);
-		}
+		fname++;
+		i++;
 	}
-	if (template[i])
-		return (1);
-	return (0);
+	return (ft_strdup(fname));
 }
 
 char	*get_fname_without_start_and_finish(char *fname, t_finfo *dt)
 {
-	char	*start;
-	char	*finish;
+	int		i;
+	int		j;
+	int		n;
+	char	*res;
 
-	start = ft_strtrim(fname, dt->start);
-	if (start == NULL)
-		return (NULL);
-	finish = ft_strtrim(start, dt->finish);
-	free(start);
-	return (finish);
-}
-
-int	check_in_word(int start, char *fname, char *template)
-{
-	int	j;
-
-	while (fname[start])
+	i = 0;
+	while (dt->start && fname[i] == dt->start[i])
+		i++;
+	n = ft_strlen(fname) - 1;
+	j = ft_strlen(dt->finish) - 1;
+	while (j >= 0 && dt->finish[j] == fname[n])
 	{
-		if (start > (int) ft_strlen(fname) - 1)
-			return (-1);
-		j = 0;
-		while (fname[start] && fname[start] != template[j])
-			start++;
-		if (!fname[start] || (start == (int) ft_strlen(fname) - 1 && j < (int) ft_strlen(template) - 1))
-			return (-1);
-		while (fname[start] && template[j] && fname[start] == template[j])
-		{
-			start++;
-			j++;
-		}
+
+		j--;
+		n--;
 	}
-	// if (!fname[start])
-	// 	return (-1);
-	return (start);
+	res = ft_substr(fname, i, ft_strlen(fname) - ft_strlen(dt->start) - ft_strlen(dt->finish));
+	return (res);
 }
 
 int	check_between(t_finfo *dt, char *filename)
 {
 	int		i;
 	int		j;
-	char	*tmp;
+	char	*fname;
+	char	*sub_str;
 
 	i = 0;
-	j = 0;
-	// filename = get_fname_without_start_and_finish(filename, dt);
-	// if (filename == NULL)
-	// 	return (1);
+	fname = get_fname_without_start_and_finish(filename, dt);
+	if (fname == NULL)
+		return (1);
+	sub_str = fname;
 	while (dt->between[i])
 	{
-		tmp = filename;
-		filename = ft_strnstr(filename, dt->between[i], ft_strlen(filename));
-		// free(tmp);
-		if (filename == NULL)
+		j = 0;
+		sub_str = ft_strnstr(sub_str, dt->between[i], ft_strlen(sub_str));
+		if (sub_str == NULL)
+		{
+			free(fname);
 			return (1);
-		filename = filename + ft_strlen(dt->between[i]);
+		}
+		while (dt->between[i][j++])
+			sub_str++;
 		i++;
 	}
-	// free(filename);
-	filename = NULL;
+	free(fname);
 	return (0);
 }
