@@ -22,35 +22,36 @@ void	tmp_print_arg_after_parser(t_comm *data)
 
 void    tmp_print_env(t_envr *env)
 {
-    t_envr  *envr;
-    envr = env;
-    while (envr)
-    {
-        printf("%s=%s\n", envr->key, envr->val);
+	t_envr  *envr;
+	envr = env;
+	while (envr)
+	{
+		printf("%s=%s\n", envr->key, envr->val);
         envr = envr->next;
-    }
+	}
 }
 
 void	minishell(t_data *data, char **env)
 {
+	int	err;
 	take_start_env(data, env);
 	while (1)
 	{
+		err = errno;
 		if (!data->env)
 			error_mes_with_exit("Error environment\n", data);
 		data->instr = readline("🔥mini_hell🔥$ ");
+		errno = err;
 		if (!data->instr)
 			error_mes_with_exit("\b\bexit\n", data);
 		if (data->instr[0] == 0)
 			continue ;
 		add_history(data->instr);
-		errno = 90;
 		if (parser(data) || check_tilda(&data->comm))
 		{
 			freedata(data);
 			continue ;
 		}
-		errno = 99;
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
 		add_ptr_prev_to_data(data->comm);
@@ -76,21 +77,11 @@ void	ft_takesig(int sig)
 int	main(int argc, char **argv, char **env)
 {
 	t_data				data;
-	// struct sigaction	sig;
-	// sigset_t			newset;
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
-	// sig.sa_handler = &ft_takesig;
-	// sig.sa_flags = SA_RESTART;
-	// sigemptyset(&newset);
-	// sigaddset(&newset, SIGQUIT);
-	// if (sigprocmask(SIG_BLOCK, &newset, 0) < 0)
-	// 	perror("Minishell: Sigactoin");
-	// if (sigaction(SIGINT, &sig, NULL) < 0)
-	// 	perror("Minishell: Sigactoin");
-	// signal(SIGINT, ft_takesig);
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, ft_takesig);
+	signal(SIGQUIT, SIG_IGN);
 	minishell(&data, env);
 	return (0);
 }
