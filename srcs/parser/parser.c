@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 {

@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	connect_arrays(char ***temp, char ***args, char ***wild)
 {

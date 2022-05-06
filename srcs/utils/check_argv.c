@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	check_argv(int argc, char **argv, char **env, t_data *data)
 {

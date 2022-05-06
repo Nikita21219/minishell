@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	read_directory(DIR *dir, struct dirent **entry)
 {

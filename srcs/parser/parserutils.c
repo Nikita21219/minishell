@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	syntx_oper(char **arg, char **s, int *i, int a)
 {
