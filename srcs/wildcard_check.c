@@ -39,7 +39,7 @@ char	*get_fname_without_start_and_finish(char *fname, t_finfo *dt)
 	res = ft_strdup(fname);
 	if (res == NULL)
 		return (NULL);
-	while (dt->start && (res)[i] == dt->start[i])
+	while (dt->start && *res == dt->start[i])
 	{
 		res++;
 		i++;
@@ -56,24 +56,33 @@ int	check_between(t_finfo *dt, char *filename)
 	int		i;
 	int		j;
 	char	*fname;
-	char	*tmp;
+	char	*sub_str;
+	char	*trim_str;
+	char	*ptr_to_free;
 
 	i = 0;
 	j = 0;
-	filename = get_fname_without_start_and_finish(filename, dt);
-	if (filename == NULL)
+	fname = get_fname_without_start_and_finish(filename, dt);
+	// printf("filename = %p\n", fname);
+	if (fname == NULL)
 		return (1);
-	fname = filename;
+	// printf("fname = %s - %p \nfilename = %s - %p\n", fname, fname, filename, filename);
+	// sleep(10);
+	// free(fname);
+	// return (1);
+	ptr_to_free = NULL;
+	trim_str = fname;
 	while (dt->between[i])
 	{
-		tmp = filename;
-		filename = ft_strnstr(filename, dt->between[i], ft_strlen(filename));
-		if (filename == NULL)
+		sub_str = ft_strnstr(trim_str, dt->between[i], ft_strlen(trim_str));
+		if (sub_str == NULL)
+		{
+			// free(trim_str);
 			return (1);
-		filename = ft_strdup(filename + ft_strlen(dt->between[i]));
-		if (filename == NULL)
-			return (1);
+		}
+		trim_str = ft_strdup(sub_str + ft_strlen(dt->between[i])); //FIXME if not allocated
 		i++;
 	}
+	// free(fname);
 	return (0);
 }
