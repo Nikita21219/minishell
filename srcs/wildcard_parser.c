@@ -83,10 +83,6 @@ int	check_wildcard_arg(char **str, char **s, int i, t_comm *data)
 	}
 	if (write_arg(str, s, i) || write_str_to_wild(str, &pos))
 		return (-3);
-	printf("str to wild: %s\n", *str);
-	i = 0;
-	while (pos[i] != -1)
-		printf("pos: %d\n", pos[i++]);
 	wild = wildcard(*str, pos);
 	*str = NULL;
 	free (pos);
