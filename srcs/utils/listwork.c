@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	take_data_in_list(t_comm **temp, t_data *data)
 {

@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	wild_add_elem(char ***arr, char *file, int i)
 {

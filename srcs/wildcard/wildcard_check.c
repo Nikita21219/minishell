@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	check_start(t_finfo *dt, char *filename)
 {
@@ -55,6 +55,7 @@ char	*get_fname_without_start_and_finish(char *fname, t_finfo *dt)
 	j = ft_strlen(dt->finish) - 1;
 	while (j >= 0 && dt->finish[j] == fname[n])
 	{
+
 		j--;
 		n--;
 	}

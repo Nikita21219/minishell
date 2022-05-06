@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 t_envr	*take_path_env(t_envr **env, char *s)
 {

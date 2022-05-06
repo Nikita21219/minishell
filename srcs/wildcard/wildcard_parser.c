@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	take_pos_for_wild(char **str, int *qoute, int **pos)
 {

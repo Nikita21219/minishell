@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	check_parts(t_finfo *dt, char *filename, int *arr_int)
 {
