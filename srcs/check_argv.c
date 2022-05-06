@@ -16,3 +16,14 @@ void	print_last_exit(void)
 {
 	printf("mini_hell: %d: %s\n", errno, strerror(errno));
 }
+
+void	fill_zero(int *arr, int k, int *j, char **res)
+{
+	(*j)--;
+	if (*j < 0)
+		*j = 0;
+	else
+		if (arr[--k] == (int)ft_strlen(res[*j]))
+			res[*j][ft_strlen(res[*j])] = 0;
+	res[(*j) + 1] = NULL;
+}

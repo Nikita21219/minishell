@@ -10,7 +10,8 @@ int	len(char **template)
 	return (count);
 }
 
-int	initial_var(char ***split_template, t_finfo *dt, char *template, int *arr_int)
+int	initial_var(char ***split_template, \
+t_finfo *dt, char *template, int *arr_int)
 {
 	*split_template = split_wild(template, arr_int);
 	if (*split_template == NULL)

@@ -44,7 +44,6 @@ int	takecommand(t_comm *data, char **s)
 		return (1);
 	}
 	return (0);
-	printf("comm\n");
 }
 
 int	takeargs(t_comm *data, char **s)
@@ -73,7 +72,6 @@ int	takeargs(t_comm *data, char **s)
 			return (1);
 	}
 	return (0);
-	printf("arg\n");
 }
 
 int	checkallcommands(t_comm *p)

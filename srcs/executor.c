@@ -94,7 +94,10 @@ int	executor(t_data *data, char *path, int count_comm)
 	else if (data->comm->pid == 0)
 	{
 		if (error)
+		{
+			errno = error;
 			exit(error);
+		}
 		error = handle_oper(data, count_comm);
 		if (error)
 			exit(error);

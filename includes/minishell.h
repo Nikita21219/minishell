@@ -144,5 +144,6 @@ int		check_parts(t_finfo *dt, char *filename, int *arr_int);
 int		in_arr(int *arr, int i);
 int		wild_add_elem(char ***arr, char *file, int i);
 char	**split_wild(char *str, int *arr);
+void	fill_zero(int *arr, int k, int *j, char **res);
 
 #endif

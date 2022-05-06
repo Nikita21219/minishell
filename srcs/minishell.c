@@ -44,11 +44,13 @@ void	minishell(t_data *data, char **env)
 		if (data->instr[0] == 0)
 			continue ;
 		add_history(data->instr);
+		errno = 90;
 		if (parser(data) || check_tilda(&data->comm))
 		{
 			freedata(data);
 			continue ;
 		}
+		errno = 99;
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
 		add_ptr_prev_to_data(data->comm);

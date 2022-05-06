@@ -36,6 +36,15 @@ int	len_words_wild(int *arr)
 	return (i + 3);
 }
 
+int	init_res(char ***res, int *arr)
+{
+	*res = malloc(len_words_wild(arr) * (sizeof(char *) + 1));
+	if (*res == NULL)
+		return (1);
+	**res = NULL;
+	return (0);
+}
+
 char	**split_wild(char *str, int *arr)
 {
 	size_t	i;
@@ -46,8 +55,8 @@ char	**split_wild(char *str, int *arr)
 	i = 0;
 	j = 0;
 	k = 0;
-	res = malloc(len_words_wild(arr) * (sizeof(char *) + 1));
-	res[j] = NULL;
+	if (init_res(&res, arr))
+		return (NULL);
 	while (i < ft_strlen(str))
 	{
 		if (in_arr(arr, i))
@@ -59,14 +68,6 @@ char	**split_wild(char *str, int *arr)
 		res[j] = ft_substr(str, i, arr[k] - i);
 		i += ft_strlen(res[j++]);
 	}
-	j--;
-	if (j < 0)
-		j = 0;
-	else
-	{
-		if (arr[--k] == (int)ft_strlen(res[j]))
-			res[j][ft_strlen(res[j])] = 0;
-	}
-	res[j + 1] = NULL;
+	fill_zero(arr, k, &j, res);
 	return (res);
 }

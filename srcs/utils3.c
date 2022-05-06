@@ -64,9 +64,15 @@ int	check_oper(t_data *data)
 	}
 	if (check_operator(dt))
 	{
-		if (is_same_lines(dt->oper, "<") && dt->next && access(dt->next->comm, 0))
+		if (is_same_lines(dt->oper, "<") && \
+		dt->next && access(dt->next->comm, 0))
+		{
+			write(2, "mini_hell: ", 11);
+			perror(dt->next->comm);
 			return (1);
-		if (is_same_lines(dt->oper, "<") && dt->next && access(dt->next->comm, 4))
+		}
+		if (is_same_lines(dt->oper, "<") && \
+		dt->next && access(dt->next->comm, 4))
 		{
 			perror(dt->next->comm);
 			return (1);

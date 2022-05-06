@@ -1,5 +1,21 @@
 #include "../includes/minishell.h"
 
+void	init_fd(t_comm *data, int *fd)
+{
+	if (is_same_lines(data->oper, ">"))
+		*fd = open(data->next->comm, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+	else
+		*fd = open(data->next->comm, O_CREAT | O_WRONLY | O_APPEND, S_IRWXU);
+}
+
+int	ft_fprintf(char *str)
+{
+	write(2, "mini_hell: ", 11); //FIXME if returned fail
+	write(2, str, ft_strlen(str)); //FIXME if returned fail
+	write(2, ": No such file or directory\n", 29); //FIXME if returned fail
+	return (0);
+}
+
 int	redirect_out(t_comm *data)
 {
 	int	fd;
@@ -11,10 +27,7 @@ int	redirect_out(t_comm *data)
 		if (fd)
 			if (close(fd) == -1)
 				return (CLOSE_ERR);
-		if (is_same_lines(data->oper, ">"))
-			fd = open(data->next->comm, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-		else
-			fd = open(data->next->comm, O_CREAT | O_WRONLY | O_APPEND, S_IRWXU);
+		init_fd(data, &fd);
 		if (fd == -1)
 			return (OPEN_ERR);
 		if (dup2(fd, STDOUT_FILENO) == -1)
@@ -42,9 +55,6 @@ int	redirect_in(t_comm *data)
 		if (fd)
 			if (close(fd) == -1)
 				return (CLOSE_ERR);
-		fprintf(stderr, "test\n");
-		if (!access(data->next->comm, 0))
-			fprintf(stderr, "mini_hell: %s: No such file or directory\n", data->next->comm);
 		fd = open(data->next->comm, O_RDONLY);
 		data = data->next;
 	}

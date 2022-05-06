@@ -58,7 +58,8 @@ char	*get_fname_without_start_and_finish(char *fname, t_finfo *dt)
 		j--;
 		n--;
 	}
-	res = ft_substr(fname, i, ft_strlen(fname) - ft_strlen(dt->start) - ft_strlen(dt->finish));
+	res = ft_substr(fname, i, ft_strlen(fname) - \
+	ft_strlen(dt->start) - ft_strlen(dt->finish));
 	return (res);
 }
 
@@ -68,6 +69,7 @@ int	check_between(t_finfo *dt, char *filename)
 	int		j;
 	char	*fname;
 	char	*sub_str;
+
 	i = 0;
 	fname = get_fname_without_start_and_finish(filename, dt);
 	if (fname == NULL)
