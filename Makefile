@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 OBJDIR = ./objs
 LIBFT = libft/libft.a
-CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror 
 HEADER = minishell.h
 SRCDIR = ./srcs
 HEADDIR = ./includes
