@@ -74,6 +74,7 @@ int	check_oper(t_data *data)
 		if (is_same_lines(dt->oper, "<") && \
 		dt->next && access(dt->next->comm, 4))
 		{
+			write(2, "mini_hell: ", 11);
 			perror(dt->next->comm);
 			return (1);
 		}

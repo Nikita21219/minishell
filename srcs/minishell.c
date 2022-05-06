@@ -80,8 +80,8 @@ int	main(int argc, char **argv, char **env)
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
-	signal(SIGINT, ft_takesig);
-	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGINT, ft_takesig);
+	// signal(SIGQUIT, SIG_IGN);
 	minishell(&data, env);
 	return (0);
 }

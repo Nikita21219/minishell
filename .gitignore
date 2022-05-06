@@ -1,14 +1,9 @@
-outfile.txt
 minishell
 *objs
 *.DS_Store
 .vscode
-test.txt
 test.c
 wild_main.c
-hello.txt
-fileee
-file
 
 # Prerequisites
 *.d

@@ -38,6 +38,8 @@ int	redirect_out(t_comm *data)
 		if (data && data->prev && is_same_lines(data->prev->oper, "<"))
 			if (dup2(data->prev->fd[0], STDIN_FILENO) == -1)
 				return (DUP_ERR);
+		if (data && data->next && is_same_lines(data->next->oper, "<"))
+			redirect_in(data->next);
 		data = data->next;
 	}
 	if (close(fd) == -1)
@@ -66,6 +68,12 @@ int	redirect_in(t_comm *data)
 	if (data && data->next && is_same_lines(data->next->oper, "|"))
 	{
 		if (dup2(data->next->fd[1], STDOUT_FILENO) == -1)
+			return (DUP_ERR);
+	}
+	if (data && data->prev && is_same_lines(data->prev->oper, ">"))
+	{
+		// fprintf(stderr, "test\n"); // FIXME fprintf is not allow
+		if (dup2(data->fd[1], STDOUT_FILENO) == -1)
 			return (DUP_ERR);
 	}
 	return (0);
