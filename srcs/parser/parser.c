@@ -71,19 +71,38 @@ int	takeargs(t_comm *data, char **s)
 	return (0);
 }
 
-int	checkallcommands(t_comm *p)
+void	move_list(t_comm **p)
 {
-	while (p)
+	t_comm	*temp;
+	int		i;
+
+	i = 0;
+	temp = (*p)->next;
+	(*p)->args = temp->args;
+	temp->args = NULL;
+	(*p)->comm = (*p)->args[1];
+	while ((*p)->args[++i])
+		(*p)->args[i] = (*p)->args[i + 1];
+}
+
+int	checkallcommands(t_comm **p)
+{
+	t_comm	*tmp;
+
+	tmp = *p;
+	if ((*p) && !(*p)->comm && ((*p)->oper[0] == '<' || (*p)->oper[0] == '>'))
+		move_list(p);
+	while (tmp)
 	{
-		if ((!p->comm && !(is_same_lines(p->oper, ">") || \
-		is_same_lines(p->oper, ">>") || is_same_lines(p->oper, "<") \
-		|| is_same_lines(p->oper, "<<"))) || (p->oper && !p->next))
+		if ((!tmp->comm && !(is_same_lines(tmp->oper, ">") || \
+		is_same_lines(tmp->oper, ">>") || is_same_lines(tmp->oper, "<") \
+		|| is_same_lines(tmp->oper, "<<"))) || (tmp->oper && !tmp->next))
 		{
 			printf("Parse error\n");
 			errno = 22;
 			return (1);
 		}
-		p = p->next;
+		tmp = tmp->next;
 	}
 	return (0);
 }
@@ -114,5 +133,5 @@ int	parser(t_data *data)
 		if (takeargs(p, &str))
 			return (1);
 	}
-	return (checkallcommands(data->comm));
+	return (checkallcommands(&data->comm));
 }
