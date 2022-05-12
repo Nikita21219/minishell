@@ -74,12 +74,14 @@ int	takeargs(t_comm *data, char **s)
 void	move_list(t_comm **p)
 {
 	t_comm	*temp;
+	char	**tmp_arg;
 	int		i;
 
 	i = 0;
 	temp = (*p)->next;
+	tmp_arg = (*p)->args;
 	(*p)->args = temp->args;
-	temp->args = NULL;
+	temp->args = tmp_arg;
 	(*p)->comm = (*p)->args[1];
 	while ((*p)->args[++i])
 		(*p)->args[i] = (*p)->args[i + 1];
