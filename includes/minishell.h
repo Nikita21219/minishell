@@ -85,6 +85,11 @@ int		connect_arrays(char ***temp, char ***args, char ***wild);
 int		varisdigit(char **s);
 int		writevar(char **str, t_envr p);
 int		last_error(char **s, char **str);
+int		vars_quote_check(char **str, char **s, int i, t_comm *data);
+int		checkallcommands(t_comm **p);
+int		add_list_env(t_envr **env, char *arg);
+int		check_for_local_vars(char **str, t_data *data);
+int		check_right_var(char *arg);
 
 /* launcher */
 int		launcher(t_data *data);
