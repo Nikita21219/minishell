@@ -4,12 +4,9 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 {
 	char	quote;
 
-	if ((*s)[i] == '$')
-	{
-		if (write_arg(str, s, i))
-			return (-1);
-		return (takevar(s, str, data));
-	}
+	if ((*s)[i] == '$' && (*s)[i + 1] \
+		&& !ft_space((*s)[i + 1]) && (*s)[i + 1] != '=')
+		return (takevar(s, str, data, i));
 	if ((*s)[i] == 34 || (*s)[i] == 39)
 	{
 		quote = (*s)[i];

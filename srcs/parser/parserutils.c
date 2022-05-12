@@ -46,11 +46,12 @@ int	check_quote(char **s, char **str, char quote, t_comm *data)
 	i = 0;
 	while ((*s)[i] && (*s)[i] != quote)
 	{
-		if (quote == 34 && (*s)[i] == '$')
+		if (quote == 34 && (*s)[i] == '$' && (*s)[i + 1] \
+			&& !ft_space((*s)[i + 1]) && (*s)[i + 1] != '=')
 		{
 			if (write_arg(str, s, i))
 				return (-1);
-			i = takevar(s, str, data);
+			i = takevar(s, str, data, i);
 			if (i < 0)
 				return (-1);
 		}

@@ -72,7 +72,7 @@ int		check_quote(char **s, char **str, char quote, t_comm *data);
 int		write_arg(char **arg, char **s, int i);
 int		take_arg_mass(char ***args, int a);
 int		check_second_qoute(char *s, int i, char quote);
-int		takevar(char **s, char **str, t_comm *data);
+int		takevar(char **s, char **str, t_comm *data, int i);
 int		operand(t_comm	*data, char **s, int *i, char **arg);
 void	delenv(t_envr **env);
 int		command_in_bin(char *command);
@@ -82,6 +82,9 @@ int		check_wildcard_arg(char **str, char **s, int i, t_comm *data);
 int		write_pos_wild(int **pos, int i, int a);
 int		check_wild(char ***args, char **wild);
 int		connect_arrays(char ***temp, char ***args, char ***wild);
+int		varisdigit(char **s);
+int		writevar(char **str, t_envr p);
+int		last_error(char **s, char **str);
 
 /* launcher */
 int		launcher(t_data *data);
