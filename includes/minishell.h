@@ -53,6 +53,12 @@ typedef struct s_finfo
 	char	**between;
 }	t_finfo;
 
+typedef struct s_box
+{
+	t_comm			*dt_comm;
+	struct s_box	*next;
+}	t_box;
+
 /* general */
 int		is_same_lines(char *f_str, char *s_str);
 void	freedata(t_data *data);
@@ -151,5 +157,6 @@ int		in_arr(int *arr, int i);
 int		wild_add_elem(char ***arr, char *file, int i);
 char	**split_wild(char *str, int *arr);
 void	fill_zero(int *arr, int k, int *j, char **res);
+int		init_containers(t_comm *data, t_box	**box);
 
 #endif

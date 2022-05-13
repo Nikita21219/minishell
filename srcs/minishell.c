@@ -29,11 +29,13 @@ void    tmp_print_env(t_envr *env)
 		printf("%s=%s\n", envr->key, envr->val);
         envr = envr->next;
 	}
-}
+} //FIXME delete this func
 
 void	minishell(t_data *data, char **env)
 {
-	int	err;
+	int		err;
+	t_box	*box;
+
 	take_start_env(data, env);
 	while (1)
 	{
@@ -56,8 +58,16 @@ void	minishell(t_data *data, char **env)
 		// exit(0);
 		// tmp_print_env(data->vars);
 		// exit(0);
-		add_ptr_prev_to_data(data->comm);
-		launcher(data);
+		box = malloc(sizeof(t_box *));
+		init_containers(data->comm, &box);
+		while (box)
+		{
+			tmp_print_arg_after_parser(data->comm);
+			data->comm = box->dt_comm;
+			add_ptr_prev_to_data(data->comm);
+			launcher(data);
+			box = box->next;
+		}
 		freedata(data);
 	}
 	delenv(&data->env);
