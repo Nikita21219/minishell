@@ -3,12 +3,20 @@
 int	ft_echo(t_comm com)
 {
 	int	i;
+	int	x;
 	int	a;
 
-	i = 0;
+	i = 1;
 	a = 0;
-	while (is_same_lines(com.args[++i], "-n"))
+	x = 0;
+	while (com.args[i][0] == '-' && com.args[i][1] == 'n')
+	{
+		while (com.args[i][++x])
+			if (com.args[i][x] != 'n')
+				break ;
+		i++;
 		a++;
+	}
 	while (com.args[i])
 	{
 		printf("%s", com.args[i++]);
