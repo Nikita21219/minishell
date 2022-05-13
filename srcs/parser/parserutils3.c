@@ -34,6 +34,8 @@ int	checkallcommands(t_comm **p)
 			errno = 22;
 			return (1);
 		}
+		if (check_wildcard_arg(tmp))
+			return (1);
 		tmp = tmp->next;
 	}
 	return (0);
@@ -61,6 +63,7 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 			(*s)++;
 		}
 	}
-	i = check_wildcard_arg(str, s, i, data);
+	if ((*s)[i] == '*')
+		(*s)[i] = '*' * -1;
 	return (++i);
 }
