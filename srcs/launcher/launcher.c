@@ -71,30 +71,39 @@ int	check_builtins(t_data *data, char **path)
 
 void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 {
-	if (is_same_lines(data->comm->oper, ">") || \
-	is_same_lines(data->comm->oper, ">>"))
+	if (data->comm && (is_same_lines(data->comm->oper, ">") || \
+	is_same_lines(data->comm->oper, ">>") || \
+	is_same_lines(data->comm->oper, "<")))
 	{
-		if (is_same_lines(data->comm->oper, ">>"))
-			data->comm = data->comm->next->next;
-		else
-		{
-			while (data->comm && (is_same_lines(data->comm->oper, ">") || \
-			(data->comm->prev && is_same_lines(data->comm->prev->oper, ">"))))
-				data->comm = data->comm->next;
-		}
-	}
-	else if (is_same_lines(data->comm->oper, "<"))
-	{
-		while ((data->comm && is_same_lines(data->comm->oper, "<")) || \
-		(data->comm && is_same_lines(data->comm->prev->oper, "<")))
+		while (data->comm && (is_same_lines(data->comm->oper, ">") || \
+	is_same_lines(data->comm->oper, ">>") || \
+	is_same_lines(data->comm->oper, "<")))
 			data->comm = data->comm->next;
 	}
-	else if (data && data->comm && is_same_lines(data->comm->oper, "<<"))
-	{
-		while ((data->comm && is_same_lines(data->comm->oper, "<<")) || \
-		(data->comm && is_same_lines(data->comm->prev->oper, "<<")))
-			data->comm = data->comm->next;
-	}
+	// if (is_same_lines(data->comm->oper, ">") || \
+	// is_same_lines(data->comm->oper, ">>"))
+	// {
+	// 	if (is_same_lines(data->comm->oper, ">>"))
+	// 		data->comm = data->comm->next->next;
+	// 	else
+	// 	{
+	// 		while (data->comm && (is_same_lines(data->comm->oper, ">") || \
+	// 		(data->comm->prev && is_same_lines(data->comm->prev->oper, ">"))))
+	// 			data->comm = data->comm->next;
+	// 	}
+	// }
+	// else if (is_same_lines(data->comm->oper, "<"))
+	// {
+	// 	while ((data->comm && is_same_lines(data->comm->oper, "<")) || \
+	// 	(data->comm && is_same_lines(data->comm->prev->oper, "<")))
+	// 		data->comm = data->comm->next;
+	// }
+	// else if (data && data->comm && is_same_lines(data->comm->oper, "<<"))
+	// {
+	// 	while ((data->comm && is_same_lines(data->comm->oper, "<<")) || \
+	// 	(data->comm && is_same_lines(data->comm->prev->oper, "<<")))
+	// 		data->comm = data->comm->next;
+	// }
 	else
 		data->comm = data->comm->next;
 	free(path);
@@ -112,6 +121,7 @@ int	launcher(t_data *data)
 		return (0);
 	while (data->comm)
 	{
+		fprintf(stderr, "command = %s, oper = %s\n", data->comm->comm, data->comm->oper);
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;
