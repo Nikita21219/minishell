@@ -29,11 +29,12 @@ void    tmp_print_env(t_envr *env)
 		printf("%s=%s\n", envr->key, envr->val);
         envr = envr->next;
 	}
-}
+} //FIXME delete this func
 
 void	minishell(t_data *data, char **env)
 {
-	int	err;
+	int		err;
+
 	take_start_env(data, env);
 	while (1)
 	{
@@ -45,7 +46,10 @@ void	minishell(t_data *data, char **env)
 		if (!data->instr)
 			error_mes_with_exit("\b\bexit\n", data);
 		if (data->instr[0] == 0)
+		{
+			free(data->instr);
 			continue ;
+		}
 		add_history(data->instr);
 		if (parser(data) || check_tilda(&data->comm))
 		{
@@ -53,6 +57,8 @@ void	minishell(t_data *data, char **env)
 			continue ;
 		}
 		// tmp_print_arg_after_parser(data->comm);
+		// exit(0);
+		// tmp_print_env(data->vars);
 		// exit(0);
 		add_ptr_prev_to_data(data->comm);
 		launcher(data);
@@ -85,3 +91,5 @@ int	main(int argc, char **argv, char **env)
 	minishell(&data, env);
 	return (0);
 }
+
+

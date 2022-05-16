@@ -1,34 +1,5 @@
 #include "../../includes/minishell.h"
 
-int	vars_quote_check(char **str, char **s, int i, t_comm *data)
-{
-	char	quote;
-
-	if ((*s)[i] == '$')
-	{
-		if (write_arg(str, s, i))
-			return (-1);
-		return (takevar(s, str, data));
-	}
-	if ((*s)[i] == 34 || (*s)[i] == 39)
-	{
-		quote = (*s)[i];
-		if (check_second_qoute(*s, i, quote))
-		{
-			if (write_arg(str, s, i))
-				return (-1);
-			(*s)++;
-			i = check_quote(s, str, quote, data);
-			if (i < 0)
-				return (-1);
-			i = -1;
-			(*s)++;
-		}
-	}
-	i = check_wildcard_arg(str, s, i, data);
-	return (++i);
-}
-
 int	takecommand(t_comm *data, char **s)
 {
 	int		i;
@@ -74,23 +45,6 @@ int	takeargs(t_comm *data, char **s)
 	return (0);
 }
 
-int	checkallcommands(t_comm *p)
-{
-	while (p)
-	{
-		if ((!p->comm && !(is_same_lines(p->oper, ">") || \
-		is_same_lines(p->oper, ">>") || is_same_lines(p->oper, "<") \
-		|| is_same_lines(p->oper, "<<"))) || (p->oper && !p->next))
-		{
-			printf("Parse error\n");
-			errno = 22;
-			return (1);
-		}
-		p = p->next;
-	}
-	return (0);
-}
-
 int	parser(t_data *data)
 {
 	t_comm	*p;
@@ -99,8 +53,8 @@ int	parser(t_data *data)
 	str = data->instr;
 	while (*str)
 	{
-		while (*str && ft_space(*str))
-			str++;
+		if (check_for_local_vars(&str, data))
+			return (1);
 		if (!(*str))
 			break ;
 		p = addelem(data);
@@ -117,5 +71,5 @@ int	parser(t_data *data)
 		if (takeargs(p, &str))
 			return (1);
 	}
-	return (checkallcommands(data->comm));
+	return (checkallcommands(&data->comm));
 }

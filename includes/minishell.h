@@ -53,6 +53,12 @@ typedef struct s_finfo
 	char	**between;
 }	t_finfo;
 
+typedef struct s_box
+{
+	t_comm			*dt_comm;
+	struct s_box	*next;
+}	t_box;
+
 /* general */
 int		is_same_lines(char *f_str, char *s_str);
 void	freedata(t_data *data);
@@ -72,16 +78,22 @@ int		check_quote(char **s, char **str, char quote, t_comm *data);
 int		write_arg(char **arg, char **s, int i);
 int		take_arg_mass(char ***args, int a);
 int		check_second_qoute(char *s, int i, char quote);
-int		takevar(char **s, char **str, t_comm *data);
+int		takevar(char **s, char **str, t_comm *data, int i);
 int		operand(t_comm	*data, char **s, int *i, char **arg);
 void	delenv(t_envr **env);
 int		command_in_bin(char *command);
 void	exit_from_minishell(void);
 t_envr	*take_path_env(t_envr **env, char *s);
-int		check_wildcard_arg(char **str, char **s, int i, t_comm *data);
+int		check_wildcard_arg(t_comm *tmp);
 int		write_pos_wild(int **pos, int i, int a);
-int		check_wild(char ***args, char **wild);
-int		connect_arrays(char ***temp, char ***args, char ***wild);
+int		varisdigit(char **s);
+int		writevar(char **str, t_envr p);
+int		last_error(char **s, char **str);
+int		vars_quote_check(char **str, char **s, int i, t_comm *data);
+int		checkallcommands(t_comm **p);
+int		add_list_env(t_envr **env, char *arg);
+int		check_for_local_vars(char **str, t_data *data);
+int		check_right_var(char *arg);
 
 /* launcher */
 int		launcher(t_data *data);
@@ -145,5 +157,6 @@ int		in_arr(int *arr, int i);
 int		wild_add_elem(char ***arr, char *file, int i);
 char	**split_wild(char *str, int *arr);
 void	fill_zero(int *arr, int k, int *j, char **res);
+int		init_containers(t_comm *data, t_box	**box);
 
 #endif

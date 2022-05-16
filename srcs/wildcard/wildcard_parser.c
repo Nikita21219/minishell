@@ -1,8 +1,30 @@
 #include "../../includes/minishell.h"
 
-int	take_pos_for_wild(char **str, int *qoute, int **pos)
+int	write_pos_wild(int **pos, int i, int a)
 {
-	char	qt;
+	int	*tmp;
+	int	x;
+
+	x = 0;
+	tmp = malloc(sizeof(int) * (a + 1));
+	if (!tmp)
+		return (1);
+	if (a > 1)
+	{
+		x = -1;
+		while (++x < a - 1)
+			tmp[x] = (*pos)[x];
+	}
+	tmp[x] = i;
+	tmp[x + 1] = -1;
+	if (*pos)
+		free(*pos);
+	*pos = tmp;
+	return (0);
+}
+
+int	take_pos_for_wild(char **str, int **pos)
+{
 	int		n;
 	int		i;
 
@@ -10,81 +32,70 @@ int	take_pos_for_wild(char **str, int *qoute, int **pos)
 	i = -1;
 	while ((*str)[++i])
 	{
-		if (((*str)[i] == 34 || (*str)[i] == 39) \
-			&& check_second_qoute(*str, i, (*str)[i]))
+		if ((*str)[i] == -42)
 		{
-			qt = (*str)[i++];
-			while ((*str)[i] != qt)
-				i++;
-			(*qoute) += 2;
+			(*str)[i] = '*';
+			if (write_pos_wild(pos, i, ++n))
+				return (1);
 		}
-		if ((*str)[i] == '*')
-			if (write_pos_wild(pos, i - (*qoute), ++n))
-				return (-1);
 	}
-	return (i);
-}
-
-int	write_str_to_wild(char **str, int **pos)
-{
-	char	*tmp;
-	int		i;
-	int		n;
-	int		qoute;
-
-	qoute = 0;
-	i = take_pos_for_wild(str, &qoute, pos);
-	if (i < 0)
-		return (1);
-	tmp = malloc(sizeof(char) * (i - qoute + 1));
-	if (!tmp)
-		return (1);
-	i = -1;
-	n = 0;
-	while ((*str)[++i])
-		if ((*str)[i] != 34 && (*str)[i] != 39)
-			tmp[n++] = (*str)[i];
-	tmp[n] = 0;
-	if (*str)
-		free(*str);
-	*str = tmp;
 	return (0);
 }
 
-int	skipping_quotes(char **s, int i)
+int	write_arg_wild(char ***args, char **wild, int a)
 {
-	char	quote;
+	char	**tmp;
+	int		x;
+	int		y;
 
-	quote = (*s)[i];
-	if (!check_second_qoute(*s, i, quote))
-		return (i);
-	i++;
-	while ((*s)[i] != quote)
-		i++;
-	return (i);
+	x = 0;
+	y = a;
+	while (wild[x])
+		x++;
+	while ((*args)[y])
+		y++;
+	tmp = malloc(sizeof(char *) * (x + y + 1));
+	if (!tmp)
+		return (1);
+	x = -1;
+	while (++x != a)
+		tmp[x] = (*args)[x];
+	y = -1;
+	while (wild[++y])
+		tmp[x++] = wild[y];
+	while ((*args)[++a])
+		tmp[x++] = (*args)[a];
+	tmp[x] = NULL;
+	free(*args);
+	*args = tmp;
+	return (0);
 }
 
-int	check_wildcard_arg(char **str, char **s, int i, t_comm *data)
+int	check_wildcard_arg(t_comm *tmp)
 {
 	char	**wild;
 	int		*pos;
 	int		a;
 
-	pos = NULL;
-	a = 0;
-	if ((*s)[i] != '*' || !data->comm)
-		return (i);
-	while ((*s)[i] && !ft_space((*s)[i]) && (*s)[i] != '<' && (*s)[i] != '>' \
-		&& (*s)[i] != '|' && (*s)[i] != '&')
+	a = -1;
+	while (tmp->args[++a])
 	{
-		if ((*s)[i] == 34 || (*s)[i] == 39)
-			i = skipping_quotes(s, i);
-		i++;
+		pos = NULL;
+		if (ft_strchr(tmp->args[a], -42))
+		{
+			if (take_pos_for_wild(&tmp->args[a], &pos))
+				return (1);
+			wild = wildcard(tmp->args[a], pos);
+			free (pos);
+			if (!wild)
+				return (1);
+			if (write_arg_wild(&tmp->args, wild, a))
+			{
+				free(wild);
+				return (1);
+			}
+			free(wild);
+		}
 	}
-	if (write_arg(str, s, i) || write_str_to_wild(str, &pos))
-		return (-3);
-	wild = wildcard(*str, pos);
-	*str = NULL;
-	free (pos);
-	return (check_wild(&data->args, wild));
+	return (0);
 }

@@ -3,27 +3,28 @@
 int	ft_echo(t_comm com)
 {
 	int	i;
+	int	x;
+	int	a;
 
 	i = 1;
-	if (is_same_lines(com.args[i], "-n"))
+	a = 0;
+	x = 0;
+	while (com.args[i][0] == '-' && com.args[i][1] == 'n')
 	{
-		while (com.args[++i])
-		{
-			printf("%s", com.args[i]);
-			if (com.args[i + 1])
-				printf(" ");
-		}
+		while (com.args[i][++x])
+			if (com.args[i][x] != 'n')
+				break ;
+		i++;
+		a++;
 	}
-	else
+	while (com.args[i])
 	{
-		while (com.args[i])
-		{
-			printf("%s", com.args[i++]);
-			if (com.args[i])
-				printf(" ");
-		}
+		printf("%s", com.args[i++]);
+		if (com.args[i])
+			printf(" ");
+	}
+	if (a == 0)
 		printf("\n");
-	}
 	return (0);
 }
 
@@ -54,70 +55,4 @@ int	ft_env(t_envr *env)
 		p = p->next;
 	}
 	return (0);
-}
-
-int	ft_exit(t_data *data)
-{
-	int		i;
-
-	i = 0;
-	if (data->comm->args[1] && data->comm->args[2])
-	{
-		printf("exit: too many arguments\n");
-		return (1);
-	}
-	while (data->comm->args[1] && data->comm->args[1][i])
-	{
-		if (!(data->comm->args[1][i] >= 48 && data->comm->args[1][i++] <= 57))
-		{
-			printf("exit: %s: numeric argument required\n", data->comm->args[1]);
-			i = 0;
-			break ;
-		}
-	}
-	if (i != 0)
-	{
-		errno = ft_atoi(data->comm->args[1]);
-		printf("exit\n");
-	}
-	freedata(data);
-	delenv(&data->env);
-	exit(errno);
-}
-
-void	ft_unset(t_data	*data)
-{
-	t_envr	*p1;
-	t_envr	*p2;
-	int		i;
-
-	i = 1;
-	while (data->comm->args[i])
-	{
-		p1 = data->env;
-		p2 = take_path_env(&data->env, data->comm->args[i]);
-		if (!p2)
-		{
-			i++;
-			continue ;
-		}
-		if (is_same_lines(p1->key, data->comm->args[i++]))
-		{
-			data->env = data->env->next;
-			free (p1);
-			continue ;
-		}
-		while (p1->next != p2)
-			p1 = p1->next;
-		if (p2->next == NULL)
-		{
-			free(p2);
-			p1->next = NULL;
-		}
-		else
-		{
-			p1->next = p2->next;
-			free(p2);
-		}
-	}
 }

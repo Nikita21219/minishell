@@ -50,15 +50,40 @@ void	print_env(t_envr *env)
 	}
 }
 
+int	seach_in_vars(t_data *data, char *var, int *i)
+{
+	t_envr	*rv;
+	t_envr	*tenv;
+
+	rv = take_path_env(&data->vars, var);
+	if (!rv)
+		return (-1);
+	tenv = malloc(sizeof(t_envr));
+	if (!tenv)
+		return (1);
+	tenv->key = rv->key;
+	tenv->val = rv->val;
+	tenv->next = data->env;
+	data->env = tenv;
+	(*i)++;
+	return (0);
+}
+
 int	ft_export(t_data *data)
 {
 	int		i;
+	int		check;
 
 	i = 1;
 	if (!data->comm->args[i])
 		print_env(data->env);
 	while (data->comm->args[i])
 	{
+		check = seach_in_vars(data, data->comm->args[i], &i);
+		if (check)
+			return (1);
+		if (!check)
+			continue ;
 		if (check_right_var(data->comm->args[i]))
 		{
 			printf("export: '%s': not a valid identifier\n", \

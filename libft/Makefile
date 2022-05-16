@@ -7,7 +7,7 @@ HEADDIR = includes
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(addprefix $(OBJDIR)/,$(notdir $(SRC:.c=.o)))
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -O3
 
 all: $(NAME)
 
