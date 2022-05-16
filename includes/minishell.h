@@ -63,6 +63,7 @@ typedef struct s_box
 int		is_same_lines(char *f_str, char *s_str);
 void	freedata(t_data *data);
 void	free_arrs(char **arr);
+int		ft_perror(t_comm *dt);
 int		continue_with_print(char *err_str);
 
 /* parser */

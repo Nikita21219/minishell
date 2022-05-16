@@ -42,3 +42,10 @@ int	handle_error_executor(int error)
 		return (continue_with_print("Error: open() returned fail\n"));
 	return (0);
 }
+
+int	ft_perror(t_comm *dt)
+{
+	write(2, "mini_hell: ", 11);
+	perror(dt->next->comm);
+	return (1);
+}
