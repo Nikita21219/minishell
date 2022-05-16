@@ -129,6 +129,7 @@ int		ft_space(char str);
 int		launch_builtins(t_data *data);
 int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
+int		check_builtins(t_data *data, char **path);
 
 /* executor */
 int		executor(t_data *data, char *path, int count_comm);

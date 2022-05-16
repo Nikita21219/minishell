@@ -78,11 +78,13 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	is_same_lines(data->comm->oper, "<")))
 	{
 		while ((data->comm && (is_same_lines(data->comm->oper, ">") || \
-	is_same_lines(data->comm->oper, "<<") || \
-	is_same_lines(data->comm->oper, ">>") || \
-	is_same_lines(data->comm->oper, "<"))) || \
-	(data->comm && data->comm->prev && (is_same_lines(data->comm->prev->oper, ">") || is_same_lines(data->comm->prev->oper, ">>")\
-	 || is_same_lines(data->comm->prev->oper, "<"))))
+		is_same_lines(data->comm->oper, "<<") || \
+		is_same_lines(data->comm->oper, ">>") || \
+		is_same_lines(data->comm->oper, "<"))) || \
+		(data->comm && data->comm->prev && \
+		(is_same_lines(data->comm->prev->oper, ">") \
+		|| is_same_lines(data->comm->prev->oper, ">>") \
+		|| is_same_lines(data->comm->prev->oper, "<"))))
 		{
 			if (is_same_lines(data->comm->oper, "<<"))
 				while ((data->comm && is_same_lines(data->comm->oper, "<<")) || \
@@ -92,30 +94,6 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 				data->comm = data->comm->next;
 		}
 	}
-	// if (is_same_lines(data->comm->oper, ">") || \
-	// is_same_lines(data->comm->oper, ">>"))
-	// {
-	// 	if (is_same_lines(data->comm->oper, ">>"))
-	// 		data->comm = data->comm->next->next;
-	// 	else
-	// 	{
-	// 		while (data->comm && (is_same_lines(data->comm->oper, ">") || \
-	// 		(data->comm->prev && is_same_lines(data->comm->prev->oper, ">"))))
-	// 			data->comm = data->comm->next;
-	// 	}
-	// }
-	// else if (is_same_lines(data->comm->oper, "<"))
-	// {
-	// 	while ((data->comm && is_same_lines(data->comm->oper, "<")) || \
-	// 	(data->comm && is_same_lines(data->comm->prev->oper, "<")))
-	// 		data->comm = data->comm->next;
-	// }
-	// else if (data && data->comm && is_same_lines(data->comm->oper, "<<"))
-	// {
-	// 	while ((data->comm && is_same_lines(data->comm->oper, "<<")) || \
-	// 	(data->comm && is_same_lines(data->comm->prev->oper, "<<")))
-	// 		data->comm = data->comm->next;
-	// }
 	else
 		data->comm = data->comm->next;
 	free(path);

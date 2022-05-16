@@ -26,10 +26,8 @@ int	init_result(char **free_ptr, char **nl, char **line, char **res)
 int	check_operator(t_comm *dt)
 {
 	if (dt->next)
-	{
 		if (is_same_lines(dt->next->oper, "|") && (is_same_lines(dt->oper, "<<") || is_same_lines(dt->oper, "<")))
 			return (1);
-	}
 	if (is_same_lines(dt->oper, "<") || is_same_lines(dt->oper, ">") || is_same_lines(dt->oper, ">>"))
 		return (1);
 	return (0);
