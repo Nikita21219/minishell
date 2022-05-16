@@ -30,7 +30,7 @@ int	check_operator(t_comm *dt)
 		if (is_same_lines(dt->next->oper, "|") && (is_same_lines(dt->oper, "<<") || is_same_lines(dt->oper, "<")))
 			return (1);
 	}
-	if (is_same_lines(dt->oper, "<") || is_same_lines(dt->oper, ">"))
+	if (is_same_lines(dt->oper, "<") || is_same_lines(dt->oper, ">") || is_same_lines(dt->oper, ">>"))
 		return (1);
 	return (0);
 }

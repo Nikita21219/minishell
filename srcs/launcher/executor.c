@@ -59,7 +59,7 @@ int	handle_oper(t_data *data, int count_comm)
 	else if (data->comm->next && (is_same_lines(data->comm->next->oper, ">") || is_same_lines(data->comm->next->oper, ">>")))
 	{
 		if (!is_same_lines(data->comm->oper, "|"))
-			redirect_out(data->comm->next);
+			redirect_out(data->comm->next); //FIXME if redirect_out returned fail
 	}
 	return (0);
 }

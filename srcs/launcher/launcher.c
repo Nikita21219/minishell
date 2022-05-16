@@ -42,6 +42,7 @@ int	close_fds_and_waiting(t_comm *data, int wait_count)
 		if (WIFEXITED(wstatus))
 		{
 			status_code = WEXITSTATUS(wstatus);
+			// fprintf(stderr, "status_code = %d\n", status_code); //FIXME tmp line for debug. need to delete
 			errno = status_code;
 		}
 	}
@@ -73,12 +74,23 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 {
 	if (data->comm && (is_same_lines(data->comm->oper, ">") || \
 	is_same_lines(data->comm->oper, ">>") || \
+	is_same_lines(data->comm->oper, "<<") || \
 	is_same_lines(data->comm->oper, "<")))
 	{
-		while (data->comm && (is_same_lines(data->comm->oper, ">") || \
+		while ((data->comm && (is_same_lines(data->comm->oper, ">") || \
+	is_same_lines(data->comm->oper, "<<") || \
 	is_same_lines(data->comm->oper, ">>") || \
-	is_same_lines(data->comm->oper, "<")))
-			data->comm = data->comm->next;
+	is_same_lines(data->comm->oper, "<"))) || \
+	(data->comm && data->comm->prev && (is_same_lines(data->comm->prev->oper, ">") || is_same_lines(data->comm->prev->oper, ">>")\
+	 || is_same_lines(data->comm->prev->oper, "<"))))
+		{
+			if (is_same_lines(data->comm->oper, "<<"))
+				while ((data->comm && is_same_lines(data->comm->oper, "<<")) || \
+				(data->comm && is_same_lines(data->comm->prev->oper, "<<")))
+					data->comm = data->comm->next;
+			else
+				data->comm = data->comm->next;
+		}
 	}
 	// if (is_same_lines(data->comm->oper, ">") || \
 	// is_same_lines(data->comm->oper, ">>"))
@@ -121,14 +133,11 @@ int	launcher(t_data *data)
 		return (0);
 	while (data->comm)
 	{
-		fprintf(stderr, "command = %s, oper = %s\n", data->comm->comm, data->comm->oper);
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;
 		result = executor(data, path, count_command);
-		if (result < 0)
-			return (handle_error_executor(result));
-		else if (result == 1)
+		if (result < 0 || result == 1)
 			return (handle_error_executor(result));
 		set_next_ptr_data_and_free_path(data, path);
 	}
