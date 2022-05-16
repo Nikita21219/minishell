@@ -56,32 +56,3 @@ int	ft_env(t_envr *env)
 	}
 	return (0);
 }
-
-int	ft_exit(t_data *data)
-{
-	int		i;
-
-	i = 0;
-	if (data->comm->args[1] && data->comm->args[2])
-	{
-		printf("exit: too many arguments\n");
-		return (1);
-	}
-	while (data->comm->args[1] && data->comm->args[1][i])
-	{
-		if (!(data->comm->args[1][i] >= 48 && data->comm->args[1][i++] <= 57))
-		{
-			printf("exit: %s: numeric argument required\n", data->comm->args[1]);
-			i = 0;
-			break ;
-		}
-	}
-	if (i != 0)
-	{
-		errno = ft_atoi(data->comm->args[1]);
-		printf("exit\n");
-	}
-	freedata(data);
-	delenv(&data->env);
-	exit(errno);
-}

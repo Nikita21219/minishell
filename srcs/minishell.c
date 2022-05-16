@@ -34,7 +34,6 @@ void    tmp_print_env(t_envr *env)
 void	minishell(t_data *data, char **env)
 {
 	int		err;
-	t_box	*box;
 
 	take_start_env(data, env);
 	while (1)
@@ -47,7 +46,10 @@ void	minishell(t_data *data, char **env)
 		if (!data->instr)
 			error_mes_with_exit("\b\bexit\n", data);
 		if (data->instr[0] == 0)
+		{
+			free(data->instr);
 			continue ;
+		}
 		add_history(data->instr);
 		if (parser(data) || check_tilda(&data->comm))
 		{
@@ -58,16 +60,8 @@ void	minishell(t_data *data, char **env)
 		// exit(0);
 		// tmp_print_env(data->vars);
 		// exit(0);
-		box = malloc(sizeof(t_box *));
-		init_containers(data->comm, &box);
-		while (box)
-		{
-			tmp_print_arg_after_parser(data->comm);
-			data->comm = box->dt_comm;
-			add_ptr_prev_to_data(data->comm);
-			launcher(data);
-			box = box->next;
-		}
+		add_ptr_prev_to_data(data->comm);
+		launcher(data);
 		freedata(data);
 	}
 	delenv(&data->env);
@@ -97,3 +91,5 @@ int	main(int argc, char **argv, char **env)
 	minishell(&data, env);
 	return (0);
 }
+
+
