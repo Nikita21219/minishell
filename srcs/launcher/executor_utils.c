@@ -55,10 +55,6 @@ int	exec_heredoc_and_pipes(t_comm **data)
 
 int	next_oper(char *oper)
 {
-	// if (is_same_lines(oper, "<"))
-	// 	return (1);
-	// if (is_same_lines(oper, ">"))
-	// 	return (1);
 	if (is_same_lines(oper, "<<"))
 		return (1);
 	if (is_same_lines(oper, "|"))
@@ -70,7 +66,5 @@ int	curr_oper(char *oper)
 {
 	if (is_same_lines(oper, "<"))
 		return (1);
-	// if (is_same_lines(oper, "<<"))
-	// 	return (1);
 	return (0);
 }
