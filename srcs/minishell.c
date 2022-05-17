@@ -31,11 +31,28 @@ void    tmp_print_env(t_envr *env)
 	}
 } //FIXME delete this func
 
+void	increment_shlvl(t_data *data)
+{
+	t_envr	*env;
+
+	env = data->env;
+	while (env)
+	{
+		if (is_same_lines(env->key, "SHLVL"))
+		{
+			env->val = ft_itoa(ft_atoi(env->val) + 1);
+			break ;
+		}
+		env = env->next;
+	}
+}
+
 void	minishell(t_data *data, char **env)
 {
 	int		err;
 
 	take_start_env(data, env);
+	increment_shlvl(data);
 	while (1)
 	{
 		err = errno;

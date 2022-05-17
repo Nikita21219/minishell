@@ -65,9 +65,15 @@ int	check_oper(t_data *data)
 	if (check_operator(dt))
 	{
 		if (is_redirect(dt->oper))
+		{
 			if (access(dt->next->comm, 0) == 0)
+			{
 				if (is_redirect(data->comm->oper) && access(dt->next->comm, 4) != 0)
 					return (ft_perror(dt));
+			}
+			else if (is_same_lines(dt->oper, "<"))
+				return (ft_perror(dt));
+		}
 		if (create_pipe(dt->next))
 			return (PIPE_ERR);
 	}
