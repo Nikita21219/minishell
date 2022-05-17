@@ -36,13 +36,14 @@ int	check_operator(t_comm *dt)
 int	exec_heredoc_and_pipes(t_comm **data)
 {
 	t_comm	*dt;
+	int		fd;
 
 	dt = *data;
-	if (create_pipe(dt))
-		return (PIPE_ERR);
 	while (dt && ((is_same_lines(dt->oper, "<<")) || \
 	(dt->next && is_same_lines(dt->next->oper, "|") && is_same_lines(dt->oper, "<<"))))
 	{
+		fd = open(".tmp_heredoc", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+		dt->fd[1] = fd;
 		if (heredoc(dt))
 			return (MALLOC_ERR);
 		if (dt->next && is_same_lines(dt->next->oper, "|") && is_same_lines(dt->oper, "<<"))
@@ -50,6 +51,9 @@ int	exec_heredoc_and_pipes(t_comm **data)
 		else
 			dt = dt->next;
 	}
+	dt->prev->fd[1] = fd;
+	if (create_pipe(dt->prev))
+		return (PIPE_ERR);
 	return (0);
 }
 
