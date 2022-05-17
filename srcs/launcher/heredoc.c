@@ -54,14 +54,25 @@ int	heredoc(t_comm *data)
 			return (1);
 	}
 	free(line);
-	write(data->fd[1], result, ft_strlen(result));
+	if (!(data->next && is_same_lines(data->next->oper, "<<")) && \
+	!(data->next && data->next->next && is_same_lines(data->next->oper, "|") && \
+	is_same_lines(data->next->next->oper, "<<")))
+	{
+		// fprintf(stderr, "TEST\n");
+		write(data->fd[1], result, ft_strlen(result));
+	}
 	free(result);
 	return (0);
 }
 
 int	duplicate_fd_for_heredoc(t_comm *data)
 {
+	// while (data && is_same_lines(data->oper, "<<"))
+	// {
+	// fprintf(stderr, "TEST 2\n");
 	if (dup2(data->fd[0], STDIN_FILENO) == -1)
 		return (DUP_ERR);
+		// data = data->next;
+	// }
 	return (0);
 }

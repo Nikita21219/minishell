@@ -40,7 +40,8 @@ int	exec_heredoc_and_pipes(t_comm **data)
 	dt = *data;
 	if (create_pipe(dt))
 		return (PIPE_ERR);
-	while (dt && ((is_same_lines(dt->oper, "<<")) || (dt->next && is_same_lines(dt->next->oper, "|") && is_same_lines(dt->oper, "<<"))))
+	while (dt && ((is_same_lines(dt->oper, "<<")) || \
+	(dt->next && is_same_lines(dt->next->oper, "|") && is_same_lines(dt->oper, "<<"))))
 	{
 		if (heredoc(dt))
 			return (MALLOC_ERR);
