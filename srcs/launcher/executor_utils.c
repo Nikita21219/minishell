@@ -33,17 +33,19 @@ int	check_operator(t_comm *dt)
 	return (0);
 }
 
-int	exec_heredoc_and_pipes(t_comm **data)
+int	exec_heredoc(t_comm **data)
 {
 	t_comm	*dt;
-	int		fd;
 
 	dt = *data;
 	while (dt && ((is_same_lines(dt->oper, "<<")) || \
 	(dt->next && is_same_lines(dt->next->oper, "|") && is_same_lines(dt->oper, "<<"))))
 	{
-		fd = open(".tmp_heredoc", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-		dt->fd[1] = fd;
+		dt->fd[1] = open("/tmp/.tmp_heredoc", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU); //FIXME if returned fail
+		if (dt->fd[1] == -1)
+			return (OPEN_ERR);
+		if (create_pipe(dt))
+			return (PIPE_ERR);
 		if (heredoc(dt))
 			return (MALLOC_ERR);
 		if (dt->next && is_same_lines(dt->next->oper, "|") && is_same_lines(dt->oper, "<<"))
@@ -51,9 +53,6 @@ int	exec_heredoc_and_pipes(t_comm **data)
 		else
 			dt = dt->next;
 	}
-	dt->prev->fd[1] = fd;
-	if (create_pipe(dt->prev))
-		return (PIPE_ERR);
 	return (0);
 }
 

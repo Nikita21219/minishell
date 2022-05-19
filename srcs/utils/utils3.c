@@ -58,7 +58,10 @@ int	check_oper(t_data *data)
 	dt = data->comm;
 	if (is_same_lines(dt->oper, "|") || is_same_lines(dt->oper, "<<"))
 	{
-		err = exec_heredoc_and_pipes(&dt);
+		if (is_same_lines(dt->oper, "<<"))
+			err = exec_heredoc(&dt);
+		else
+			err = create_pipe(dt);
 		if (err)
 			return (err);
 	}

@@ -49,3 +49,17 @@ int	ft_perror(t_comm *dt)
 	perror(dt->next->comm);
 	return (1);
 }
+
+int	del_file_doc(t_comm *data)
+{
+	t_comm	*dt;
+
+	dt = data;
+	while (dt)
+	{
+		if (is_same_lines(dt->oper, "<<"))
+			return(unlink("/tmp/.tmp_heredoc"));
+		dt = dt->next;
+	}
+	return (0);
+}

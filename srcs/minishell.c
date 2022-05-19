@@ -34,13 +34,16 @@ void    tmp_print_env(t_envr *env)
 void	increment_shlvl(t_data *data)
 {
 	t_envr	*env;
+	char	*ptr_to_free;
 
 	env = data->env;
 	while (env)
 	{
 		if (is_same_lines(env->key, "SHLVL"))
 		{
+			ptr_to_free = env->val;
 			env->val = ft_itoa(ft_atoi(env->val) + 1);
+			free(ptr_to_free);
 			break ;
 		}
 		env = env->next;
@@ -50,6 +53,7 @@ void	increment_shlvl(t_data *data)
 void	minishell(t_data *data, char **env)
 {
 	int		err;
+	t_comm	*start_dt;
 
 	take_start_env(data, env);
 	increment_shlvl(data);
@@ -75,10 +79,11 @@ void	minishell(t_data *data, char **env)
 		}
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
-		// tmp_print_env(data->vars);
-		// exit(0);
 		add_ptr_prev_to_data(data->comm);
+		start_dt = data->comm;
 		launcher(data);
+		if (del_file_doc(start_dt))
+			printf("Error unlink\n");
 		freedata(data);
 	}
 	delenv(&data->env);
@@ -108,5 +113,3 @@ int	main(int argc, char **argv, char **env)
 	minishell(&data, env);
 	return (0);
 }
-
-

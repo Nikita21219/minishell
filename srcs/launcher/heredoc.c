@@ -41,15 +41,6 @@ int	heredoc(t_comm *data)
 
 	if (init_result_and_line(&result, &line))
 		return (1);
-	// if (data->fd[1])
-	// 	close(data->fd[1]);
-	// data->fd[1] = open(".tmp_heredoc", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-	// // fprintf(stderr, "FROM HEREDOC; commd num %d; fd[1] = %d\n", data->i + 1, data->fd[1]);
-	// if (data->fd[1] == -1)
-	// {
-	// 	fprintf(stderr, "ERROR in open func\n");
-	// 	return (OPEN_ERR);
-	// }
 	while (1)
 	{
 		if (readline_and_free(&line))
@@ -63,26 +54,13 @@ int	heredoc(t_comm *data)
 			return (1);
 	}
 	free(line);
-	// if (!(data->next && is_same_lines(data->next->oper, "<<")) && \
-	// !(data->next && data->next->next && is_same_lines(data->next->oper, "|") && \
-	// is_same_lines(data->next->next->oper, "<<")))
-	// {
-	// fprintf(stderr, "data->fd[1] = %d\n", data->fd[1]);
 	write(data->fd[1], result, ft_strlen(result));
-	// fprintf(stderr, "command number %d; fd[1] = %d\n", data->i + 1, data->fd[1]);
-	// }
 	free(result);
 	return (0);
 }
 
 int	duplicate_fd_for_heredoc(t_comm *data)
 {
-	while (data && data->next && is_same_lines(data->next->oper, "<<"))
-	{
-	// fprintf(stderr, "TEST 2\n");
-		close(data->fd[1]);
-		data = data->next;
-	}
 	if (dup2(data->fd[0], STDIN_FILENO) == -1)
 		return (DUP_ERR);
 	return (0);
