@@ -66,8 +66,8 @@ int	write_arg(char **arg, char **s, int i)
 	char	*tmp1;
 	char	*tmp2;
 
-	if (i == 0)
-		return (0);
+	// if (i == 0)
+	// 	return (0);
 	if (!ft_strlen(*arg))
 		*arg = ft_substr(*s, 0, i);
 	else

@@ -4,8 +4,7 @@ int	varisdigit(char **s)
 {
 	if (ft_isdigit(**s))
 	{
-		while ((**s) && ft_isdigit(**s))
-			(*s)++;
+		(*s)++;
 		return (1);
 	}
 	return (0);

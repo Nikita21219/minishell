@@ -9,7 +9,7 @@ int	ft_echo(t_comm com)
 	i = 1;
 	a = 0;
 	x = 0;
-	while (com.args[i][0] == '-' && com.args[i][1] == 'n')
+	while (com.args[i] && com.args[i][0] == '-' && com.args[i][1] == 'n')
 	{
 		while (com.args[i][++x])
 			if (com.args[i][x] != 'n')
