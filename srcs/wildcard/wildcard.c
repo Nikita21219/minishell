@@ -90,7 +90,7 @@ char	**wildcard(char *template, int *arr_int)
 		arr[0] = template;
 		arr[1] = NULL;
 	}
-	else
-		free(template);
+	// else
+	// 	free(template);
 	return (arr);
 }

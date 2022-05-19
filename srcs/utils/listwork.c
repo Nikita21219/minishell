@@ -6,6 +6,13 @@ void	take_data_in_list(t_comm **temp, t_data *data)
 	(*temp)->oper = NULL;
 	(*temp)->data = data;
 	(*temp)->next = NULL;
+	(*temp)->prev = NULL;
+	(*temp)->args = malloc(sizeof(char *) * 3);
+	if (!(*temp)->args)
+		return ;
+	(*temp)->args[0] = ft_strdup("./mini_hell");
+	if (!(*temp)->args[0])
+		return ;
 	(*temp)->args[1] = NULL;
 	(*temp)->args[2] = NULL;
 }
@@ -18,22 +25,21 @@ t_comm	*addelem(t_data *data)
 	temp = (t_comm *)malloc(sizeof(t_comm));
 	if (!temp)
 		return (NULL);
-	temp->args = malloc(sizeof(char *) * 3);
-	if (!temp->args)
-		return (NULL);
-	temp->args[0] = ft_strdup("./mini_hell");
-	if (!temp->args[0])
-		return (NULL);
 	take_data_in_list(&temp, data);
+	if (!temp->args || !temp->args[0])
+		return (NULL);
 	if (!data->comm)
 	{
 		data->comm = temp;
+		temp->i = 0;
 		return (temp);
 	}
 	p = data->comm;
 	while (p->next)
 		p = p->next;
 	p->next = temp;
+	temp->prev = p;
+	temp->i = p->i + 1;
 	return (temp);
 }
 

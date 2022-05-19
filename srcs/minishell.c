@@ -14,6 +14,7 @@ void	tmp_print_arg_after_parser(t_comm *data)
 			printf("data args %d: %s\n", j, data->args[j]);
 		printf("data args %d: %s\n", j, data->args[j]);
 		printf("oper: %s\n", data->oper);
+		printf("i: %d\n", data->i);
 		printf("\n\n");
 		i++;
 		data = data->next;
@@ -56,11 +57,11 @@ void	minishell(t_data *data, char **env)
 			freedata(data);
 			continue ;
 		}
-		// tmp_print_arg_after_parser(data->comm);
-		// exit(0);
+		tmp_print_arg_after_parser(data->comm);
+		exit(0);
 		// tmp_print_env(data->vars);
 		// exit(0);
-		add_ptr_prev_to_data(data->comm);
+		// add_ptr_prev_to_data(data->comm);
 		launcher(data);
 		freedata(data);
 	}

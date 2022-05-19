@@ -84,7 +84,7 @@ void	delenv(t_envr **env);
 int		command_in_bin(char *command);
 void	exit_from_minishell(void);
 t_envr	*take_path_env(t_envr **env, char *s);
-int		check_wildcard_arg(t_comm *tmp);
+int		check_wildcard(t_comm *tmp);
 int		write_pos_wild(int **pos, int i, int a);
 int		varisdigit(char **s);
 int		writevar(char **str, t_envr p);
@@ -158,5 +158,7 @@ int		wild_add_elem(char ***arr, char *file, int i);
 char	**split_wild(char *str, int *arr);
 void	fill_zero(int *arr, int k, int *j, char **res);
 int		init_containers(t_comm *data, t_box	**box);
+int		take_pos_for_wild(char **str, int **pos);
+int		write_arg_wild(char ***args, char **wild, int a);
 
 #endif

@@ -34,8 +34,9 @@ int	checkallcommands(t_comm **p)
 			errno = 22;
 			return (1);
 		}
-		if (check_wildcard_arg(tmp))
-			return (1);
+		if (tmp->prev && !is_same_lines(tmp->prev->oper, "<<"))
+			if (check_wildcard(tmp))
+				return (1);
 		tmp = tmp->next;
 	}
 	return (0);
@@ -45,8 +46,10 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 {
 	char	quote;
 
-	if ((*s)[i] == '$' && (*s)[i + 1] \
-		&& !ft_space((*s)[i + 1]) && (*s)[i + 1] != '=')
+	if ((*s)[i] == '$' && data->prev && is_same_lines(data->prev->oper, "<<"))
+		return (++i);
+	if ((*s)[i] == '$' && (*s)[i + 1] && !ft_space((*s)[i + 1]) \
+		&& (*s)[i + 1] != '=')
 		return (takevar(s, str, data, i));
 	if ((*s)[i] == 34 || (*s)[i] == 39)
 	{
