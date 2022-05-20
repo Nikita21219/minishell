@@ -58,25 +58,24 @@ int	check_oper(t_data *data)
 	dt = data->comm;
 	if (is_same_lines(dt->oper, "|") || is_same_lines(dt->oper, "<<"))
 	{
-		err = exec_heredoc_and_pipes(&dt);
+		if (is_same_lines(dt->oper, "<<"))
+			err = exec_heredoc(&dt);
+		else
+			err = create_pipe(dt);
 		if (err)
 			return (err);
 	}
 	if (check_operator(dt))
 	{
-		if (is_redirect(dt->oper) && !is_same_lines(dt->oper, "<<") && \
-		dt->next && access(dt->next->comm, 0))
+		if (is_redirect(dt->oper))
 		{
-			write(2, "mini_hell: ", 11);
-			perror(dt->next->comm);
-			return (1);
-		}
-		if (is_redirect(dt->oper) && !is_same_lines(dt->oper, "<<") && \
-		dt->next && access(dt->next->comm, 4))
-		{
-			write(2, "mini_hell: ", 11);
-			perror(dt->next->comm);
-			return (1);
+			if (access(dt->next->comm, 0) == 0)
+			{
+				if (is_redirect(data->comm->oper) && access(dt->next->comm, 4) != 0)
+					return (ft_perror(dt));
+			}
+			else if (is_same_lines(dt->oper, "<"))
+				return (ft_perror(dt));
 		}
 		if (create_pipe(dt->next))
 			return (PIPE_ERR);

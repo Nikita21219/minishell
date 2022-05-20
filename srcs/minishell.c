@@ -32,11 +32,32 @@ void    tmp_print_env(t_envr *env)
 	}
 } //FIXME delete this func
 
+void	increment_shlvl(t_data *data)
+{
+	t_envr	*env;
+	char	*ptr_to_free;
+
+	env = data->env;
+	while (env)
+	{
+		if (is_same_lines(env->key, "SHLVL"))
+		{
+			ptr_to_free = env->val;
+			env->val = ft_itoa(ft_atoi(env->val) + 1);
+			free(ptr_to_free);
+			break ;
+		}
+		env = env->next;
+	}
+}
+
 void	minishell(t_data *data, char **env)
 {
 	int		err;
+	t_comm	*start_dt;
 
 	take_start_env(data, env);
+	increment_shlvl(data);
 	while (1)
 	{
 		err = errno;
@@ -62,7 +83,10 @@ void	minishell(t_data *data, char **env)
 		// tmp_print_env(data->vars);
 		// exit(0);
 		// add_ptr_prev_to_data(data->comm);
+		start_dt = data->comm;
 		launcher(data);
+		if (del_file_doc(start_dt))
+			printf("Error unlink\n");
 		freedata(data);
 	}
 	delenv(&data->env);

@@ -63,6 +63,7 @@ typedef struct s_box
 int		is_same_lines(char *f_str, char *s_str);
 void	freedata(t_data *data);
 void	free_arrs(char **arr);
+int		ft_perror(t_comm *dt);
 int		continue_with_print(char *err_str);
 
 /* parser */
@@ -109,6 +110,7 @@ int		heredoc(t_comm *data);
 int		init_result(char **free_ptr, char **nl, char **line, char **res);
 int		is_redirect(char *op);
 int		duplicate_fd_for_heredoc(t_comm *data);
+int		del_file_doc(t_comm *data);
 int		duplicate_fd(t_comm *data, int idx, int count_comm);
 int		redirect_out(t_comm *data);
 int		redirect_in(t_comm *data);
@@ -129,6 +131,7 @@ int		ft_space(char str);
 int		launch_builtins(t_data *data);
 int		is_builtins(char *comm);
 int		is_builtins_in_main_proc(char *comm);
+int		check_builtins(t_data *data, char **path);
 
 /* executor */
 int		executor(t_data *data, char *path, int count_comm);
@@ -137,7 +140,7 @@ void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);
 char	**get_env(t_envr *dt_env);
 int		check_operator(t_comm *dt);
-int		exec_heredoc_and_pipes(t_comm **data);
+int		exec_heredoc(t_comm **data);
 int		next_oper(char *oper);
 int		curr_oper(char *oper);
 

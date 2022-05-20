@@ -22,6 +22,8 @@ void	add_ptr_prev_to_data(t_comm *data)
 	while (data->next)
 	{
 		data->i = i++;
+		// data->fd[0] = 0;
+		// data->fd[1] = 1;
 		data->next->prev = data;
 		data = data->next;
 	}
