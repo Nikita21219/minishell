@@ -20,10 +20,8 @@ int	move_args(t_comm **arg, int i, int x)
 {
 	char	**tmp;
 
-	while ((*arg)->args[i])
-		i++;
-	while ((*arg)->next->args[x])
-		x++;
+	i = len((*arg)->args);
+	x = len((*arg)->next->args);
 	tmp = malloc(sizeof(char *) * (i + x + 1));
 	if (!tmp)
 	{
