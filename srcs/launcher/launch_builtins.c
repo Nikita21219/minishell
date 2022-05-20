@@ -31,7 +31,9 @@ int	is_builtins(char *comm)
 
 int	launch_builtins(t_data *data)
 {
-	int	builtin;
+	int		builtin;
+	int		i;
+	char	**env;
 
 	builtin = is_builtins(data->comm->comm);
 	if (builtin == BUILTIN_ECHO)
@@ -45,7 +47,17 @@ int	launch_builtins(t_data *data)
 	if (builtin == BUILTIN_CD)
 		return (ft_cd(data));
 	if (builtin == BUILTIN_EXPORT)
-		return (ft_export(data));
+	{
+		ft_export(data);
+		env = get_env(data->env);
+		i = -1;
+		while (env[++i])
+		{
+			write(data->comm->fd[1], env[i], ft_strlen(env[i]));
+			write(data->comm->fd[1], "\n", 1);
+		}
+		return (0);
+	}
 	if (builtin == BUILTIN_UNSET)
 	{
 		ft_unset(data);

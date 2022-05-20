@@ -56,6 +56,8 @@ int	check_oper(t_data *data)
 	int		err;
 
 	dt = data->comm;
+	if (is_same_lines(dt->comm, "export"))
+		create_pipe(data->comm);
 	if (is_same_lines(dt->oper, "|") || is_same_lines(dt->oper, "<<"))
 	{
 		if (is_same_lines(dt->oper, "<<"))

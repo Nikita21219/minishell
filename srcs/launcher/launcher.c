@@ -28,7 +28,7 @@ char	*get_path(char *comm)
 	return (ft_strdup("launch builtins"));
 }
 
-int	close_fds_and_waiting(t_comm *data, int wait_count)
+int	close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt)
 {
 	int	wstatus;
 	int	status_code;
@@ -46,6 +46,8 @@ int	close_fds_and_waiting(t_comm *data, int wait_count)
 			errno = status_code;
 		}
 	}
+	if (is_same_lines(data->comm, "export") && data->args[1])
+		set_env(data, dt); //FIXME if fail
 	return (0);
 }
 
@@ -99,6 +101,46 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	free(path);
 }
 
+int	get_fsize(int fd)
+{
+	struct stat	buff;
+
+	if (fstat(fd, &buff) == -1)
+		return (-1);
+	return (buff.st_size);
+}
+
+void	set_env(t_comm *data, t_data *dt)
+{
+	char	*buf;
+	char	**split_str;
+	char	**key_val;
+	int		i;
+	t_envr	*env;
+
+	buf = malloc((get_fsize(data->fd[0]) + 1) * sizeof(char));
+	if (read(data->fd[0], buf, get_fsize(data->fd[0])) == -1)
+		fprintf(stderr, "ERROR\n"); //FIXME fprintf is not allow
+	split_str = ft_split(buf, '\n'); //FIXME if rerurned fail
+	free(buf);
+	env = dt->env;
+	i = -1;
+	while (split_str[++i])
+	{
+		key_val = ft_split(split_str[i], '='); //FIXME if rerurned fail
+		free(env->key);
+		free(env->val);
+		env->key = key_val[0];
+		env->val = key_val[1];
+		env = env->next;
+		free(key_val);
+	}
+	i = -1;
+	while (split_str[++i])
+		free(split_str[i]);
+	free(split_str);
+}
+
 int	launcher(t_data *data)
 {
 	char	*path;
@@ -119,7 +161,7 @@ int	launcher(t_data *data)
 			return (handle_error_executor(result));
 		set_next_ptr_data_and_free_path(data, path);
 	}
-	result = close_fds_and_waiting(tmp_dt, wait_count);
+	result = close_fds_and_waiting(tmp_dt, wait_count, data);
 	delcommand(&tmp_dt);
 	return (result);
 }
