@@ -67,9 +67,8 @@ int	checkallcommands(t_comm **p)
 		if (tmp && tmp->next && tmp->oper[0] == '>')
 			if (move_args(&tmp, 0, 0))
 				return (1);
-		if (tmp->prev && !is_same_lines(tmp->prev->oper, "<<"))
-			if (check_wildcard(tmp))
-				return (1);
+		if (check_wildcard(tmp))
+			return (1);
 		tmp = tmp->next;
 	}
 	return (0);

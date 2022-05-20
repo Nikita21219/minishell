@@ -7,6 +7,8 @@ int	check_wildcard(t_comm *tmp)
 	int		a;
 
 	a = -1;
+	if (tmp->prev && is_same_lines(tmp->prev->oper, "<<"))
+		return (0);
 	if (ft_strchr(tmp->comm, -42))
 	{
 		pos = NULL;
@@ -40,7 +42,6 @@ int	check_wildcard(t_comm *tmp)
 			if (take_pos_for_wild(&tmp->args[a], &pos))
 				return (1);
 			wild = wildcard(tmp->args[a], pos);
-			free (tmp->args[a]);
 			free (pos);
 			if (!wild)
 				return (1);
