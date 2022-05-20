@@ -18,10 +18,10 @@ int	is_builtins(char *comm)
 	builtin = is_builtins_in_main_proc(comm);
 	if (builtin)
 		return (builtin);
-	if (is_same_lines(comm, "env"))
-		return (BUILTIN_ENV);
 	if (is_same_lines(comm, "export"))
 		return (BUILTIN_EXPORT);
+	if (is_same_lines(comm, "env"))
+		return (BUILTIN_ENV);
 	if (is_same_lines(comm, "echo"))
 		return (BUILTIN_ECHO);
 	if (is_same_lines(comm, "pwd"))
