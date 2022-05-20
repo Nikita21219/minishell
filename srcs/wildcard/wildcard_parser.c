@@ -16,26 +16,22 @@ int	check_wildcard(t_comm *tmp)
 		free (pos);
 		if (wild)
 		{
-			if ((tmp->prev->oper[0] == '<' || tmp->prev->oper[0] == '>') \
-				&& len(wild) > 1)
+			tmp->comm = wild[0];
+			if (tmp->prev && (tmp->prev->oper[0] == '<' \
+			|| tmp->prev->oper[0] == '>') && len(wild) > 1)
 			{
-				if (write_arg_wild(&tmp->args, wild, 0))
+				if (write_arg_wild(&tmp->args, wild + 1, 1))
 				{
-					while (wild[++a])
-						free(wild[a]);
 					free(wild);
 					return (1);
 				}
 				free(wild);
 				return (0);
 			}
-			tmp->comm = ft_strdup(wild[0]);
-			while (wild[++a])
-				free(wild[a]);
-			free(wild);
+			else
+				free(wild);
 		}
 	}
-	a = -1;
 	while (tmp->args[++a])
 	{
 		pos = NULL;

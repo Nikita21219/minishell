@@ -49,9 +49,14 @@ int	check_quote(char **s, char **str, char quote, t_comm *data)
 		if (quote == 34 && (*s)[i] == '$' && (*s)[i + 1] \
 			&& !ft_space((*s)[i + 1]) && (*s)[i + 1] != '=')
 		{
-			i = takevar(s, str, data, i);
-			if (i < 0)
-				return (-1);
+			if (is_same_lines(data->prev->oper, "<<"))
+				i++;
+			else
+			{
+				i = takevar(s, str, data, i);
+				if (i < 0)
+					return (-1);
+			}
 		}
 		else
 			i++;

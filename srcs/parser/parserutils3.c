@@ -16,6 +16,36 @@ void	move_list(t_comm **p)
 		(*p)->args[i] = (*p)->args[i + 1];
 }
 
+int	move_args(t_comm **arg, int i, int x)
+{
+	char	**tmp;
+
+	while ((*arg)->args[i])
+		i++;
+	while ((*arg)->next->args[x])
+		x++;
+	tmp = malloc(sizeof(char *) * (i + x + 1));
+	if (!tmp)
+	{
+		errno = 12;
+		printf("Parse error malloc\n");
+		return (1);
+	}
+	i = -1;
+	x = 0;
+	while ((*arg)->args[++i])
+		tmp[i] = (*arg)->args[i];
+	while ((*arg)->next->args[++x])
+	{
+		tmp[i++] = (*arg)->next->args[x];
+		(*arg)->next->args[x] = NULL;
+	}
+	tmp[i] = NULL;
+	free((*arg)->args);
+	(*arg)->args = tmp;
+	return (0);
+}
+
 int	checkallcommands(t_comm **p)
 {
 	t_comm	*tmp;
@@ -34,6 +64,9 @@ int	checkallcommands(t_comm **p)
 			errno = 22;
 			return (1);
 		}
+		if (tmp && tmp->next && tmp->oper[0] == '>')
+			if (move_args(&tmp, 0, 0))
+				return (1);
 		if (tmp->prev && !is_same_lines(tmp->prev->oper, "<<"))
 			if (check_wildcard(tmp))
 				return (1);

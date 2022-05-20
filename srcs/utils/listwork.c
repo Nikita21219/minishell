@@ -53,7 +53,7 @@ void	delcommand(t_comm **comm)
 		i = 0;
 		p = *comm;
 		*comm = p->next;
-		while (p->args[i])
+		while (p->args && p->args[i])
 		{
 			free(p->args[i]);
 			p->args[i++] = NULL;
