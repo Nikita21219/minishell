@@ -57,7 +57,7 @@ void	minishell(t_data *data, char **env)
 			freedata(data);
 			continue ;
 		}
-		tmp_print_arg_after_parser(data->comm);
+		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
 		// tmp_print_env(data->vars);
 		// exit(0);
@@ -87,10 +87,8 @@ int	main(int argc, char **argv, char **env)
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
-	// signal(SIGINT, ft_takesig);
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, ft_takesig);
+	signal(SIGQUIT, SIG_IGN);
 	minishell(&data, env);
 	return (0);
 }
-
-

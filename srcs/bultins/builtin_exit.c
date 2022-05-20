@@ -51,8 +51,6 @@ long int	ft_atoi_mod(char *str)
 		return (255);
 	}
 	return (n * dig);
-
-
 }
 
 int	ft_exit(t_data *data)
