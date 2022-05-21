@@ -57,7 +57,7 @@ int	del_file_doc(t_comm *data)
 	dt = data;
 	while (dt)
 	{
-		if (is_same_lines(dt->oper, "<<"))
+		if (dt->oper && is_same_lines(dt->oper, "<<"))
 			return(unlink("/tmp/.tmp_heredoc"));
 		dt = dt->next;
 	}

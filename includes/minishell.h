@@ -60,6 +60,12 @@ typedef struct s_box
 	struct s_box	*next;
 }	t_box;
 
+
+/*!!!!DELETE!!!!!*/
+void	tmp_print_env(t_envr *env);
+void	tmp_print_arg_after_parser(t_comm *data);
+
+
 /* general */
 int		is_same_lines(char *f_str, char *s_str);
 void	freedata(t_data *data);

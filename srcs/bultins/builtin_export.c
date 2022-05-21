@@ -62,12 +62,14 @@ int	seach_in_vars_with_eq(t_data *data, char *var, int *i)
 		n++;
 	tmp_key = ft_substr(var, 0, n++);
 	tmp_val = ft_substr(var, n, ft_strlen(var));
-	rv = take_path_env(&data->vars, tmp_key);
+	if (!tmp_key || !tmp_val)
+		return (1);
+	rv = take_path_env(&data->env, tmp_key);
 	if (!rv)
 	{
-		rv = take_path_env(&data->env, tmp_key);
-		if (!rv)
-			return (-1);
+		free(tmp_key);
+		free(tmp_val);
+		return (-1);
 	}
 	free(tmp_key);
 	free(rv->val);
@@ -84,19 +86,16 @@ int	seach_in_vars(t_data *data, char *var, int *i)
 	if (ft_strchr(var, '='))
 		return (seach_in_vars_with_eq(data, var, i));
 	rv = take_path_env(&data->vars, var);
-	if (!rv)
+	if (rv)
 	{
-		rv = take_path_env(&data->vars, var);
-		if (!rv)
-			return (-1);
+		tenv = malloc(sizeof(t_envr));
+		if (!tenv)
+			return (1);
+		tenv->key = rv->key;
+		tenv->val = rv->val;
+		tenv->next = data->env;
+		data->env = tenv;
 	}
-	tenv = malloc(sizeof(t_envr));
-	if (!tenv)
-		return (1);
-	tenv->key = rv->key;
-	tenv->val = rv->val;
-	tenv->next = data->env;
-	data->env = tenv;
 	(*i)++;
 	return (0);
 }

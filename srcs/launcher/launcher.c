@@ -117,6 +117,7 @@ void	set_env(t_comm *data, t_data *dt)
 	char	**key_val;
 	int		i;
 	t_envr	*env;
+	t_envr	*tmp;
 
 	buf = malloc((get_fsize(data->fd[0]) + 1) * sizeof(char));
 	if (read(data->fd[0], buf, get_fsize(data->fd[0])) == -1)
@@ -128,8 +129,17 @@ void	set_env(t_comm *data, t_data *dt)
 	while (split_str[++i])
 	{
 		key_val = ft_split(split_str[i], '='); //FIXME if rerurned fail
-		free(env->key);
-		free(env->val);
+		if (!env)
+		{
+			free(env->key);
+			free(env->val);
+		}
+		else
+		{
+			tmp = malloc(sizeof(t_envr));
+			tmp->next = env;
+			env = tmp;
+		}
 		env->key = key_val[0];
 		env->val = key_val[1];
 		env = env->next;
@@ -163,6 +173,6 @@ int	launcher(t_data *data)
 		set_next_ptr_data_and_free_path(data, path);
 	}
 	result = close_fds_and_waiting(tmp_dt, wait_count, data);
-	delcommand(&tmp_dt);
+	// delcommand(&tmp_dt);
 	return (result);
 }
