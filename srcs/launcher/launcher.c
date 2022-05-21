@@ -153,6 +153,7 @@ int	launcher(t_data *data)
 		return (0);
 	while (data->comm)
 	{
+		
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;

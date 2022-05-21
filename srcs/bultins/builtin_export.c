@@ -5,13 +5,11 @@ int	check_right_var(char *arg)
 	int	i;
 
 	i = 0;
-	if (!ft_isalpha(*arg))
+	if (!ft_isalpha(*arg) && (*arg) != '_')
 		return (1);
 	while (arg[i] && arg[i] != '=')
-		if (!ft_isalnum(arg[i++]))
+		if (!ft_isalnum(arg[i++]) && (*arg) != '_')
 			return (1);
-	if (!arg[i] || arg[i] != '=')
-		return (1);
 	return (0);
 }
 
@@ -21,6 +19,8 @@ int	add_list_env(t_envr **env, char *arg)
 	int		i;
 
 	i = 0;
+	if (!ft_strchr(arg, '='))
+		return (0);
 	p = malloc(sizeof(t_envr));
 	if (!p)
 	{
@@ -50,14 +50,46 @@ void	print_env(t_envr *env)
 	}
 }
 
+int	seach_in_vars_with_eq(t_data *data, char *var, int *i)
+{
+	t_envr	*rv;
+	char	*tmp_key;
+	char	*tmp_val;
+	int		n;
+
+	n = 0;
+	while (var[n] != '=')
+		n++;
+	tmp_key = ft_substr(var, 0, n++);
+	tmp_val = ft_substr(var, n, ft_strlen(var));
+	rv = take_path_env(&data->vars, tmp_key);
+	if (!rv)
+	{
+		rv = take_path_env(&data->env, tmp_key);
+		if (!rv)
+			return (-1);
+	}
+	free(tmp_key);
+	free(rv->val);
+	rv->val = tmp_val;
+	(*i)++;
+	return (0);
+}
+
 int	seach_in_vars(t_data *data, char *var, int *i)
 {
 	t_envr	*rv;
 	t_envr	*tenv;
 
+	if (ft_strchr(var, '='))
+		return (seach_in_vars_with_eq(data, var, i));
 	rv = take_path_env(&data->vars, var);
 	if (!rv)
-		return (-1);
+	{
+		rv = take_path_env(&data->vars, var);
+		if (!rv)
+			return (-1);
+	}
 	tenv = malloc(sizeof(t_envr));
 	if (!tenv)
 		return (1);
@@ -79,17 +111,17 @@ int	ft_export(t_data *data)
 		print_env(data->env);
 	while (data->comm->args[i])
 	{
-		check = seach_in_vars(data, data->comm->args[i], &i);
-		if (check)
-			return (1);
-		if (!check)
-			continue ;
 		if (check_right_var(data->comm->args[i]))
 		{
 			printf("export: '%s': not a valid identifier\n", \
 			data->comm->args[i++]);
 			continue ;
 		}
+		check = seach_in_vars(data, data->comm->args[i], &i);
+		if (check == 1)
+			return (1);
+		if (!check)
+			continue ;
 		if (add_list_env(&data->env, data->comm->args[i++]))
 			return (1);
 	}

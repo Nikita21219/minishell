@@ -14,6 +14,7 @@ void	tmp_print_arg_after_parser(t_comm *data)
 			printf("data args %d: %s\n", j, data->args[j]);
 		printf("data args %d: %s\n", j, data->args[j]);
 		printf("oper: %s\n", data->oper);
+		printf("i: %d\n", data->i);
 		printf("\n\n");
 		i++;
 		data = data->next;
@@ -79,7 +80,9 @@ void	minishell(t_data *data, char **env)
 		}
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
-		add_ptr_prev_to_data(data->comm);
+		// tmp_print_env(data->vars);
+		// exit(0);
+		// add_ptr_prev_to_data(data->comm);
 		start_dt = data->comm;
 		launcher(data);
 		if (del_file_doc(start_dt))
@@ -108,8 +111,8 @@ int	main(int argc, char **argv, char **env)
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
-	// signal(SIGINT, ft_takesig);
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, ft_takesig);
+	signal(SIGQUIT, SIG_IGN);
 	minishell(&data, env);
 	return (0);
 }

@@ -2,7 +2,7 @@
 
 int	syntx_oper(char **arg, char **s, int *i, int a)
 {
-	if (write_arg(arg, s, *i))
+	if (*i > 0 && write_arg(arg, s, *i))
 	{
 		*i = -1;
 		return (0);
@@ -49,9 +49,14 @@ int	check_quote(char **s, char **str, char quote, t_comm *data)
 		if (quote == 34 && (*s)[i] == '$' && (*s)[i + 1] \
 			&& !ft_space((*s)[i + 1]) && (*s)[i + 1] != '=')
 		{
-			i = takevar(s, str, data, i);
-			if (i < 0)
-				return (-1);
+			if (is_same_lines(data->prev->oper, "<<"))
+				i++;
+			else
+			{
+				i = takevar(s, str, data, i);
+				if (i < 0)
+					return (-1);
+			}
 		}
 		else
 			i++;
@@ -66,8 +71,6 @@ int	write_arg(char **arg, char **s, int i)
 	char	*tmp1;
 	char	*tmp2;
 
-	if (i == 0)
-		return (0);
 	if (!ft_strlen(*arg))
 		*arg = ft_substr(*s, 0, i);
 	else

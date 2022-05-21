@@ -30,7 +30,7 @@ int	takevar(char **s, char **str, t_comm *data, int i)
 	t_envr	*p;
 
 	tmp = NULL;
-	if (write_arg(str, s, i))
+	if (i > 0 && write_arg(str, s, i))
 		return (-1);
 	p = data->data->env;
 	(*s)++;
