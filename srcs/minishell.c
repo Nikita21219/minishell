@@ -80,7 +80,6 @@ void	minishell(t_data *data, char **env)
 		}
 		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
-		// tmp_print_env(data->vars);
 		// exit(0);
 		// add_ptr_prev_to_data(data->comm);
 		start_dt = data->comm;

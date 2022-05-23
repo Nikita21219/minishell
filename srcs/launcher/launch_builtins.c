@@ -49,7 +49,6 @@ int	launch_builtins(t_data *data)
 	if (builtin == BUILTIN_EXPORT)
 	{
 		ft_export(data);
-		// tmp_print_env(data->env);
 		env = get_env(data->env);
 		i = -1;
 		while (env[++i])

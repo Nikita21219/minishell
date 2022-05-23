@@ -114,37 +114,16 @@ void	set_env(t_comm *data, t_data *dt)
 {
 	char	*buf;
 	char	**split_str;
-	char	**key_val;
 	int		i;
-	t_envr	*env;
-	t_envr	*tmp;
 
-	buf = malloc((get_fsize(data->fd[0]) + 1) * sizeof(char));
+	buf = malloc(get_fsize(data->fd[0]) * sizeof(char));
 	if (read(data->fd[0], buf, get_fsize(data->fd[0])) == -1)
 		fprintf(stderr, "ERROR\n"); //FIXME fprintf is not allow
 	split_str = ft_split(buf, '\n'); //FIXME if rerurned fail
 	free(buf);
-	env = dt->env;
-	i = -1;
-	while (split_str[++i])
-	{
-		key_val = ft_split(split_str[i], '='); //FIXME if rerurned fail
-		if (!env)
-		{
-			free(env->key);
-			free(env->val);
-		}
-		else
-		{
-			tmp = malloc(sizeof(t_envr));
-			tmp->next = env;
-			env = tmp;
-		}
-		env->key = key_val[0];
-		env->val = key_val[1];
-		env = env->next;
-		free(key_val);
-	}
+	delenv(&dt->env);
+	dt->env = NULL;
+	take_start_env(dt, split_str);
 	i = -1;
 	while (split_str[++i])
 		free(split_str[i]);
@@ -163,7 +142,6 @@ int	launcher(t_data *data)
 		return (0);
 	while (data->comm)
 	{
-		
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;
