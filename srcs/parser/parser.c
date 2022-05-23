@@ -4,7 +4,7 @@ int	takecommand(t_comm *data, char **s)
 {
 	int		i;
 
-	while (**s && !data->comm)
+	while (**s && !data->comm && !data->oper)
 	{
 		i = 0;
 		while ((*s)[i] && i >= 0 && !ft_space((*s)[i]) \
@@ -71,8 +71,9 @@ int	parser(t_data *data)
 		}
 		if (takecommand(p, &str))
 			return (1);
-		if (takeargs(p, &str))
-			return (1);
+		if (!p->oper)
+			if (takeargs(p, &str))
+				return (1);
 	}
 	return (checkallcommands(&data->comm));
 }

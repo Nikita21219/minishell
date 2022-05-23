@@ -2,7 +2,7 @@
 
 int	check_wildcard_command(t_comm *tmp, int *pos, char **wild)
 {
-	if (ft_strchr(tmp->comm, -42))
+	if (tmp->comm && ft_strchr(tmp->comm, -42))
 	{
 		if (take_pos_for_wild(&tmp->comm, &pos))
 			return (1);

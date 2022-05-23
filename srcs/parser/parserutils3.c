@@ -49,7 +49,7 @@ int	checkallcommands(t_comm **p)
 	t_comm	*tmp;
 
 	tmp = *p;
-	if ((*p) && (*p)->next && !(*p)->comm && \
+	if ((*p) && (*p)->next && !(*p)->prev && !(*p)->comm && \
 		((*p)->oper[0] == '<' || (*p)->oper[0] == '>'))
 		move_list(p);
 	while (tmp)
