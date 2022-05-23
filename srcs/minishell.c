@@ -51,10 +51,30 @@ void	increment_shlvl(t_data *data)
 	}
 }
 
+void	pars_and_launch(t_data *data)
+{
+	t_comm	*start_dt;
+
+	if (parser(data) || check_tilda(&data->comm))
+	{
+		freedata(data);
+		return ;
+	}
+	// tmp_print_arg_after_parser(data->comm);
+	// exit(0);
+	// exit(0);
+	// add_ptr_prev_to_data(data->comm);
+	start_dt = data->comm;
+	launcher(data);
+	if (del_file_doc(start_dt))
+		printf("Error unlink\n");
+	freedata(data);
+	return ;
+}
+
 void	minishell(t_data *data, char **env)
 {
 	int		err;
-	t_comm	*start_dt;
 
 	take_start_env(data, env);
 	increment_shlvl(data);
@@ -73,20 +93,7 @@ void	minishell(t_data *data, char **env)
 			continue ;
 		}
 		add_history(data->instr);
-		if (parser(data) || check_tilda(&data->comm))
-		{
-			freedata(data);
-			continue ;
-		}
-		// tmp_print_arg_after_parser(data->comm);
-		// exit(0);
-		// exit(0);
-		// add_ptr_prev_to_data(data->comm);
-		start_dt = data->comm;
-		launcher(data);
-		if (del_file_doc(start_dt))
-			printf("Error unlink\n");
-		freedata(data);
+		pars_and_launch(data);
 	}
 	delenv(&data->env);
 	freedata(data);

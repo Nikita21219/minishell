@@ -49,7 +49,7 @@ int	check_quote(char **s, char **str, char quote, t_comm *data)
 		if (quote == 34 && (*s)[i] == '$' && (*s)[i + 1] \
 			&& !ft_space((*s)[i + 1]) && (*s)[i + 1] != '=')
 		{
-			if (is_same_lines(data->prev->oper, "<<"))
+			if (data->prev && is_same_lines(data->prev->oper, "<<"))
 				i++;
 			else
 			{
@@ -71,6 +71,8 @@ int	write_arg(char **arg, char **s, int i)
 	char	*tmp1;
 	char	*tmp2;
 
+	if (!*arg && i == 0)
+		return (0);
 	if (!ft_strlen(*arg))
 		*arg = ft_substr(*s, 0, i);
 	else
