@@ -85,24 +85,12 @@ void	delenv(t_envr **env)
 
 void	write_start_env(char *envar, t_envr **temp)
 {
-	// int	x;
-	// int	i;
-
-	// i = 0;
-	// if (!envar)
-	// 	return ;
-	// while (envar[i] && envar[i] != '=')
-	// 	i++;
-	// (*temp)->key = ft_substr(envar, 0, i);
-	// x = ++i;
-	// while (envar[i])
-	// 	i++;
-	// (*temp)->val = ft_substr(envar, x, i - x);
 	char	**tmp;
 
 	tmp = ft_split(envar, '=');
 	(*temp)->key = tmp[0];
 	(*temp)->val = tmp[1];
+	free(tmp);
 }
 
 void	take_start_env(t_data *data, char **envar)
@@ -128,7 +116,4 @@ void	take_start_env(t_data *data, char **envar)
 		temp->next = data->env;
 		data->env = temp;
 	}
-	data->comm = NULL;
-	data->instr = NULL;
-	data->vars = NULL;
 }
