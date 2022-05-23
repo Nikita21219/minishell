@@ -42,12 +42,12 @@ int	close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt)
 		if (WIFEXITED(wstatus))
 		{
 			status_code = WEXITSTATUS(wstatus);
-			// fprintf(stderr, "status_code = %d\n", status_code); //FIXME tmp line for debug. need to delete
 			errno = status_code;
 		}
 	}
 	if (is_same_lines(data->comm, "export") && data->args[1])
-		set_env(data, dt); //FIXME if fail
+		if (set_env(data, dt))
+			return (continue_with_print("Error\n"));
 	return (0);
 }
 
@@ -99,35 +99,6 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	else
 		data->comm = data->comm->next;
 	free(path);
-}
-
-int	get_fsize(int fd)
-{
-	struct stat	buff;
-
-	if (fstat(fd, &buff) == -1)
-		return (-1);
-	return (buff.st_size);
-}
-
-void	set_env(t_comm *data, t_data *dt)
-{
-	char	*buf;
-	char	**split_str;
-	int		i;
-
-	buf = malloc(get_fsize(data->fd[0]) * sizeof(char));
-	if (read(data->fd[0], buf, get_fsize(data->fd[0])) == -1)
-		fprintf(stderr, "ERROR\n"); //FIXME fprintf is not allow
-	split_str = ft_split(buf, '\n'); //FIXME if rerurned fail
-	free(buf);
-	delenv(&dt->env);
-	dt->env = NULL;
-	take_start_env(dt, split_str);
-	i = -1;
-	while (split_str[++i])
-		free(split_str[i]);
-	free(split_str);
 }
 
 int	launcher(t_data *data)

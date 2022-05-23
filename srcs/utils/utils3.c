@@ -1,12 +1,5 @@
 #include "../../includes/minishell.h"
 
-int	create_pipe(t_comm *data)
-{
-	if (pipe(data->fd) == -1)
-		return (1);
-	return (0);
-}
-
 int	is_redirect(char *op)
 {
 	if (is_same_lines(op, "<<"))
@@ -50,6 +43,18 @@ int	initialize_dirs(char ***dirs)
 	return (0);
 }
 
+int	check_access(t_comm *dt, t_data *data)
+{
+	if (access(dt->next->comm, 0) == 0)
+	{
+		if (is_redirect(data->comm->oper) && access(dt->next->comm, 4) != 0)
+			return (ft_perror(dt));
+	}
+	else if (is_same_lines(dt->oper, "<"))
+		return (ft_perror(dt));
+	return (0);
+}
+
 int	check_oper(t_data *data)
 {
 	t_comm	*dt;
@@ -67,18 +72,11 @@ int	check_oper(t_data *data)
 		if (err)
 			return (err);
 	}
-	if (check_operator(dt))
+	if (check_operator(dt) && is_redirect(dt->oper))
 	{
-		if (is_redirect(dt->oper))
-		{
-			if (access(dt->next->comm, 0) == 0)
-			{
-				if (is_redirect(data->comm->oper) && access(dt->next->comm, 4) != 0)
-					return (ft_perror(dt));
-			}
-			else if (is_same_lines(dt->oper, "<"))
-				return (ft_perror(dt));
-		}
+		err = check_access(dt, data);
+		if (err)
+			return (err);
 		if (create_pipe(dt->next))
 			return (PIPE_ERR);
 	}
