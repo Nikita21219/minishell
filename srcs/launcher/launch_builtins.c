@@ -1,21 +1,28 @@
 #include "../../includes/minishell.h"
 
-int	is_builtins_in_main_proc(char *comm)
+int	is_builtins_in_main_proc(char *comm, t_data *dt)
 {
-	if (is_same_lines(comm, "cd"))
-		return (BUILTIN_CD);
-	if (is_same_lines(comm, "exit"))
-		return (BUILTIN_EXIT);
-	if (is_same_lines(comm, "unset"))
-		return (BUILTIN_UNSET);
+	if ((dt->comm->prev && \
+	!is_same_lines(dt->comm->prev->oper, "|")) || !dt->comm->prev)
+	{
+		if (is_same_lines(comm, "cd") && ((dt->comm->prev \
+		&& !is_same_lines(dt->comm->prev->oper, "|")) || !dt->comm->prev))
+			return (BUILTIN_CD);
+		if (is_same_lines(comm, "exit") && ((dt->comm->prev \
+		&& !is_same_lines(dt->comm->prev->oper, "|")) || !dt->comm->prev))
+			return (BUILTIN_EXIT);
+		if (is_same_lines(comm, "unset") && ((dt->comm->prev \
+		&& !is_same_lines(dt->comm->prev->oper, "|")) || !dt->comm->prev))
+			return (BUILTIN_UNSET);
+	}
 	return (0);
 }
 
-int	is_builtins(char *comm)
+int	is_builtins(char *comm, t_data *dt)
 {
 	int	builtin;
 
-	builtin = is_builtins_in_main_proc(comm);
+	builtin = is_builtins_in_main_proc(comm, dt);
 	if (builtin)
 		return (builtin);
 	if (is_same_lines(comm, "env"))
@@ -26,6 +33,12 @@ int	is_builtins(char *comm)
 		return (BUILTIN_ECHO);
 	if (is_same_lines(comm, "pwd"))
 		return (BUILTIN_PWD);
+	if (is_same_lines(comm, "exit"))
+		return (BUILTIN_EXIT);
+	if (is_same_lines(comm, "cd"))
+		return (BUILTIN_CD);
+	if (is_same_lines(comm, "unset"))
+		return (BUILTIN_UNSET);
 	return (0);
 }
 
@@ -58,7 +71,7 @@ int	launch_builtins(t_data *data)
 {
 	int		builtin;
 
-	builtin = is_builtins(data->comm->comm);
+	builtin = is_builtins(data->comm->comm, data);
 	if (builtin == BUILTIN_ECHO)
 		return (ft_echo(*(data->comm)));
 	if (builtin == BUILTIN_PWD)

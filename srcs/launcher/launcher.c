@@ -55,7 +55,7 @@ int	check_builtins(t_data *data, char **path)
 {
 	int	error;
 
-	if (is_builtins_in_main_proc(data->comm->comm))
+	if (is_builtins_in_main_proc(data->comm->comm, data))
 	{
 		error = launch_builtins(data);
 		data->comm = data->comm->next;
@@ -63,7 +63,7 @@ int	check_builtins(t_data *data, char **path)
 			return (error);
 		return (-1);
 	}
-	else if (is_builtins(data->comm->comm))
+	else if (is_builtins(data->comm->comm, data))
 		*path = ft_strdup("launch builtins");
 	else
 		*path = get_path(data->comm->comm);
