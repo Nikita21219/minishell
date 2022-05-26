@@ -61,6 +61,8 @@ void	pars_and_launch(t_data *data)
 		return ;
 	}
 	start_dt = data->comm;
+	// tmp_print_arg_after_parser(data->comm);
+	// exit(0);
 	launcher(data);
 	freedata(data);
 	return ;
