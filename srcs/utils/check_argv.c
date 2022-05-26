@@ -44,6 +44,12 @@ int	check_path(char *path)
 		ft_fprintf(path, "command not found\n");
 		return (errno);
 	}
+	else if (is_same_lines(path, "."))
+	{
+		errno = 2;
+		ft_fprintf(path, "usage: . filename [arguments]\n");
+		return (errno);
+	}
 	else if (only_slash(path))
 	{
 		errno = 126;
