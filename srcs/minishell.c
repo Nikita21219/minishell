@@ -78,7 +78,7 @@ void	minishell(t_data *data, char **env)
 	{
 		err = errno;
 		if (!data->env)
-			error_mes_with_exit("Error environment\n", data);
+			error_mes_with_exit("🔥mini_hell🔥: error environment\n", data);
 		data->instr = readline("🔥mini_hell🔥$ ");
 		errno = err;
 		if (!data->instr)

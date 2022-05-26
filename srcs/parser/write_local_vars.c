@@ -92,7 +92,7 @@ int	check_for_local_vars(char **str, t_data *data)
 	trm = ft_split(*str, ' ');
 	if (!trm)
 	{
-		printf("Error malloc in parse\n");
+		printf("🔥mini_hell🔥: error malloc in parse\n");
 		errno = 12;
 		return (1);
 	}

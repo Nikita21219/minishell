@@ -58,18 +58,18 @@ int	ft_create_var(t_data *data, char *var)
 	t_envr	*p;
 
 	if (!ft_isalpha(*var))
-		return (printf("%s: command not found\n", var));
+		return (printf("🔥mini_hell🔥: %s: command not found\n", var));
 	p = malloc(sizeof(t_envr));
 	if (!p)
 	{
 		errno = 12;
-		return (printf("Error malloc in export\n"));
+		return (printf("🔥mini_hell🔥: error malloc in export\n"));
 	}
 	write_start_env(var, &p);
 	if (!p->key || !p->val)
 	{
 		errno = 12;
-		return (printf("Error malloc in export\n"));
+		return (printf("🔥mini_hell🔥: error malloc in export\n"));
 	}
 	p->next = data->vars;
 	data->vars = p;

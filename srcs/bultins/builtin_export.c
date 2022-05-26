@@ -24,7 +24,7 @@ int	add_list_env(t_envr **env, char *arg)
 	p = malloc(sizeof(t_envr));
 	if (!p)
 	{
-		printf("Error malloc export\n");
+		printf("🔥mini_hell🔥: error malloc export\n");
 		return (1);
 	}
 	while (arg[i] != '=')
@@ -33,7 +33,7 @@ int	add_list_env(t_envr **env, char *arg)
 	p->val = ft_substr(arg, i, ft_strlen(arg));
 	if (!p->key || !p->val)
 	{
-		printf("Error malloc export\n");
+		printf("🔥mini_hell🔥: error malloc export\n");
 		return (1);
 	}
 	p->next = *env;
@@ -112,7 +112,7 @@ int	ft_export(t_data *data)
 	{
 		if (check_right_var(data->comm->args[i]))
 		{
-			printf("export: '%s': not a valid identifier\n", \
+			printf("🔥mini_hell🔥: export: '%s': not a valid identifier\n", \
 			data->comm->args[i++]);
 			continue ;
 		}

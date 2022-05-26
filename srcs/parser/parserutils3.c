@@ -65,8 +65,11 @@ int	checkallcommands(t_comm **p)
 		if (tmp->oper && tmp->oper[0] != '<' \
 		&& tmp->oper[0] != '>' && (!tmp->next || !tmp->comm))
 		{
-			printf("mini_hell: syntax error near unexpected token `%s'\n"\
-			, tmp->oper);
+			if (!tmp->comm)
+				printf("🔥mini_hell🔥: syntax error near unexpected token `%s'\n"\
+				, tmp->oper);
+			else
+				printf("🔥mini_hell🔥: syntax error: unexpected end of file\n");
 			errno = 258;
 			return (1);
 		}

@@ -12,7 +12,7 @@ int	syntx_oper(char **arg, char **s, int *i, int a)
 	*i = 0;
 	if (**s == '<' || **s == '>' || **s == '|' || **s == '&')
 	{
-		printf("mini_hell: syntax error near unexpected token `%c\'\n", **s);
+		printf("🔥mini_hell🔥: syntax error near unexpected token `%c\'\n", **s);
 		*i = -2;
 	}
 	return (0);
