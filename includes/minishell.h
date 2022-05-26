@@ -127,6 +127,7 @@ int		check_oper(t_data *data);
 int		check_tilda(t_comm **comm);
 char	**get_env(t_envr *dt_env);
 int		set_env(t_comm *data, t_data *dt);
+int		check_path(char *path);
 
 /* builtins */
 int		ft_export(t_data *data);
@@ -138,8 +139,8 @@ int		ft_exit(t_data *data);
 int		ft_cd(t_data *data);
 int		ft_space(char str);
 int		launch_builtins(t_data *data);
-int		is_builtins(char *comm);
-int		is_builtins_in_main_proc(char *comm);
+int		is_builtins(char *comm, t_data *dt);
+int		is_builtins_in_main_proc(char *comm, t_data *dt);
 int		check_builtins(t_data *data, char **path);
 
 /* executor */

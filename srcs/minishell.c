@@ -60,14 +60,8 @@ void	pars_and_launch(t_data *data)
 		freedata(data);
 		return ;
 	}
-	// tmp_print_arg_after_parser(data->comm);
-	// exit(0);
-	// exit(0);
-	// add_ptr_prev_to_data(data->comm);
 	start_dt = data->comm;
 	launcher(data);
-	if (del_file_doc(start_dt))
-		printf("Error unlink\n");
 	freedata(data);
 	return ;
 }
