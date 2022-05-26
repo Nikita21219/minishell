@@ -10,7 +10,7 @@ void	take_data_in_list(t_comm **temp, t_data *data)
 	(*temp)->args = malloc(sizeof(char *) * 3);
 	if (!(*temp)->args)
 		return ;
-	(*temp)->args[0] = ft_strdup("./mini_hell");
+	(*temp)->args[0] = ft_strdup("./🔥mini_hell🔥");
 	if (!(*temp)->args[0])
 		return ;
 	(*temp)->args[1] = NULL;
