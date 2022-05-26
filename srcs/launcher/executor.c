@@ -64,18 +64,17 @@ void	exec_command(t_data *data, char *path)
 	if (close_fd(data->comm))
 		exit(CLOSE_ERR);
 	if (is_same_lines("launch builtins", path))
-	{
-		if (launch_builtins(data))
-			exit(127);
-		exit(0);
-	}
+		exit(launch_builtins(data));
 	else
 	{
 		res = check_path(path);
 		if (res)
 			exit(res);
 		if (execve(path, data->comm->args, get_env(data->env)) == -1)
-			exit(EXEC_ERR);
+		{
+			perror(path);
+			exit(errno);
+		}
 	}
 }
 

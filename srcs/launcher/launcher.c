@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-char	*get_path(char *comm)
+char	*get_path(char *comm, t_data *data)
 {
 	char	**dirs;
 	char	*correct_dir;
@@ -10,12 +10,12 @@ char	*get_path(char *comm)
 	if (is_correct_comm(comm))
 		return (ft_strdup(comm));
 	i = -1;
-	if (initialize_dirs(&dirs))
-		return (NULL);
+	if (initialize_dirs(&dirs, data))
+		return (ft_strdup(comm));
 	while (dirs[++i])
 	{
-		correct_dir = ft_strjoin(dirs[i], "/");
-		result = ft_strjoin(correct_dir, comm);
+		correct_dir = ft_strjoin(dirs[i], "/"); //FIXME check if not allocated
+		result = ft_strjoin(correct_dir, comm); //FIXME check if not allocated
 		free(correct_dir);
 		if (!access(result, 1))
 		{
@@ -66,7 +66,7 @@ int	check_builtins(t_data *data, char **path)
 	else if (is_builtins(data->comm->comm, data))
 		*path = ft_strdup("launch builtins");
 	else
-		*path = get_path(data->comm->comm);
+		*path = get_path(data->comm->comm, data);
 	if (!(path) && data->comm->comm)
 		return (continue_with_print("Error: memory allocated failed\n"));
 	return (0);
