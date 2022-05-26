@@ -72,6 +72,7 @@ void	freedata(t_data *data);
 void	free_arrs(char **arr);
 int		ft_perror(t_comm *dt);
 int		continue_with_print(char *err_str);
+void	ft_fprintf(char *command, char *str);
 
 /* parser */
 int		check_argv(int argc, char **argv, char **env, t_data *data);
@@ -125,7 +126,7 @@ int		initialize_dirs(char ***dirs);
 int		check_oper(t_data *data);
 int		check_tilda(t_comm **comm);
 char	**get_env(t_envr *dt_env);
-void	set_env(t_comm *data, t_data *dt);
+int		set_env(t_comm *data, t_data *dt);
 
 /* builtins */
 int		ft_export(t_data *data);
@@ -155,7 +156,7 @@ int		curr_oper(char *oper);
 /* wildcard */
 char	**wildcard(char *template, int *arr);
 int		check_start(t_finfo *dt, char *filename);
-int		check_finish(t_finfo *dt, char *filename, int *arr_int);
+int		check_finish(t_finfo *dt, char *filename);
 int		check_between(t_finfo *dt, char *filename);
 int		free_dt(t_finfo *dt);
 int		len(char **template);
@@ -163,7 +164,7 @@ int		initial_var(char ***split_template, t_finfo *dt, char *template, int *arr_i
 int		init_dt_start(t_finfo *dt, char *str, char ***split_template);
 int		init_dt_finish(t_finfo *dt, char *str, char ***temp, int last_idx_str);
 int		init_dt_between(t_finfo *dt, char ***split_template, int *i);
-int		check_parts(t_finfo *dt, char *filename, int *arr_int);
+int		check_parts(t_finfo *dt, char *filename);
 int		in_arr(int *arr, int i);
 int		wild_add_elem(char ***arr, char *file, int i);
 char	**split_wild(char *str, int *arr);

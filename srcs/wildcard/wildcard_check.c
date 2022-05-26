@@ -14,12 +14,11 @@ int	check_start(t_finfo *dt, char *filename)
 	return (0);
 }
 
-int	check_finish(t_finfo *dt, char *filename, int *arr_int)
+int	check_finish(t_finfo *dt, char *filename)
 {
 	int	last_idx_filename;
 	int	dt_finish_idx;
 
-	(void) arr_int;
 	last_idx_filename = ft_strlen(filename) - 1;
 	dt_finish_idx = ft_strlen(dt->finish) - 1;
 	while (last_idx_filename >= 0 && dt_finish_idx >= 0)
@@ -55,7 +54,6 @@ char	*get_fname_without_start_and_finish(char *fname, t_finfo *dt)
 	j = ft_strlen(dt->finish) - 1;
 	while (j >= 0 && dt->finish[j] == fname[n])
 	{
-
 		j--;
 		n--;
 	}

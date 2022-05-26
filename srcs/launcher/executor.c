@@ -11,58 +11,46 @@ int	check_pipe(t_data *data)
 
 int	handle_heredoc(t_comm *data, int count_comm)
 {
+	int	res;
+
+	res = 0;
 	while (data && is_same_lines(data->oper, "<<"))
 	{
-		// fprintf(stderr, "TEST\n");
 		if (duplicate_fd_for_heredoc(data) == DUP_ERR)
 			return (DUP_ERR);
 		data = data->next;
 	}
 	if (data && data->next && is_same_lines(data->next->oper, "|"))
-	{
-		if (duplicate_fd(data->next, data->next->i, count_comm))
-			return (DUP_ERR);
-	}
+		res = duplicate_fd(data->next, data->next->i, count_comm);
 	else if (data && is_same_lines(data->oper, ">"))
-	{
-		if (redirect_out(data)) //FIXME handle error
-			return (DUP_ERR); //FIXME handle error
-	}
-	return (0);
+		res = redirect_out(data);
+	return (res);
 }
 
 int	handle_oper(t_data *data, int count_comm)
 {
+	int	res;
+
+	res = 0;
 	if (check_redirect(data))
-	{
-		if (redirect_out(data->comm) == DUP_ERR)
-			return (DUP_ERR);
-	}
+		res = redirect_out(data->comm);
 	else if (is_same_lines(data->comm->oper, "<"))
-	{
-		if (redirect_in(data->comm) == DUP_ERR)
-			return (DUP_ERR);
-	}
+		res = redirect_in(data->comm);
 	else if (check_pipe(data))
-	{
-		if (duplicate_fd(data->comm, data->comm->i, count_comm))
-			return (DUP_ERR);
-	}
+		res = duplicate_fd(data->comm, data->comm->i, count_comm);
 	else if (is_same_lines(data->comm->oper, "<<"))
-	{
-		handle_heredoc(data->comm, count_comm);
-	}
-	if (curr_oper(data->comm->oper) && data->comm->next && next_oper(data->comm->next->oper))
-	{
-		if (duplicate_fd(data->comm->next, data->comm->next->i, count_comm))
-			return (DUP_ERR);
-	}
-	else if (data->comm->next && (is_same_lines(data->comm->next->oper, ">") || is_same_lines(data->comm->next->oper, ">>")))
-	{
+		res = handle_heredoc(data->comm, count_comm);
+	if (res)
+		return (res);
+	if (curr_oper(data->comm->oper) && \
+	data->comm->next && next_oper(data->comm->next->oper))
+		res = duplicate_fd(data->comm->next, data->comm->next->i, count_comm);
+	else if (data->comm->next && \
+	(is_same_lines(data->comm->next->oper, ">") || \
+	is_same_lines(data->comm->next->oper, ">>")))
 		if (!is_same_lines(data->comm->oper, "|"))
-			redirect_out(data->comm->next); //FIXME if redirect_out returned fail
-	}
-	return (0);
+			res = redirect_out(data->comm->next);
+	return (res);
 }
 
 void	exec_command(t_data *data, char *path)

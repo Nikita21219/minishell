@@ -64,7 +64,7 @@ int	is_right_file(char *filename, char *template, int *arr_int)
 	if (ft_strlen(filename) < ft_strlen(dt->start) + \
 	ft_strlen(dt->finish) + count)
 		return (free_dt(dt));
-	return (check_parts(dt, filename, arr_int));
+	return (check_parts(dt, filename));
 }
 
 char	**wildcard(char *template, int *arr_int)

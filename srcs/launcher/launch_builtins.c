@@ -29,10 +29,33 @@ int	is_builtins(char *comm)
 	return (0);
 }
 
+int	launch_export_or_unset(int builtin, t_data *data, char ***env)
+{
+	int	i;
+
+	if (builtin == BUILTIN_EXPORT)
+	{
+		ft_export(data);
+		*env = get_env(data->env);
+		i = -1;
+		while (*env[++i])
+		{
+			write(data->comm->fd[1], *env[i], ft_strlen(*env[i]));
+			write(data->comm->fd[1], "\n", 1);
+		}
+		return (0);
+	}
+	if (builtin == BUILTIN_UNSET)
+	{
+		ft_unset(data);
+		return (0);
+	}
+	return (0);
+}
+
 int	launch_builtins(t_data *data)
 {
 	int		builtin;
-	int		i;
 	char	**env;
 
 	builtin = is_builtins(data->comm->comm);
@@ -46,26 +69,10 @@ int	launch_builtins(t_data *data)
 		return (ft_exit(data));
 	if (builtin == BUILTIN_CD)
 		return (ft_cd(data));
-	if (builtin == BUILTIN_EXPORT)
-	{
-		ft_export(data);
-		env = get_env(data->env);
-		i = -1;
-		while (env[++i])
-		{
-			write(data->comm->fd[1], env[i], ft_strlen(env[i]));
-			write(data->comm->fd[1], "\n", 1);
-		}
-		return (0);
-	}
-	if (builtin == BUILTIN_UNSET)
-	{
-		ft_unset(data);
-		return (0);
-	}
+	if (builtin == BUILTIN_EXPORT || builtin == BUILTIN_UNSET)
+		return (launch_export_or_unset(builtin, data, &env));
 	errno = 127;
-	fprintf(stderr, "mini_hell: %s: command not found\n", data->comm->comm); // FIXME fprintf is not allow
-	// perror(data->comm->comm);
+	ft_fprintf(data->comm->comm, "command not found\n");
 	return (127);
 }
 
