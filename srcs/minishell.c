@@ -63,6 +63,8 @@ void	pars_and_launch(t_data *data)
 	// tmp_print_arg_after_parser(data->comm);
 	// exit(0);
 	start_dt = data->comm;
+	// tmp_print_arg_after_parser(data->comm);
+	// exit(0);
 	launcher(data);
 	freedata(data);
 	return ;
@@ -78,7 +80,7 @@ void	minishell(t_data *data, char **env)
 	{
 		err = errno;
 		if (!data->env)
-			error_mes_with_exit("Error environment\n", data);
+			error_mes_with_exit("🔥mini_hell🔥: error environment\n", data);
 		data->instr = readline("🔥mini_hell🔥$ ");
 		errno = err;
 		if (!data->instr)

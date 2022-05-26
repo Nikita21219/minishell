@@ -46,7 +46,7 @@ int	ft_env(t_envr *env)
 	p = env;
 	if (!p || !take_path_env(&env, "PATH"))
 	{
-		printf("env: No such file or directory\n");
+		printf("🔥mini_hell🔥: env: No such file or directory\n");
 		return (1);
 	}
 	while (p)

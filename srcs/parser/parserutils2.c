@@ -9,7 +9,7 @@ int	write_tilda(char **s)
 		tmp = ft_substr(*s, 2, ft_strlen(*s) - 2);
 		if (!tmp)
 		{
-			printf("Error malloc in parse\n");
+			printf("🔥mini_hell🔥: error malloc in parse\n");
 			errno = 12;
 			return (1);
 		}
@@ -18,7 +18,7 @@ int	write_tilda(char **s)
 	*s = ft_strdup(getenv("HOME"));
 	if (!*s)
 	{
-		printf("Error malloc in parse\n");
+		printf("🔥mini_hell🔥: error malloc in parse\n");
 		errno = 12;
 		return (1);
 	}
@@ -68,7 +68,7 @@ int	take_arg_mass(char ***args, int a)
 	mass = ft_calloc(sizeof(char *), a + 2);
 	if (!mass)
 	{
-		printf("Error malloc in parse\n");
+		printf("🔥mini_hell🔥: error malloc in parse\n");
 		errno = 12;
 		return (1);
 	}

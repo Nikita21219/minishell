@@ -14,7 +14,7 @@ int	check_operator(t_comm *dt)
 
 void	ft_fprintf(char *command, char *str)
 {
-	write(2, "mini_hell: ", 11);
+	write(2, "🔥mini_hell🔥: ", 20);
 	write(2, command, ft_strlen(command));
 	write(2, ": ", 2);
 	write(2, str, ft_strlen(str));

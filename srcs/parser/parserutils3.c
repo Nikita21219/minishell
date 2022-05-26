@@ -1,46 +1,55 @@
 #include "../../includes/minishell.h"
 
-void	move_list(t_comm **p)
+int	rewrite_args(char ***in, char **out)
 {
-	t_comm	*temp;
-	char	**tmp_arg;
+	int		x;
+	int		y;
+	char	**tmp;
+
+	x = len(*in);
+	y = len(out);
+	tmp = malloc(sizeof(char *) * (x + y + 1));
+	if (!tmp)
+		return (1);
+	x = -1;
+	while ((*in)[++x])
+		tmp[x] = (*in)[x];
+	y = -1;
+	while (out[++y])
+	{
+		tmp[x++] = out[y];
+		out[y] = NULL;
+	}
+	tmp[x] = NULL;
+	free (*in);
+	*in = tmp;
+	return (0);
+}
+
+int	move_args(t_comm **p, t_comm **tmp)
+{
+	char	**arg;
 	int		i;
 
 	i = 0;
-	temp = (*p)->next;
-	tmp_arg = (*p)->args;
-	(*p)->args = temp->args;
-	temp->args = tmp_arg;
-	(*p)->comm = (*p)->args[1];
-	while ((*p)->args[++i])
-		(*p)->args[i] = (*p)->args[i + 1];
-}
-
-int	move_args(t_comm **arg, int i, int x)
-{
-	char	**tmp;
-
-	i = len((*arg)->args);
-	x = len((*arg)->next->args);
-	tmp = malloc(sizeof(char *) * (i + x + 1));
-	if (!tmp)
+	if ((((*tmp)->oper && (*tmp)->oper[0] == '>') \
+	|| ((*tmp)->prev && (*tmp)->prev->oper && (*tmp)->prev->oper[0] == '>')) \
+	|| (((*tmp)->oper && (*tmp)->oper[0] == '<') \
+	|| ((*tmp)->prev && (*tmp)->prev->oper && (*tmp)->prev->oper[0] == '<')))
 	{
-		errno = 12;
-		printf("Parse error malloc\n");
-		return (1);
+		arg = (*tmp)->args;
+		arg++;
+		if (!(*p)->comm && arg[0])
+		{
+			(*p)->comm = arg[0];
+			arg++;
+		}
+		if (*arg && (*tmp)->prev)
+			if (rewrite_args(&(*p)->args, arg))
+				return (1);
+		while ((*tmp)->args[++i] && (*tmp)->prev)
+			(*tmp)->args[i] = NULL;
 	}
-	i = -1;
-	x = 0;
-	while ((*arg)->args[++i])
-		tmp[i] = (*arg)->args[i];
-	while ((*arg)->next->args[++x])
-	{
-		tmp[i++] = (*arg)->next->args[x];
-		(*arg)->next->args[x] = NULL;
-	}
-	tmp[i] = NULL;
-	free((*arg)->args);
-	(*arg)->args = tmp;
 	return (0);
 }
 
@@ -49,22 +58,23 @@ int	checkallcommands(t_comm **p)
 	t_comm	*tmp;
 
 	tmp = *p;
-	if ((*p) && (*p)->next && !(*p)->prev && !(*p)->comm && \
-		((*p)->oper[0] == '<' || (*p)->oper[0] == '>'))
-		move_list(p);
+	if (!tmp->comm && !tmp->args[1] && !tmp->oper)
+		return (0);
 	while (tmp)
 	{
-		if ((!tmp->comm && !(is_same_lines(tmp->oper, ">") || \
-		is_same_lines(tmp->oper, ">>") || is_same_lines(tmp->oper, "<") \
-		|| is_same_lines(tmp->oper, "<<"))) || (tmp->oper && !tmp->next))
+		if (tmp->oper && tmp->oper[0] != '<' \
+		&& tmp->oper[0] != '>' && (!tmp->next || !tmp->comm))
 		{
-			printf("Parse error\n");
-			errno = 22;
+			if (!tmp->comm)
+				printf("🔥mini_hell🔥: syntax error near unexpected token `%s'\n"\
+				, tmp->oper);
+			else
+				printf("🔥mini_hell🔥: syntax error: unexpected end of file\n");
+			errno = 258;
 			return (1);
 		}
-		if (tmp && tmp->next && tmp->oper[0] == '>')
-			if (move_args(&tmp, 0, 0))
-				return (1);
+		if (move_args(p, &tmp))
+			return (1);
 		if (check_wildcard(tmp))
 			return (1);
 		tmp = tmp->next;
