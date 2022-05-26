@@ -27,7 +27,7 @@ int	ft_checkdig(char **str, unsigned long long int *dig, int *j)
 	return (0);
 }
 
-long int	ft_atoi_mod(char *str)
+long int	ft_atoi_mod(char *str, int pid)
 {
 	int						n;
 	char					*err;
@@ -43,7 +43,8 @@ long int	ft_atoi_mod(char *str)
 	n = ft_sign(&str);
 	j = 0;
 	dig = 0;
-	printf("exit\n");
+	if (pid != 0)
+		printf("exit\n");
 	if (ft_checkdig(&str, &dig, &j) || j > 19 || \
 	(n > 0 && dig > (max - 1)) || (n < 0 && dig > max))
 	{
@@ -63,7 +64,7 @@ int	ft_exit(t_data *data)
 		printf("exit: too many arguments\n");
 		return (1);
 	}
-	errno = ft_atoi_mod(data->comm->args[1]);
+	errno = ft_atoi_mod(data->comm->args[1], data->comm->pid);
 	freedata(data);
 	delenv(&data->env);
 	exit(errno % 256);

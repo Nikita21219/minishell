@@ -1,21 +1,5 @@
 #include "../../includes/minishell.h"
 
-// void	move_list(t_comm **p)
-// {
-// 	t_comm	*temp;
-// 	char	**tmp_arg;
-// 	int		i;
-
-// 	i = 0;
-// 	temp = (*p)->next;
-// 	tmp_arg = (*p)->args;
-// 	(*p)->args = temp->args;
-// 	temp->args = tmp_arg;
-// 	(*p)->comm = (*p)->args[1];
-// 	while ((*p)->args[++i])
-// 		(*p)->args[i] = (*p)->args[i + 1];
-// }
-
 int	rewrite_args(char ***in, char **out)
 {
 	int		x;
@@ -48,18 +32,24 @@ int	move_args(t_comm **p, t_comm **tmp)
 	int		i;
 
 	i = 0;
-	arg = (*tmp)->args;
-	arg++;
-	if (!(*p)->comm && arg[0])
+	if ((((*tmp)->oper && (*tmp)->oper[0] == '>') \
+	|| ((*tmp)->prev && (*tmp)->prev->oper && (*tmp)->prev->oper[0] == '>')) \
+	|| (((*tmp)->oper && (*tmp)->oper[0] == '<') \
+	|| ((*tmp)->prev && (*tmp)->prev->oper && (*tmp)->prev->oper[0] == '<')))
 	{
-		(*p)->comm = arg[0];
+		arg = (*tmp)->args;
 		arg++;
+		if (!(*p)->comm && arg[0])
+		{
+			(*p)->comm = arg[0];
+			arg++;
+		}
+		if (*arg && (*tmp)->prev)
+			if (rewrite_args(&(*p)->args, arg))
+				return (1);
+		while ((*tmp)->args[++i] && (*tmp)->prev)
+			(*tmp)->args[i] = NULL;
 	}
-	if (*arg && (*tmp)->prev)
-		if (rewrite_args(&(*p)->args, arg))
-			return (1);
-	while ((*tmp)->args[++i] && (*tmp)->prev)
-		(*tmp)->args[i] = NULL;
 	return (0);
 }
 
@@ -68,25 +58,20 @@ int	checkallcommands(t_comm **p)
 	t_comm	*tmp;
 
 	tmp = *p;
-	// if ((*p) && (*p)->next && !(*p)->prev && !(*p)->comm && \
-	// 	((*p)->oper[0] == '<' || (*p)->oper[0] == '>'))
-	// 	move_list(p);
+	if (!tmp->comm && !tmp->args[1] && !tmp->oper)
+		return (0);
 	while (tmp)
 	{
-		if ((!tmp->comm && !(is_same_lines(tmp->oper, ">") || \
-		is_same_lines(tmp->oper, ">>") || is_same_lines(tmp->oper, "<") \
-		|| is_same_lines(tmp->oper, "<<"))) || (tmp->oper && !tmp->next))
+		if (tmp->oper && tmp->oper[0] != '<' \
+		&& tmp->oper[0] != '>' && (!tmp->next || !tmp->comm))
 		{
-			printf("Parse error\n");
-			errno = 22;
+			printf("mini_hell: syntax error near unexpected token `%s'\n"\
+			, tmp->oper);
+			errno = 258;
 			return (1);
 		}
-		if (((tmp->oper && tmp->oper[0] == '>') \
-		|| (tmp->prev && tmp->prev->oper && tmp->prev->oper[0] == '>')) \
-		|| ((tmp->oper && tmp->oper[0] == '<') \
-		|| (tmp->prev && tmp->prev->oper && tmp->prev->oper[0] == '<')))
-			if (move_args(p, &tmp))
-				return (1);
+		if (move_args(p, &tmp))
+			return (1);
 		if (check_wildcard(tmp))
 			return (1);
 		tmp = tmp->next;
