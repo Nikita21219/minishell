@@ -16,8 +16,6 @@ int	set_env(t_comm *data, t_data *dt)
 	int		i;
 	int		size;
 
-	// printf("\n\n-------------------------BEFORE-------------------------------\n\n");
-	// tmp_print_env(dt->env);
 	size = get_fsize(data->fd[0]);
 	if (size == -1)
 		return (1);
@@ -37,8 +35,6 @@ int	set_env(t_comm *data, t_data *dt)
 	while (split_str[++i])
 		free(split_str[i]);
 	free(split_str);
-	// printf("\n\n-------------------------AFTER-------------------------------\n\n");
-	// tmp_print_env(dt->env);
 	return (0);
 }
 

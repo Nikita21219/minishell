@@ -127,6 +127,7 @@ int		check_oper(t_data *data);
 int		check_tilda(t_comm **comm);
 char	**get_env(t_envr *dt_env);
 int		set_env(t_comm *data, t_data *dt);
+int		check_path(char *path);
 
 /* builtins */
 int		ft_export(t_data *data);

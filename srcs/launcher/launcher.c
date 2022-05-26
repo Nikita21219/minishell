@@ -67,7 +67,7 @@ int	check_builtins(t_data *data, char **path)
 		*path = ft_strdup("launch builtins");
 	else
 		*path = get_path(data->comm->comm);
-	if (!(*path) && data->comm->comm)
+	if (!(path) && data->comm->comm)
 		return (continue_with_print("Error: memory allocated failed\n"));
 	return (0);
 }
