@@ -29,18 +29,19 @@ int	is_builtins(char *comm)
 	return (0);
 }
 
-int	launch_export_or_unset(int builtin, t_data *data, char ***env)
+int	launch_export_or_unset(int builtin, t_data *data)
 {
-	int	i;
+	int		i;
+	char	**env;
 
 	if (builtin == BUILTIN_EXPORT)
 	{
 		ft_export(data);
-		*env = get_env(data->env);
+		env = get_env(data->env);
 		i = -1;
-		while (*env[++i])
+		while (env[++i])
 		{
-			write(data->comm->fd[1], *env[i], ft_strlen(*env[i]));
+			write(data->comm->fd[1], env[i], ft_strlen(env[i]));
 			write(data->comm->fd[1], "\n", 1);
 		}
 		return (0);
@@ -56,7 +57,6 @@ int	launch_export_or_unset(int builtin, t_data *data, char ***env)
 int	launch_builtins(t_data *data)
 {
 	int		builtin;
-	char	**env;
 
 	builtin = is_builtins(data->comm->comm);
 	if (builtin == BUILTIN_ECHO)
@@ -70,7 +70,7 @@ int	launch_builtins(t_data *data)
 	if (builtin == BUILTIN_CD)
 		return (ft_cd(data));
 	if (builtin == BUILTIN_EXPORT || builtin == BUILTIN_UNSET)
-		return (launch_export_or_unset(builtin, data, &env));
+		return (launch_export_or_unset(builtin, data));
 	errno = 127;
 	ft_fprintf(data->comm->comm, "command not found\n");
 	return (127);
