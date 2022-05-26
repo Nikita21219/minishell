@@ -35,10 +35,15 @@ int	duplicate_fd(t_comm *data, int idx, int count_comm)
 	return (0);
 }
 
-int	initialize_dirs(char ***dirs)
+int	initialize_dirs(char ***dirs, t_data *data)
 {
-	*dirs = ft_split(getenv("PATH"), ':');
-	if (!(*dirs))
+	t_envr	*var;
+
+	var = take_path_env(&data->env, "PATH");
+	if (var == NULL)
+		return (1);
+	*dirs = ft_split(var->val, ':');
+	if (*dirs == NULL)
 		return (1);
 	return (0);
 }
