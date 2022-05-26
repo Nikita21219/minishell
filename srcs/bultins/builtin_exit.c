@@ -58,7 +58,7 @@ int	ft_exit(t_data *data)
 	int			i;
 
 	i = 0;
-	if (data->comm->args[1] && data->comm->args[2])
+	if (data->comm->args && data->comm->args[1] && data->comm->args[2])
 	{
 		printf("exit: too many arguments\n");
 		return (1);

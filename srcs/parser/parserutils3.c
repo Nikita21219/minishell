@@ -16,31 +16,78 @@ void	move_list(t_comm **p)
 		(*p)->args[i] = (*p)->args[i + 1];
 }
 
-int	move_args(t_comm **arg, int i, int x)
+// int	move_args(t_comm **arg, int i, int x)
+// {
+// 	char	**tmp;
+
+// i = len((*arg)->args);
+// 	x = len((*arg)->next->args);
+// 	tmp = malloc(sizeof(char *) * (i + x + 1));
+// 	if (!tmp)
+// 	{
+// 		errno = 12;
+// 		printf("Parse error malloc\n");
+// 		return (1);
+// 	}
+// 	i = -1;
+// 	x = 0;
+// 	while ((*arg)->args[++i])
+// 		tmp[i] = (*arg)->args[i];
+// 	while ((*arg)->next->args[++x])
+// 	{
+// 		tmp[i++] = (*arg)->next->args[x];
+// 		(*arg)->next->args[x] = NULL;
+// 	}
+// 	tmp[i] = NULL;
+// 	free((*arg)->args);
+// 	(*arg)->args = tmp;
+// 	return (0);
+// }
+
+int	rewrite_args(char ***in, char **out)
 {
+	int		x;
+	int		y;
 	char	**tmp;
 
-	i = len((*arg)->args);
-	x = len((*arg)->next->args);
-	tmp = malloc(sizeof(char *) * (i + x + 1));
+	x = len(*in);
+	y = len(out);
+	tmp = malloc(sizeof(char *) * (x + y + 1));
 	if (!tmp)
-	{
-		errno = 12;
-		printf("Parse error malloc\n");
 		return (1);
-	}
-	i = -1;
-	x = 0;
-	while ((*arg)->args[++i])
-		tmp[i] = (*arg)->args[i];
-	while ((*arg)->next->args[++x])
+	x = -1;
+	while ((*in)[++x])
+		tmp[x] = (*in)[x];
+	y = -1;
+	while (out[++y])
 	{
-		tmp[i++] = (*arg)->next->args[x];
-		(*arg)->next->args[x] = NULL;
+		tmp[x++] = out[y];
+		out[y] = NULL;
 	}
-	tmp[i] = NULL;
-	free((*arg)->args);
-	(*arg)->args = tmp;
+	tmp[x] = NULL;
+	free (*in);
+	*in = tmp;
+	return (0);
+}
+
+int	move_args(t_comm **p, t_comm **tmp)
+{
+	char	**arg;
+	int		i;
+
+	i = 0;
+	arg = (*tmp)->args;
+	arg++;
+	if (!(*p)->comm && arg[0])
+	{
+		(*p)->comm = arg[0];
+		arg++;
+	}
+	if (*arg)
+		if (rewrite_args(&(*p)->args, arg))
+			return (1);
+	while ((*tmp)->args[++i])
+		(*tmp)->args[i] = NULL;
 	return (0);
 }
 
@@ -62,8 +109,12 @@ int	checkallcommands(t_comm **p)
 			errno = 22;
 			return (1);
 		}
-		if (tmp && tmp->next && tmp->oper[0] == '>')
-			if (move_args(&tmp, 0, 0))
+		// if (tmp && tmp->next && tmp->oper[0] == '>')
+		// 	if (move_args(&tmp, 0, 0))
+		// 		return (1);
+		if ((tmp->oper && tmp->oper[0] == '>') \
+		|| (tmp->prev && tmp->prev->oper && tmp->prev->oper[0] == '>'))
+			if (move_args(p, &tmp))
 				return (1);
 		if (check_wildcard(tmp))
 			return (1);

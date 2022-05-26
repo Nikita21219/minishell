@@ -152,5 +152,8 @@ int	launcher(t_data *data)
 	}
 	result = close_fds_and_waiting(tmp_dt, wait_count, data);
 	delcommand(&tmp_dt);
+	tmp_print_arg_after_parser(data->comm);
+	if (!data->comm)
+		printf("NUUL\n");
 	return (result);
 }
