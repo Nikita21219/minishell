@@ -1,20 +1,20 @@
 #include "../../includes/minishell.h"
 
-void	move_list(t_comm **p)
-{
-	t_comm	*temp;
-	char	**tmp_arg;
-	int		i;
+// void	move_list(t_comm **p)
+// {
+// 	t_comm	*temp;
+// 	char	**tmp_arg;
+// 	int		i;
 
-	i = 0;
-	temp = (*p)->next;
-	tmp_arg = (*p)->args;
-	(*p)->args = temp->args;
-	temp->args = tmp_arg;
-	(*p)->comm = (*p)->args[1];
-	while ((*p)->args[++i])
-		(*p)->args[i] = (*p)->args[i + 1];
-}
+// 	i = 0;
+// 	temp = (*p)->next;
+// 	tmp_arg = (*p)->args;
+// 	(*p)->args = temp->args;
+// 	temp->args = tmp_arg;
+// 	(*p)->comm = (*p)->args[1];
+// 	while ((*p)->args[++i])
+// 		(*p)->args[i] = (*p)->args[i + 1];
+// }
 
 int	rewrite_args(char ***in, char **out)
 {
@@ -55,10 +55,10 @@ int	move_args(t_comm **p, t_comm **tmp)
 		(*p)->comm = arg[0];
 		arg++;
 	}
-	if (*arg)
+	if (*arg && (*tmp)->prev)
 		if (rewrite_args(&(*p)->args, arg))
 			return (1);
-	while ((*tmp)->args[++i])
+	while ((*tmp)->args[++i] && (*tmp)->prev)
 		(*tmp)->args[i] = NULL;
 	return (0);
 }
@@ -68,9 +68,9 @@ int	checkallcommands(t_comm **p)
 	t_comm	*tmp;
 
 	tmp = *p;
-	if ((*p) && (*p)->next && !(*p)->prev && !(*p)->comm && \
-		((*p)->oper[0] == '<' || (*p)->oper[0] == '>'))
-		move_list(p);
+	// if ((*p) && (*p)->next && !(*p)->prev && !(*p)->comm && \
+	// 	((*p)->oper[0] == '<' || (*p)->oper[0] == '>'))
+	// 	move_list(p);
 	while (tmp)
 	{
 		if ((!tmp->comm && !(is_same_lines(tmp->oper, ">") || \
