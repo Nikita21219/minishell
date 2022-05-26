@@ -122,6 +122,8 @@ int	launcher(t_data *data)
 		set_next_ptr_data_and_free_path(data, path);
 	}
 	result = close_fds_and_waiting(tmp_dt, wait_count, data);
+	if (del_file_doc(tmp_dt))
+		printf("Error unlink\n");
 	delcommand(&tmp_dt);
 	return (result);
 }
