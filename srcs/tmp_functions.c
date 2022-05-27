@@ -42,8 +42,7 @@ void	print_containers(t_box *box)
 		printf("CONTAINER NUMBER %d\n", ++i);
 		while (box->dt_comm)
 		{
-			printf("command = %s %s\n", \
-			box->dt_comm->comm, box->dt_comm->args[1]);
+			printf("command = %s %s; next = %p\n", box->dt_comm->comm, box->dt_comm->args[1], box->dt_comm->next);
 			box->dt_comm = box->dt_comm->next;
 		}
 		printf("oper box = %s\n", box->oper);

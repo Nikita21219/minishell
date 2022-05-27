@@ -27,6 +27,7 @@ int	add_new_container(t_comm **data, t_box **box)
 	(*data)->next = NULL;
 	(*data) = start;
 	new->dt_comm = start;
+	new->dt_comm->prev = NULL;
 	new->next = NULL;
 	p->next = new;
 	return (0);

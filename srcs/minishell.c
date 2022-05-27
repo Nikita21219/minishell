@@ -1,5 +1,17 @@
 #include "../includes/minishell.h"
 
+void	init_index(t_comm *dt)
+{
+	int	i;
+
+	i = 0;
+	while (dt)
+	{
+		dt->i = i++;
+		dt = dt->next;
+	}
+}
+
 void	increment_shlvl(t_data *data)
 {
 	t_envr	*env;
@@ -32,12 +44,14 @@ void	pars_and_launch(t_data *data)
 	// tmp_print_arg_after_parser(data->comm);
 	// exit(0);
 	start_dt = data->comm;
-	// tmp_print_arg_after_parser(data->comm);
-	// exit(0);
 	init_containers(data->comm, &box);
+	// print_containers(box);
+	// exit(0);
 	while (box)
 	{
+		// fprintf(stderr, "test\n");
 		data->comm = box->dt_comm;
+		init_index(data->comm);
 		launcher(data);
 		if (set_next_box(&box))
 			return ; //FIXME if fail
