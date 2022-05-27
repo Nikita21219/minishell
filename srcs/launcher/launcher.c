@@ -104,6 +104,7 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 int	launcher(t_data *data)
 {
 	char	*path;
+	char	*new_instr;
 	int		count_command;
 	int		wait_count;
 	int		result;
@@ -113,6 +114,22 @@ int	launcher(t_data *data)
 		return (0);
 	while (data->comm)
 	{
+		if (data->comm->status == 1)
+		{
+			data->comm->pid = fork();
+			if (data->comm->pid == 0)
+			{
+				// printf("DOT\n");
+				new_instr = ft_strdup(data->comm->comm);
+				freedata(data);
+				data->instr = new_instr;
+				pars_and_launch(data);
+			}
+			waitpid(data->comm->pid, &data->comm->status, 0);
+			// printf("Status: %d\n", errno);
+			data->comm = data->comm->next;
+			continue ;
+		}
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;

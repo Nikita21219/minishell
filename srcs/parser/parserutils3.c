@@ -110,3 +110,10 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 		(*s)[i] = '*' * -1;
 	return (++i);
 }
+
+int	print_error_and_errno(char *str, int error, int ret)
+{
+	printf("%s\n", str);
+	errno = error;
+	return (ret);
+}

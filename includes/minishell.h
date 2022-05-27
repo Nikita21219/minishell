@@ -73,6 +73,8 @@ void	free_arrs(char **arr);
 int		ft_perror(t_comm *dt);
 int		continue_with_print(char *err_str);
 void	ft_fprintf(char *command, char *str);
+int		print_error_and_errno(char *str, int error, int ret);
+void	pars_and_launch(t_data *data);
 
 /* parser */
 int		check_argv(int argc, char **argv, char **env, t_data *data);
@@ -103,6 +105,7 @@ int		checkallcommands(t_comm **p);
 int		add_list_env(t_envr **env, char *arg);
 int		check_for_local_vars(char **str, t_data *data);
 int		check_right_var(char *arg);
+int		check_prnts(char **str, char **s, int *i, t_comm *data);
 
 /* launcher */
 int		launcher(t_data *data);
@@ -173,5 +176,8 @@ void	fill_zero(int *arr, int k, int *j, char **res);
 int		init_containers(t_comm *data, t_box	**box);
 int		take_pos_for_wild(char **str, int **pos);
 int		write_arg_wild(char ***args, char **wild, int a);
+
+/* bonus func */
+int		is_logic_oper(char *str);
 
 #endif

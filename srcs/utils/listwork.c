@@ -7,6 +7,8 @@ void	take_data_in_list(t_comm **temp, t_data *data)
 	(*temp)->data = data;
 	(*temp)->next = NULL;
 	(*temp)->prev = NULL;
+	(*temp)->status = 0;
+	(*temp)->pid = -2;
 	(*temp)->args = malloc(sizeof(char *) * 3);
 	if (!(*temp)->args)
 		return ;
