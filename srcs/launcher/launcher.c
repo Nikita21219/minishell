@@ -42,7 +42,6 @@ int	close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt)
 		if (WIFEXITED(wstatus))
 		{
 			status_code = WEXITSTATUS(wstatus);
-			printf("status_code = %d pid = %d\n", status_code, data->pid);
 			errno = status_code;
 		}
 	}
@@ -110,6 +109,7 @@ int	launcher(t_data *data)
 	int		wait_count;
 	int		result;
 	t_comm	*tmp_dt;
+	// int		wstatus;
 
 	if (init_var(&tmp_dt, data, &wait_count, &count_command))
 		return (0);
@@ -117,16 +117,19 @@ int	launcher(t_data *data)
 	{
 		if (data->comm->status == 1)
 		{
-			data->comm->pid = fork();
-			if (data->comm->pid == 0)
+			data->comm->prnt = fork();
+			if (data->comm->prnt == 0)
 			{
 				new_instr = ft_strdup(data->comm->comm);
 				freedata(data);
 				data->instr = new_instr;
-				pars_and_launch(data);
+				pars_and_launch(data, 0);
 			}
-			waitpid(data->comm->pid, &data->comm->status, 0);
-			// printf("Status: %d\n", errno);
+			waitpid(data->comm->prnt, &data->comm->status, 0);
+			if (WIFEXITED(data->comm->status))
+			{
+				errno = WEXITSTATUS(data->comm->status);
+			}
 			data->comm = data->comm->next;
 			continue ;
 		}

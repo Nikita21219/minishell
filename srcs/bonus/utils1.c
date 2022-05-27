@@ -26,6 +26,7 @@ int	handle_or(t_box **tmp_box)
 
 void	handle_logic_operators(t_box **tmp_box, char *oper)
 {
+	// printf("err = %d\n", errno);
 	if (!oper || (oper[0] == '&' && errno == 0) || (oper[0] == '|' && errno != 0))
 		return ;
 	else
@@ -46,16 +47,6 @@ int	set_next_box(t_box **box)
 	}
 	oper = tmp_box->oper;
 	handle_logic_operators(&tmp_box, tmp_box->oper);
-	// if (is_same_lines(tmp_box->oper, "&&"))
-	// {
-	// 	handle_and(&tmp_box);
-	// }
-	// else if (is_same_lines(tmp_box->oper, "||"))
-	// {
-	// 	handle_or(&tmp_box);
-	// }
-	// else
-	// 	tmp_box = tmp_box->next;
 	*box = tmp_box;
 	return (0);
 }

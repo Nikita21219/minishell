@@ -49,7 +49,7 @@ int	takeargs(t_comm *data, char **s)
 	return (0);
 }
 
-int	parser(t_data *data)
+int	parser(t_data *data, int i)
 {
 	t_comm	*p;
 	char	*str;
@@ -65,7 +65,7 @@ int	parser(t_data *data)
 			return (1);
 		if (!(*str))
 			break ;
-		p = addelem(data);
+		p = addelem(data, i);
 		if (!p)
 			return (print_error_and_errno("Error malloc in parse", 12, 1));
 		if (takecommand(p, &str))

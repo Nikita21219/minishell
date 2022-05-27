@@ -31,32 +31,30 @@ void	increment_shlvl(t_data *data)
 	}
 }
 
-void	pars_and_launch(t_data *data)
+void	pars_and_launch(t_data *data, int i)
 {
 	t_comm	*start_dt;
 	t_box	*box;
+	int		ch;
 
-	if (parser(data) || check_tilda(&data->comm))
+	ch = i;
+	if (parser(data, i) || check_tilda(&data->comm))
 	{
 		freedata(data);
 		return ;
 	}
-	// tmp_print_arg_after_parser(data->comm);
-	// exit(0);
 	start_dt = data->comm;
 	init_containers(data->comm, &box);
-	// print_containers(box);
-	// print_containers(box);
-	// exit(0);
 	while (box)
 	{
-		// fprintf(stderr, "test\n");
 		data->comm = box->dt_comm;
 		init_index(data->comm);
 		launcher(data);
 		if (set_next_box(&box))
 			return ; //FIXME if fail
 	}
+	if (ch == 0)
+		exit (errno);
 	freedata(data); //FIXME check leaks and free boxes
 	return ;
 }
@@ -82,7 +80,7 @@ void	minishell(t_data *data, char **env)
 			continue ;
 		}
 		add_history(data->instr);
-		pars_and_launch(data);
+		pars_and_launch(data, 1);
 	}
 	delenv(&data->env);
 	freedata(data);

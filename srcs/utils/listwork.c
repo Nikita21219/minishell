@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	take_data_in_list(t_comm **temp, t_data *data)
+void	take_data_in_list(t_comm **temp, t_data *data, int i)
 {
 	(*temp)->comm = NULL;
 	(*temp)->oper = NULL;
@@ -8,7 +8,7 @@ void	take_data_in_list(t_comm **temp, t_data *data)
 	(*temp)->next = NULL;
 	(*temp)->prev = NULL;
 	(*temp)->status = 0;
-	(*temp)->pid = -2;
+	(*temp)->prnt = i;
 	(*temp)->args = malloc(sizeof(char *) * 3);
 	if (!(*temp)->args)
 		return ;
@@ -19,7 +19,7 @@ void	take_data_in_list(t_comm **temp, t_data *data)
 	(*temp)->args[2] = NULL;
 }
 
-t_comm	*addelem(t_data *data)
+t_comm	*addelem(t_data *data, int i)
 {
 	t_comm	*temp;
 	t_comm	*p;
@@ -27,7 +27,7 @@ t_comm	*addelem(t_data *data)
 	temp = (t_comm *)malloc(sizeof(t_comm));
 	if (!temp)
 		return (NULL);
-	take_data_in_list(&temp, data);
+	take_data_in_list(&temp, data, i);
 	if (!temp->args || !temp->args[0])
 		return (NULL);
 	if (!data->comm)

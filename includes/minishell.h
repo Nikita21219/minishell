@@ -30,6 +30,7 @@ typedef struct s_comm
 	int				fd[2];
 	int				i;
 	pid_t			pid;
+	pid_t			prnt;
 	char			*comm;
 	char			**args;
 	char			*oper;
@@ -74,7 +75,7 @@ int		ft_perror(t_comm *dt);
 int		continue_with_print(char *err_str);
 void	ft_fprintf(char *command, char *str);
 int		print_error_and_errno(char *str, int error, int ret);
-void	pars_and_launch(t_data *data);
+void	pars_and_launch(t_data *data, int i);
 
 /* parser */
 int		check_argv(int argc, char **argv, char **env, t_data *data);
@@ -82,8 +83,8 @@ void	error_mes_with_exit(char *err_mes, t_data *data);
 void	take_start_env(t_data *data, char **envar);
 void	write_start_env(char *envar, t_envr **temp);
 int		ft_create_var(t_data *data, char *var);
-int		parser(t_data *data);
-t_comm	*addelem(t_data *data);
+int		parser(t_data *data, int i);
+t_comm	*addelem(t_data *data, int i);
 void	delcommand(t_comm **comm);
 int		check_quote(char **s, char **str, char quote, t_comm *data);
 int		write_arg(char **arg, char **s, int i);
