@@ -42,6 +42,7 @@ int	close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt)
 		if (WIFEXITED(wstatus))
 		{
 			status_code = WEXITSTATUS(wstatus);
+			printf("status_code = %d pid = %d\n", status_code, data->pid);
 			errno = status_code;
 		}
 	}
@@ -119,7 +120,6 @@ int	launcher(t_data *data)
 			data->comm->pid = fork();
 			if (data->comm->pid == 0)
 			{
-				// printf("DOT\n");
 				new_instr = ft_strdup(data->comm->comm);
 				freedata(data);
 				data->instr = new_instr;

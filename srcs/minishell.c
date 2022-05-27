@@ -46,6 +46,7 @@ void	pars_and_launch(t_data *data)
 	start_dt = data->comm;
 	init_containers(data->comm, &box);
 	// print_containers(box);
+	// print_containers(box);
 	// exit(0);
 	while (box)
 	{
