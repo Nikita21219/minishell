@@ -118,6 +118,7 @@ int		check_redirect(t_data *data);
 int		is_correct_comm(char *comm);
 int		handle_error_executor(int error);
 int		create_pipe(t_comm *data);
+int		handle_oper(t_data *data, int count_comm);
 int		heredoc(t_comm *data);
 int		init_result(char **free_ptr, char **nl, char **line, char **res);
 int		is_redirect(char *op);

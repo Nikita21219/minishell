@@ -116,20 +116,19 @@ int	launcher(t_data *data)
 	{
 		if (data->comm->status == 1)
 		{
-			// check_pipe(data->comm);
+			check_oper(data);
 			data->comm->prnt = fork();
 			if (data->comm->prnt == 0)
 			{
 				new_instr = ft_strdup(data->comm->comm);
+				handle_oper(data, count_command); //FIXME if returned fail
 				freedata(data);
 				data->instr = new_instr;
 				pars_and_launch(data, 0);
 			}
 			waitpid(data->comm->prnt, &data->comm->status, 0);
 			if (WIFEXITED(data->comm->status))
-			{
 				errno = WEXITSTATUS(data->comm->status);
-			}
 			data->comm = data->comm->next;
 			continue ;
 		}

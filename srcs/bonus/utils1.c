@@ -2,7 +2,8 @@
 
 // int	check_pipe(t_comm *data)
 // {
-
+// 	if (is_same_lines(data->oper, "|"))
+	
 // }
 
 void	handle_logic_operators(t_box **tmp_box, char *oper)
