@@ -109,7 +109,6 @@ int	launcher(t_data *data)
 	int		wait_count;
 	int		result;
 	t_comm	*tmp_dt;
-	// int		wstatus;
 
 	if (init_var(&tmp_dt, data, &wait_count, &count_command))
 		return (0);
@@ -117,6 +116,7 @@ int	launcher(t_data *data)
 	{
 		if (data->comm->status == 1)
 		{
+			// check_pipe(data->comm);
 			data->comm->prnt = fork();
 			if (data->comm->prnt == 0)
 			{
@@ -144,6 +144,6 @@ int	launcher(t_data *data)
 	result = close_fds_and_waiting(tmp_dt, wait_count, data);
 	if (del_file_doc(tmp_dt))
 		printf("🔥mini_hell🔥: error unlink\n");
-	// delcommand(&tmp_dt);
+	delcommand(&tmp_dt);
 	return (result);
 }

@@ -1,32 +1,12 @@
 #include "../../includes/minishell.h"
 
-int	handle_and(t_box **tmp_box)
-{
-	if (errno == 0)
-		return (0);
-	else
-	{
-		while (*tmp_box && is_same_lines("&&", (*tmp_box)->oper))
-			*tmp_box = (*tmp_box)->next;
-	}
-	return (0);
-}
+// int	check_pipe(t_comm *data)
+// {
 
-int	handle_or(t_box **tmp_box)
-{
-	if (errno != 0)
-		return (0);
-	else
-	{
-		while (*tmp_box && is_same_lines("||", (*tmp_box)->oper))
-			*tmp_box = (*tmp_box)->next;
-	}
-	return (0);
-}
+// }
 
 void	handle_logic_operators(t_box **tmp_box, char *oper)
 {
-	// printf("err = %d\n", errno);
 	if (!oper || (oper[0] == '&' && errno == 0) || (oper[0] == '|' && errno != 0))
 		return ;
 	else
@@ -50,6 +30,3 @@ int	set_next_box(t_box **box)
 	*box = tmp_box;
 	return (0);
 }
-
-// echo 1 && echo 2
-// echo 1 || echo 2
