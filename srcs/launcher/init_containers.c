@@ -18,16 +18,15 @@ int	add_new_container(t_comm **data, t_box **box)
 	p = *box;
 	while (p->next)
 		p = p->next;
-	p->oper = (*data)->oper;
+	new = malloc(sizeof(t_box));
+	if (!new)
+		return (1);
+	new->oper = (*data)->oper;
 	(*data)->oper = NULL;
 	start = (*data)->next;
 	(*data)->next = NULL;
 	(*data) = start;
-	new = malloc(sizeof(t_box));
-	if (!new)
-		return (1);
 	new->dt_comm = start;
-	new->oper = NULL;
 	new->next = NULL;
 	p->next = new;
 	return (0);
