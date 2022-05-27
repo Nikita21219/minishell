@@ -35,8 +35,14 @@ void	pars_and_launch(t_data *data)
 	// tmp_print_arg_after_parser(data->comm);
 	// exit(0);
 	init_containers(data->comm, &box);
-	launcher(data);
-	freedata(data);
+	while (box)
+	{
+		data->comm = box->dt_comm;
+		launcher(data);
+		if (set_next_box(&box))
+			return ; //FIXME if fail
+	}
+	freedata(data); //FIXME check leaks and free boxes
 	return ;
 }
 
