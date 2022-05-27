@@ -72,7 +72,6 @@ void	exec_command(t_data *data, char *path)
 			exit(res);
 		if (execve(path, data->comm->args, get_env(data->env)) == -1)
 		{
-			printf("🔥mini_hell🔥: ");	
 			perror(path);
 			exit(errno);
 		}
