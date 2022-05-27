@@ -57,14 +57,14 @@ typedef struct s_finfo
 typedef struct s_box
 {
 	t_comm			*dt_comm;
+	char			*oper;
 	struct s_box	*next;
 }	t_box;
-
 
 /*!!!!DELETE!!!!!*/
 void	tmp_print_env(t_envr *env);
 void	tmp_print_arg_after_parser(t_comm *data);
-
+void	print_containers(t_box *box);
 
 /* general */
 int		is_same_lines(char *f_str, char *s_str);
@@ -179,5 +179,6 @@ int		write_arg_wild(char ***args, char **wild, int a);
 
 /* bonus func */
 int		is_logic_oper(char *str);
+int		init_containers(t_comm *data, t_box	**box);
 
 #endif
