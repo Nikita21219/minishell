@@ -73,8 +73,8 @@ int	checkallcommands(t_comm **p)
 			errno = 258;
 			return (1);
 		}
-		if (move_args(p, &tmp))
-			return (1);
+		// if (move_args(p, &tmp))
+		// 	return (1);
 		if (check_wildcard(tmp))
 			return (1);
 		tmp = tmp->next;

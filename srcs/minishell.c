@@ -43,6 +43,8 @@ void	pars_and_launch(t_data *data, int i)
 		freedata(data);
 		return ;
 	}
+	// tmp_print_arg_after_parser(data->comm);
+	// exit(0);
 	start_dt = data->comm;
 	init_containers(data->comm, &box);
 	while (box)

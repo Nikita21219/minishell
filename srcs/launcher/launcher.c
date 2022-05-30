@@ -126,6 +126,8 @@ int	launcher(t_data *data)
 				data->instr = new_instr;
 				pars_and_launch(data, 0);
 			}
+			// if (close_fd(data->comm))
+			// 	fprintf(stderr, "ERROR in close_fd()\n");
 			waitpid(data->comm->prnt, &data->comm->status, 0);
 			if (WIFEXITED(data->comm->status))
 				errno = WEXITSTATUS(data->comm->status);

@@ -69,5 +69,5 @@ int	check_prnts(char **str, char **s, int *i, t_comm *data)
 	data->comm = new_instr;
 	*i = 0;
 	data->status = 1;
-	return (0);
+	return (1);
 }
