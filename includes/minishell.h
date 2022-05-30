@@ -183,6 +183,7 @@ int		write_arg_wild(char ***args, char **wild, int a);
 /* bonus func */
 int		is_logic_oper(char *str);
 int		init_containers(t_comm *data, t_box	**box);
-int		set_next_box(t_box **box);
+void	set_next_box(t_box **box);
+int		freebox(t_box **box);
 
 #endif

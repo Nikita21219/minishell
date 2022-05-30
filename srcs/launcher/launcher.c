@@ -99,7 +99,6 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	}
 	else
 		data->comm = data->comm->next;
-	// free(path);
 }
 
 int	launcher(t_data *data)
@@ -140,7 +139,6 @@ int	launcher(t_data *data)
 			if (WIFEXITED(data->comm->status))
 				errno = WEXITSTATUS(data->comm->status);
 			set_next_ptr_data_and_free_path(data, path);
-			// data->comm = data->comm->next;
 			continue ;
 		}
 		if (check_builtins(data, &path))
@@ -150,10 +148,10 @@ int	launcher(t_data *data)
 		if (result < 0 || result == 1)
 			return (handle_error_executor(result));
 		set_next_ptr_data_and_free_path(data, path);
+		free(path);
 	}
 	result = close_fds_and_waiting(tmp_dt, wait_count, data);
-	if (del_file_doc(tmp_dt))
-		printf("🔥mini_hell🔥: error unlink\n");
-	delcommand(&tmp_dt);
+	del_file_doc(tmp_dt);
+	// delcommand(&tmp_dt);
 	return (result);
 }

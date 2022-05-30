@@ -35,6 +35,7 @@ void	pars_and_launch(t_data *data, int i)
 {
 	t_comm	*start_dt;
 	t_box	*box;
+	t_box	*ptr;
 	int		ch;
 
 	ch = i;
@@ -44,16 +45,15 @@ void	pars_and_launch(t_data *data, int i)
 		return ;
 	}
 	start_dt = data->comm;
-	init_containers(data->comm, &box);
+	init_containers(data->comm, &box); //FIXME if fail
 	while (box)
 	{
+		ptr = box;
 		data->comm = box->dt_comm;
-		// tmp_print_arg_after_parser(data->comm);
-		// exit(0);
 		init_index(data->comm);
 		launcher(data);
-		if (set_next_box(&box))
-			return ; //FIXME if fail
+		set_next_box(&box);
+		freebox(&ptr);
 	}
 	if (ch == 0)
 		exit (errno);
@@ -83,6 +83,7 @@ void	minishell(t_data *data, char **env)
 		}
 		add_history(data->instr);
 		pars_and_launch(data, 1);
+		// free(data->instr); //FIXME instr
 	}
 	delenv(&data->env);
 	freedata(data);
