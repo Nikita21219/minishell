@@ -74,6 +74,7 @@ int	check_builtins(t_data *data, char **path)
 
 void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 {
+	(void) path;
 	if (data->comm && (is_same_lines(data->comm->oper, ">") || \
 	is_same_lines(data->comm->oper, ">>") || \
 	is_same_lines(data->comm->oper, "<<") || \
@@ -98,7 +99,7 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	}
 	else
 		data->comm = data->comm->next;
-	free(path);
+	// free(path);
 }
 
 int	launcher(t_data *data)
@@ -138,7 +139,8 @@ int	launcher(t_data *data)
 			waitpid(data->comm->prnt, &data->comm->status, 0); //FIXME check if returned fail
 			if (WIFEXITED(data->comm->status))
 				errno = WEXITSTATUS(data->comm->status);
-			data->comm = data->comm->next;
+			set_next_ptr_data_and_free_path(data, path);
+			// data->comm = data->comm->next;
 			continue ;
 		}
 		if (check_builtins(data, &path))
