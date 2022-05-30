@@ -7,12 +7,14 @@ void	handle_logic_operators(t_box **tmp_box, char *oper)
 	if (!oper || (oper[0] == '&' && errno == 0) || (oper[0] == '|' && errno != 0))
 		return ;
 	else
+	{
 		while (*tmp_box && is_same_lines(oper, (*tmp_box)->oper))
 		{
 			next = (*tmp_box)->next;
-			freebox(tmp_box);
+			freebox(tmp_box); //FIXME clear || echadso 1 || ecadsho 2 && echo 3 -> not work
 			*tmp_box = next;
 		}
+	}
 }
 
 void	set_next_box(t_box **box)
@@ -37,11 +39,6 @@ int	freebox(t_box **box)
 		{
 			free((*box)->oper);
 			(*box)->oper = NULL;
-		}
-		if ((*box)->oper)
-		{
-			free((*box)->next);
-			(*box)->next = NULL;
 		}
 		delcommand(&(*box)->dt_comm);
 		if (*box)
