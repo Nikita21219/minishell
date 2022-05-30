@@ -120,15 +120,22 @@ int	launcher(t_data *data)
 			data->comm->prnt = fork();
 			if (data->comm->prnt == 0)
 			{
-				new_instr = ft_strdup(data->comm->comm);
 				handle_oper(data, count_command); //FIXME if returned fail
+				new_instr = ft_strdup(data->comm->comm); //FIXME if returned fail
 				freedata(data);
 				data->instr = new_instr;
-				pars_and_launch(data, 0);
+				pars_and_launch(data, 0); //FIXME if returned fail
 			}
-			// if (close_fd(data->comm))
-			// 	fprintf(stderr, "ERROR in close_fd()\n");
-			waitpid(data->comm->prnt, &data->comm->status, 0);
+			else
+			{
+				if (tmp_dt->fd[1])
+				{
+					if (close(tmp_dt->fd[1]))
+						fprintf(stderr, "ERROR in close_fd 1\n");
+					tmp_dt->fd[1] = 0;
+				}
+			}
+			waitpid(data->comm->prnt, &data->comm->status, 0); //FIXME check if returned fail
 			if (WIFEXITED(data->comm->status))
 				errno = WEXITSTATUS(data->comm->status);
 			data->comm = data->comm->next;

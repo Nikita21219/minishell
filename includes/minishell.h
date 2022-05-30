@@ -114,6 +114,7 @@ int		init_var(t_comm **tmp_dt, t_data *dt, int *wait_c, int *count_comm);
 int		get_count_comm(t_comm *data);
 void	add_ptr_prev_to_data(t_comm *data);
 int		close_fd(t_comm *data);
+int		close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt); //FIXME tmp line
 int		check_redirect(t_data *data);
 int		is_correct_comm(char *comm);
 int		handle_error_executor(int error);

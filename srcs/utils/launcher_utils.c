@@ -22,6 +22,7 @@ void	ft_fprintf(char *command, char *str)
 
 int	create_pipe(t_comm *data)
 {
+	// fprintf(stderr, "command = %s\n", data->comm);
 	if (pipe(data->fd) == -1)
 		return (1);
 	return (0);

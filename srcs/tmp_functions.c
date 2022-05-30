@@ -9,13 +9,13 @@ void	tmp_print_arg_after_parser(t_comm *data)
 	while (i < cout_comm)
 	{
 		j = -1;
-		printf("command: %s\n", data->comm);
+		fprintf(stderr, "command: %s\n", data->comm);
 		while (data->args[++j])
-			printf("data args %d: %s\n", j, data->args[j]);
-		printf("data args %d: %s\n", j, data->args[j]);
-		printf("oper: %s\n", data->oper);
-		printf("i: %d\n", data->i);
-		printf("\n\n");
+			fprintf(stderr, "data args %d: %s\n", j, data->args[j]);
+		fprintf(stderr, "data args %d: %s\n", j, data->args[j]);
+		fprintf(stderr, "oper: %s\n", data->oper);
+		fprintf(stderr, "i: %d\n", data->i);
+		fprintf(stderr, "\n\n");
 		i++;
 		data = data->next;
 	}

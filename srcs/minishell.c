@@ -48,7 +48,7 @@ void	pars_and_launch(t_data *data, int i)
 	while (box)
 	{
 		data->comm = box->dt_comm;
-		tmp_print_arg_after_parser(data->comm);
+		// tmp_print_arg_after_parser(data->comm);
 		// exit(0);
 		init_index(data->comm);
 		launcher(data);
