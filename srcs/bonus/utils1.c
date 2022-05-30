@@ -20,14 +20,18 @@ void	handle_logic_operators(t_box **tmp_box, char *oper)
 void	set_next_box(t_box **box)
 {
 	t_box	*tmp_box;
+	char	*oper;
 
 	tmp_box = (*box)->next;
 	if (tmp_box == NULL)
 	{
+		free((*box)->oper);
 		*box = tmp_box;
 		return ;
 	}
+	oper = tmp_box->oper;
 	handle_logic_operators(&tmp_box, tmp_box->oper);
+	free(oper);
 	*box = tmp_box;
 }
 
@@ -35,11 +39,6 @@ int	freebox(t_box **box)
 {
 	if (*box)
 	{
-		if ((*box)->oper)
-		{
-			free((*box)->oper);
-			(*box)->oper = NULL;
-		}
 		delcommand(&(*box)->dt_comm);
 		if (*box)
 		{
