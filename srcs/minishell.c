@@ -51,7 +51,8 @@ void	pars_and_launch(t_data *data, int i)
 		ptr = box;
 		data->comm = box->dt_comm;
 		init_index(data->comm);
-		launcher(data);
+		if (launcher(data))
+			break ;
 		set_next_box(&box);
 		freebox(&ptr);
 	}
@@ -83,7 +84,6 @@ void	minishell(t_data *data, char **env)
 		}
 		add_history(data->instr);
 		pars_and_launch(data, 1);
-		// free(data->instr); //FIXME instr
 	}
 	delenv(&data->env);
 	freedata(data);

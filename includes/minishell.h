@@ -118,6 +118,7 @@ int		check_redirect(t_data *data);
 int		is_correct_comm(char *comm);
 int		handle_error_executor(int error);
 int		create_pipe(t_comm *data);
+void	set_next_ptr_data_and_free_path(t_data *data, char *path);
 int		handle_oper(t_data *data, int count_comm);
 int		heredoc(t_comm *data);
 int		init_result(char **free_ptr, char **nl, char **line, char **res);
@@ -184,5 +185,6 @@ int		is_logic_oper(char *str);
 int		init_containers(t_comm *data, t_box	**box);
 void	set_next_box(t_box **box);
 int		freebox(t_box **box);
+int		check_parenthesis(char *path, int c, t_data *data, t_comm *tmp_dt);
 
 #endif

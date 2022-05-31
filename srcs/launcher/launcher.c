@@ -108,7 +108,6 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 int	launcher(t_data *data)
 {
 	char	*path;
-	char	*new_instr;
 	int		count_command;
 	int		wait_count;
 	int		result;
@@ -118,30 +117,11 @@ int	launcher(t_data *data)
 		return (0);
 	while (data->comm)
 	{
-		if (data->comm->status == 1)
-		{
-			check_oper(data);
-			data->comm->prnt = fork();
-			if (data->comm->prnt == 0)
-			{
-				handle_oper(data, count_command); //FIXME if returned fail
-				new_instr = ft_strdup(data->comm->comm); //FIXME if returned fail
-				freedata(data);
-				data->instr = new_instr;
-				pars_and_launch(data, 0); //FIXME if returned fail
-			}
-			else if (tmp_dt->fd[1])
-			{
-				if (close(tmp_dt->fd[1]))
-					fprintf(stderr, "ERROR in close_fd 1\n");
-				tmp_dt->fd[1] = 0;
-			}
-			waitpid(data->comm->prnt, &data->comm->status, 0); //FIXME check if returned fail
-			if (WIFEXITED(data->comm->status))
-				errno = WEXITSTATUS(data->comm->status);
-			set_next_ptr_data_and_free_path(data, path);
+		result = check_parenthesis(path, count_command, data, tmp_dt);
+		if (result == 1)
 			continue ;
-		}
+		else if (result < 0)
+			return (1);
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;
