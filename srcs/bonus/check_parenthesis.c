@@ -3,7 +3,7 @@
 int	wait_process_and_set_next_ptr(t_data *data, char *path)
 {
 	if (waitpid(data->comm->prnt, &data->comm->status, 0) == -1)
-		fprintf(stderr, "Error waitpid\n");
+		ft_putstr_fd("Error waitpid\n", 2);
 	if (WIFEXITED(data->comm->status))
 		errno = WEXITSTATUS(data->comm->status);
 	set_next_ptr_data_and_free_path(data, path);
@@ -30,7 +30,7 @@ int	parenthesis_logic(char *path, int c, t_data *data, t_comm *tmp_dt)
 	else if (tmp_dt->fd[1])
 	{
 		if (close(tmp_dt->fd[1]))
-			fprintf(stderr, "Error close\n");
+			ft_putstr_fd("Error close\n", 2);
 		tmp_dt->fd[1] = 0;
 	}
 	return (wait_process_and_set_next_ptr(data, path));

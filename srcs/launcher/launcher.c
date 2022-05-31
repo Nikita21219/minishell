@@ -7,9 +7,8 @@ char	*get_path(char *comm, t_data *data)
 	char	*result;
 	int		i;
 
-	if (is_correct_comm(comm) || initialize_dirs(&dirs, data))
+	if (is_correct_comm(comm) || initialize_dirs(&dirs, data, &i))
 		return (ft_strdup(comm));
-	i = -1;
 	while (dirs[++i])
 	{
 		correct_dir = ft_strjoin(dirs[i], "/");
@@ -32,9 +31,11 @@ char	*get_path(char *comm, t_data *data)
 
 int	close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt)
 {
-	int	wstatus;
-	int	status_code;
+	int		wstatus;
+	int		status_code;
+	t_comm	*ptr;
 
+	ptr = data;
 	if (close_fd(data))
 		return (continue_with_print("Error: close() returned fail\n"));
 	while (wait_count-- > 0)
@@ -50,6 +51,7 @@ int	close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt)
 	if (is_same_lines(data->comm, "export") && data->args[1])
 		if (set_env(data, dt))
 			return (continue_with_print("Error\n"));
+	del_file_doc(ptr);
 	return (0);
 }
 
@@ -129,7 +131,5 @@ int	launcher(t_data *data)
 		set_next_ptr_data_and_free_path(data, path);
 		free(path);
 	}
-	result = close_fds_and_waiting(tmp_dt, wait_count, data);
-	del_file_doc(tmp_dt);
-	return (result);
+	return (close_fds_and_waiting(tmp_dt, wait_count, data));
 }

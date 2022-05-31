@@ -132,7 +132,7 @@ int		del_file_doc(t_comm *data);
 int		duplicate_fd(t_comm *data, int idx, int count_comm);
 int		redirect_out(t_comm *data);
 int		redirect_in(t_comm *data);
-int		initialize_dirs(char ***dirs, t_data *data);
+int		initialize_dirs(char ***dirs, t_data *data, int *i);
 int		check_oper(t_data *data);
 int		check_tilda(t_comm **comm);
 char	**get_env(t_envr *dt_env);
