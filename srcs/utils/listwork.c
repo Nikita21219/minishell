@@ -86,38 +86,3 @@ void	delenv(t_envr **env)
 		free (p);
 	}
 }
-
-void	write_start_env(char *envar, t_envr **temp)
-{
-	char	**tmp;
-
-	tmp = ft_split(envar, '=');
-	(*temp)->key = tmp[0];
-	(*temp)->val = tmp[1];
-	free(tmp);
-}
-
-void	take_start_env(t_data *data, char **envar)
-{
-	t_envr	*temp;
-	int		a;
-
-	a = -1;
-	while (envar[++a])
-	{
-		temp = (t_envr *)malloc(sizeof(t_envr));
-		if (!temp)
-		{
-			errno = 12;
-			error_mes_with_exit("Error malloc\n", data);
-		}
-		write_start_env(envar[a], &temp);
-		if (!temp->key || !temp->val)
-		{
-			errno = 12;
-			error_mes_with_exit("Error malloc\n", data);
-		}
-		temp->next = data->env;
-		data->env = temp;
-	}
-}

@@ -44,6 +44,12 @@ int	takeargs(t_comm *data, char **s)
 	return (0);
 }
 
+int	free_str(char *str)
+{
+	free(str);
+	return (1);
+}
+
 int	check_null_command(t_comm *p)
 {
 	if (!p->comm && !p->oper)
@@ -68,17 +74,17 @@ int	parser(t_data *data, int i)
 	while (*str)
 	{
 		if (check_for_local_vars(&str, data))
-			return (1);
+			return (free_str(tmp));
 		if (!(*str))
 			break ;
 		p = addelem(data, i);
 		if (!p)
 			return (print_error_and_errno("Error malloc in parse", 12, 1));
 		if (takecommand(p, &str))
-			return (1);
+			return (free_str(tmp));
 		if (!p->oper)
 			if (takeargs(p, &str) || check_null_command(p))
-				return (1);
+				return (free_str(tmp));
 	}
 	free(tmp);
 	return (checkallcommands(&data->comm));

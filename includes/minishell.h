@@ -109,6 +109,8 @@ int		add_list_env(t_envr **env, char *arg);
 int		check_for_local_vars(char **str, t_data *data);
 int		check_right_var(char *arg);
 int		check_prnts(char **str, char **s, int *i, t_comm *data);
+void	init_index(t_comm *dt);
+void	increment_shlvl(t_data *data);
 
 /* launcher */
 int		launcher(t_data *data);
@@ -169,7 +171,8 @@ int		check_finish(t_finfo *dt, char *filename);
 int		check_between(t_finfo *dt, char *filename);
 int		free_dt(t_finfo *dt);
 int		len(char **template);
-int		initial_var(char ***split_template, t_finfo *dt, char *template, int *arr_int);
+int		initial_var(char ***split_template, \
+		t_finfo *dt, char *template, int *arr_int);
 int		init_dt_start(t_finfo *dt, char *str, char ***split_template);
 int		init_dt_finish(t_finfo *dt, char *str, char ***temp, int last_idx_str);
 int		init_dt_between(t_finfo *dt, char ***split_template, int *i);

@@ -1,52 +1,9 @@
 #include "../includes/minishell.h"
 
-void	init_index(t_comm *dt)
+void	launch_box(t_box *box, int i, t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (dt)
-	{
-		dt->i = i++;
-		dt = dt->next;
-	}
-}
-
-void	increment_shlvl(t_data *data)
-{
-	t_envr	*env;
-	char	*ptr_to_free;
-
-	env = data->env;
-	while (env)
-	{
-		if (is_same_lines(env->key, "SHLVL"))
-		{
-			ptr_to_free = env->val;
-			env->val = ft_itoa(ft_atoi(env->val) + 1);
-			free(ptr_to_free);
-			break ;
-		}
-		env = env->next;
-	}
-}
-
-void	pars_and_launch(t_data *data, int i)
-{
-	t_comm	*start_dt;
-	t_box	*box;
 	t_box	*ptr;
-	int		ch;
 
-	ch = i;
-	if (parser(data, i) || check_tilda(&data->comm))
-	{
-		freedata(data);
-		return ;
-	}
-	start_dt = data->comm;
-	if (init_containers(data->comm, &box))
-		return ;
 	while (box)
 	{
 		ptr = box;
@@ -57,8 +14,23 @@ void	pars_and_launch(t_data *data, int i)
 		set_next_box(&box);
 		freebox(&ptr);
 	}
-	if (ch == 0)
+	if (i == 0)
 		exit (errno);
+}
+
+void	pars_and_launch(t_data *data, int i)
+{
+	t_box	*box;
+
+	box = NULL;
+	if (parser(data, i) || check_tilda(&data->comm))
+	{
+		freedata(data);
+		return ;
+	}
+	if (init_containers(data->comm, &box))
+		return ;
+	launch_box(box, i, data);
 	freedata(data);
 	return ;
 }
