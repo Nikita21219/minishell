@@ -45,7 +45,8 @@ void	pars_and_launch(t_data *data, int i)
 		return ;
 	}
 	start_dt = data->comm;
-	init_containers(data->comm, &box); //FIXME if fail
+	if (init_containers(data->comm, &box))
+		return ;
 	while (box)
 	{
 		ptr = box;
@@ -58,7 +59,7 @@ void	pars_and_launch(t_data *data, int i)
 	}
 	if (ch == 0)
 		exit (errno);
-	freedata(data); //FIXME check leaks and free boxes
+	freedata(data);
 	return ;
 }
 
@@ -73,7 +74,7 @@ void	minishell(t_data *data, char **env)
 		err = errno;
 		if (!data->env)
 			error_mes_with_exit("🔥mini_hell🔥: error environment\n", data);
-		data->instr = readline("🔥mini_hell🔥$ ");
+		data->instr = delete_hashtag(readline("🔥mini_hell🔥$ "));
 		errno = err;
 		if (!data->instr)
 			error_mes_with_exit("\b\bexit\n", data);

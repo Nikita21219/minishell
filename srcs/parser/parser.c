@@ -12,8 +12,7 @@ int	takecommand(t_comm *data, char **s)
 			!check_prnts(&data->comm, s, &i, data))
 			i = vars_quote_check(&data->comm, s, i, data);
 		if (i < 0 || (i > 0 && write_arg(&data->comm, s, i)))
-			return (print_error_and_errno \
-				("🔥mini_hell🔥: error malloc in parse", 12, 1));
+			return (1);
 		while (**s && ft_space(**s))
 			(*s)++;
 	}
@@ -34,17 +33,24 @@ int	takeargs(t_comm *data, char **s)
 			!check_prnts(&data->comm, s, &i, data))
 			i = vars_quote_check(&data->args[a], s, i, data);
 		if (i < 0 || (i > 0 && write_arg(&data->args[a], s, i)))
-		{
-			if (i != -2)
-				printf("🔥mini_hell🔥: error malloc in parse\n");
 			return (1);
-		}
 		while ((**s) && ft_space(**s))
 			(*s)++;
 		while (data->args[a])
 			a++;
 		if (take_arg_mass(&data->args, a))
 			return (1);
+	}
+	return (0);
+}
+
+int	check_null_command(t_comm *p)
+{
+	if (!p->comm && !p->oper)
+	{
+		p->comm = ft_strdup(" ");
+		if (!p->comm)
+			return (print_error_and_errno("Error malloc in parse", 12, 1));
 	}
 	return (0);
 }
@@ -71,7 +77,7 @@ int	parser(t_data *data, int i)
 		if (takecommand(p, &str))
 			return (1);
 		if (!p->oper)
-			if (takeargs(p, &str))
+			if (takeargs(p, &str) || check_null_command(p))
 				return (1);
 	}
 	free(tmp);

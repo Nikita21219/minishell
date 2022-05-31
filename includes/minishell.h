@@ -78,7 +78,9 @@ int		print_error_and_errno(char *str, int error, int ret);
 void	pars_and_launch(t_data *data, int i);
 
 /* parser */
+int		check_for_move_arg(t_box **box);
 int		check_argv(int argc, char **argv, char **env, t_data *data);
+char	*delete_hashtag(char *str);
 void	error_mes_with_exit(char *err_mes, t_data *data);
 void	take_start_env(t_data *data, char **envar);
 void	write_start_env(char *envar, t_envr **temp);

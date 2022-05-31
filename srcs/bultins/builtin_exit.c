@@ -48,7 +48,7 @@ long int	ft_atoi_mod(char *str, int pid)
 	if (ft_checkdig(&str, &dig, &j) || j > 19 || \
 	(n > 0 && dig > (max - 1)) || (n < 0 && dig > max))
 	{
-		printf("🔥mini_hell🔥: exit: %s: numeric argument required\n", err);
+		printf("🔥mini_hell🔥: exit: %s: numeric argument required\nexit\n", err);
 		return (255);
 	}
 	return (n * dig);
