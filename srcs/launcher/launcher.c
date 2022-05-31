@@ -14,9 +14,13 @@ char	*get_path(char *comm, t_data *data)
 	i = -1;
 	while (dirs[++i])
 	{
-		correct_dir = ft_strjoin(dirs[i], "/"); //FIXME check if not allocated
-		result = ft_strjoin(correct_dir, comm); //FIXME check if not allocated
+		correct_dir = ft_strjoin(dirs[i], "/");
+		if (correct_dir == NULL)
+			return (NULL);
+		result = ft_strjoin(correct_dir, comm);
 		free(correct_dir);
+		if (result == NULL)
+			return (NULL);
 		if (!access(result, 1))
 		{
 			free_arrs(dirs);
@@ -126,14 +130,11 @@ int	launcher(t_data *data)
 				data->instr = new_instr;
 				pars_and_launch(data, 0); //FIXME if returned fail
 			}
-			else
+			else if (tmp_dt->fd[1])
 			{
-				if (tmp_dt->fd[1])
-				{
-					if (close(tmp_dt->fd[1]))
-						fprintf(stderr, "ERROR in close_fd 1\n");
-					tmp_dt->fd[1] = 0;
-				}
+				if (close(tmp_dt->fd[1]))
+					fprintf(stderr, "ERROR in close_fd 1\n");
+				tmp_dt->fd[1] = 0;
 			}
 			waitpid(data->comm->prnt, &data->comm->status, 0); //FIXME check if returned fail
 			if (WIFEXITED(data->comm->status))
@@ -152,6 +153,5 @@ int	launcher(t_data *data)
 	}
 	result = close_fds_and_waiting(tmp_dt, wait_count, data);
 	del_file_doc(tmp_dt);
-	// delcommand(&tmp_dt);
 	return (result);
 }
