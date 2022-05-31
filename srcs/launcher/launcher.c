@@ -7,9 +7,7 @@ char	*get_path(char *comm, t_data *data)
 	char	*result;
 	int		i;
 
-	if (is_correct_comm(comm))
-		return (ft_strdup(comm));
-	if (initialize_dirs(&dirs, data))
+	if (is_correct_comm(comm) || initialize_dirs(&dirs, data))
 		return (ft_strdup(comm));
 	i = -1;
 	while (dirs[++i])

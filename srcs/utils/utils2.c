@@ -48,7 +48,7 @@ int	close_fd(t_comm *data)
 
 int	is_correct_comm(char *comm)
 {
-	if (!access(comm, 1))
+	if (comm && comm[0] == '/' && !access(comm, 1))
 		return (1);
 	return (0);
 }

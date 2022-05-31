@@ -50,3 +50,16 @@ void	ft_unset(t_data	*data)
 		i++;
 	}
 }
+
+int	check_right_var(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(*arg) && (*arg) != '_')
+		return (1);
+	while (arg[i] && arg[i] != '=')
+		if (!ft_isalnum(arg[i++]) && (*arg) != '_')
+			return (1);
+	return (0);
+}

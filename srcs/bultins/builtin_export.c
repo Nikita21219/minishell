@@ -1,18 +1,5 @@
 #include "../../includes/minishell.h"
 
-int	check_right_var(char *arg)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(*arg) && (*arg) != '_')
-		return (1);
-	while (arg[i] && arg[i] != '=')
-		if (!ft_isalnum(arg[i++]) && (*arg) != '_')
-			return (1);
-	return (0);
-}
-
 int	add_list_env(t_envr **env, char *arg)
 {
 	t_envr	*p;

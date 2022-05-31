@@ -4,7 +4,8 @@ void	handle_logic_operators(t_box **tmp_box, char *oper)
 {
 	t_box	*next;
 
-	if (!oper || (oper[0] == '&' && errno == 0) || (oper[0] == '|' && errno != 0))
+	if (!oper || (oper[0] == '&' && errno == 0) \
+	|| (oper[0] == '|' && errno != 0))
 		return ;
 	else
 	{

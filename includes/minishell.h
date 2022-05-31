@@ -149,6 +149,7 @@ int		ft_exit(t_data *data);
 int		ft_cd(t_data *data);
 int		ft_space(char str);
 int		launch_builtins(t_data *data);
+int		check_right_var(char *arg);
 int		is_builtins(char *comm, t_data *dt);
 int		is_builtins_in_main_proc(char *comm, t_data *dt);
 int		check_builtins(t_data *data, char **path);
