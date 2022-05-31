@@ -9,9 +9,9 @@ char	*get_path(char *comm, t_data *data)
 
 	if (is_correct_comm(comm))
 		return (ft_strdup(comm));
-	i = -1;
 	if (initialize_dirs(&dirs, data))
 		return (ft_strdup(comm));
+	i = -1;
 	while (dirs[++i])
 	{
 		correct_dir = ft_strjoin(dirs[i], "/"); //FIXME check if not allocated
