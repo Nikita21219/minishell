@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_containers.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:05:36 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:05:37 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	is_logic_oper(char *str)
@@ -9,71 +21,52 @@ int	is_logic_oper(char *str)
 	return (0);
 }
 
-int	count_command(t_comm *data)
-{
-	int	res;
-
-	res = 0;
-	while (data)
-	{
-		res++;
-		data = data->next;
-	}
-	return (res);
-}
-
-t_comm	*get_copy_dt(t_comm *data)
-{
-	t_comm	*res;
-
-	res = malloc(sizeof(t_comm));
-	// printf("res adress = %p\n", res);
-	if (res == NULL)
-		return (NULL);
-	res->args = data->args;
-	res->comm = data->comm;
-	res->data = data->data;
-	res->fd[0] = data->fd[0];
-	res->fd[1] = data->fd[1];
-	res->i = data->i;
-	res->next = data->next;
-	res->oper = data->oper;
-	res->prev = data->prev;
-	res->status = data->status;
-	return (res);
-}
-
-int	add_new_container(t_comm *data, t_box **box)
+int	add_new_container(t_comm **data, t_box **box)
 {
 	t_box	*new;
-	t_comm	*copy_dt;
+	t_box	*p;
+	t_comm	*start;
 
+	p = *box;
+	while (p->next)
+		p = p->next;
 	new = malloc(sizeof(t_box));
-	if (new == NULL)
+	if (!new)
 		return (1);
-	copy_dt = get_copy_dt(data->next); //FIXME if returned fail
-	if (copy_dt == NULL)
-		return (1);
-	new->dt_comm = copy_dt;
-	data->next = NULL;
-	(*box)->next = new;
-	*box = (*box)->next;
+	new->oper = (*data)->oper;
+	(*data)->oper = NULL;
+	start = (*data)->next;
+	(*data)->next = NULL;
+	(*data) = start;
+	new->dt_comm = start;
+	new->dt_comm->prev = NULL;
+	new->next = NULL;
+	p->next = new;
 	return (0);
 }
 
 int	init_containers(t_comm *data, t_box	**box)
 {
-	t_box	*tmp_box;
+	t_comm	*tmp;
 
-	(*box)->dt_comm = get_copy_dt(data);
-	tmp_box = *box;
+	*box = malloc(sizeof(t_box));
+	if (!(*box))
+		return (1);
+	(*box)->dt_comm = data;
+	(*box)->oper = NULL;
+	(*box)->next = NULL;
 	while (data)
 	{
 		if (is_logic_oper(data->oper))
-			if (add_new_container(data, &tmp_box))
-				continue ; //FIXME if add_new_container returned fail, need to free sctruct
-		data = data->next;
+		{
+			if (add_new_container(&data, box))
+				return (1);
+			tmp = (*box)->dt_comm;
+		}
+		else
+			data = data->next;
 	}
-	tmp_box->next = NULL;
+	if (check_for_move_arg(box))
+		return (1);
 	return (0);
 }

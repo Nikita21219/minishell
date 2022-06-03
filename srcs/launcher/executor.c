@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:05:32 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:42:59 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	check_pipe(t_data *data)
@@ -76,6 +88,7 @@ void	exec_command(t_data *data, char *path)
 			exit(errno);
 		}
 	}
+	exit(0);
 }
 
 int	executor(t_data *data, char *path, int count_comm)

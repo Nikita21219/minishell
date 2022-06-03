@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:05:14 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:05:15 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	ft_sign(char **str)
@@ -48,7 +60,7 @@ long int	ft_atoi_mod(char *str, int pid)
 	if (ft_checkdig(&str, &dig, &j) || j > 19 || \
 	(n > 0 && dig > (max - 1)) || (n < 0 && dig > max))
 	{
-		printf("🔥mini_hell🔥: exit: %s: numeric argument required\n", err);
+		printf("🔥mini_hell🔥: exit: %s: numeric argument required\nexit\n", err);
 		return (255);
 	}
 	return (n * dig);

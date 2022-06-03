@@ -1,27 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parserutils2.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:06:04 by bclarind          #+#    #+#             */
+/*   Updated: 2022/06/03 15:38:14 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	write_tilda(char **s)
 {
 	char	*tmp;
+	char	*tmp2;
+	char	*tmp3;
 
-	if (**s == '~' && *(*s + 1) == '/')
-	{
-		tmp = ft_substr(*s, 2, ft_strlen(*s) - 2);
-		if (!tmp)
-		{
-			printf("🔥mini_hell🔥: error malloc in parse\n");
-			errno = 12;
-			return (1);
-		}
-	}
+	tmp = ft_substr(*s, 2, ft_strlen(*s) - 2);
+	if (tmp == NULL)
+		return (ft_putstr_fd("🔥mini_hell🔥: error malloc in parse\n", 2));
 	free (*s);
-	*s = ft_strdup(getenv("HOME"));
-	if (!*s)
-	{
-		printf("🔥mini_hell🔥: error malloc in parse\n");
-		errno = 12;
-		return (1);
-	}
+	tmp2 = getenv("HOME");
+	tmp3 = ft_strjoin(tmp2, "/");
+	if (tmp3 == NULL)
+		return (ft_putstr_fd("🔥mini_hell🔥: error malloc in parse\n", 2));
+	*s = ft_strjoin(tmp3, tmp);
+	free(tmp3);
+	free(tmp);
+	if (*s == NULL)
+		return (ft_putstr_fd("🔥mini_hell🔥: error malloc in parse\n", 2));
 	return (0);
 }
 
@@ -39,12 +48,9 @@ int	check_tilda(t_comm **comm)
 			if (write_tilda(&tmp->comm))
 				return (1);
 		while (tmp->args && tmp->args[++i])
-		{
-			if (is_same_lines(tmp->args[i], "~") || \
-				(tmp->args[i][0] == '~' && tmp->args[i][1] == '/'))
+			if (is_same_lines(tmp->args[i], "~") || (tmp->args[i][0] == '~' && tmp->args[i][1] == '/'))
 				if (write_tilda(&tmp->args[i]))
 					return (1);
-		}
 		tmp = tmp->next;
 	}
 	return (0);

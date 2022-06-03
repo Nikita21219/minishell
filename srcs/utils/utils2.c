@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils2.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:06:23 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:30:52 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	create_pipes(t_comm *data)
@@ -48,7 +60,8 @@ int	close_fd(t_comm *data)
 
 int	is_correct_comm(char *comm)
 {
-	if (!access(comm, 1))
+	if (comm && (comm[0] == '/' || \
+	(comm[0] == '.' && comm[1] == '/')) && !access(comm, 1))
 		return (1);
 	return (0);
 }

@@ -1,12 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   listwork.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:06:19 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:06:20 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-void	take_data_in_list(t_comm **temp, t_data *data)
+void	take_data_in_list(t_comm **temp, t_data *data, int i)
 {
 	(*temp)->comm = NULL;
 	(*temp)->oper = NULL;
 	(*temp)->data = data;
 	(*temp)->next = NULL;
 	(*temp)->prev = NULL;
+	(*temp)->fd[0] = 0;
+	(*temp)->fd[1] = 0;
+	(*temp)->status = 0;
+	(*temp)->prnt = i;
 	(*temp)->args = malloc(sizeof(char *) * 3);
 	if (!(*temp)->args)
 		return ;
@@ -17,7 +33,7 @@ void	take_data_in_list(t_comm **temp, t_data *data)
 	(*temp)->args[2] = NULL;
 }
 
-t_comm	*addelem(t_data *data)
+t_comm	*addelem(t_data *data, int i)
 {
 	t_comm	*temp;
 	t_comm	*p;
@@ -25,7 +41,7 @@ t_comm	*addelem(t_data *data)
 	temp = (t_comm *)malloc(sizeof(t_comm));
 	if (!temp)
 		return (NULL);
-	take_data_in_list(&temp, data);
+	take_data_in_list(&temp, data, i);
 	if (!temp->args || !temp->args[0])
 		return (NULL);
 	if (!data->comm)
@@ -80,40 +96,5 @@ void	delenv(t_envr **env)
 		p = *env;
 		*env = (*env)->next;
 		free (p);
-	}
-}
-
-void	write_start_env(char *envar, t_envr **temp)
-{
-	char	**tmp;
-
-	tmp = ft_split(envar, '=');
-	(*temp)->key = tmp[0];
-	(*temp)->val = tmp[1];
-	free(tmp);
-}
-
-void	take_start_env(t_data *data, char **envar)
-{
-	t_envr	*temp;
-	int		a;
-
-	a = -1;
-	while (envar[++a])
-	{
-		temp = (t_envr *)malloc(sizeof(t_envr));
-		if (!temp)
-		{
-			errno = 12;
-			error_mes_with_exit("Error malloc\n", data);
-		}
-		write_start_env(envar[a], &temp);
-		if (!temp->key || !temp->val)
-		{
-			errno = 12;
-			error_mes_with_exit("Error malloc\n", data);
-		}
-		temp->next = data->env;
-		data->env = temp;
 	}
 }

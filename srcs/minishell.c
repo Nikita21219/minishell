@@ -1,71 +1,48 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:06:47 by bclarind          #+#    #+#             */
+/*   Updated: 2022/06/03 15:07:36 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void	tmp_print_arg_after_parser(t_comm *data)
+void	launch_box(t_box *box, int i, t_data *data)
 {
-	int j;
+	t_box	*ptr;
 
-	int i = 0;
-	int cout_comm = get_count_comm(data);
-	while (i < cout_comm)
+	while (box)
 	{
-		j = -1;
-		printf("command: %s\n", data->comm);
-		while (data->args[++j])
-			printf("data args %d: %s\n", j, data->args[j]);
-		printf("data args %d: %s\n", j, data->args[j]);
-		printf("oper: %s\n", data->oper);
-		printf("i: %d\n", data->i);
-		printf("\n\n");
-		i++;
-		data = data->next;
-	}
-} //FIXME delete this func
-
-void    tmp_print_env(t_envr *env)
-{
-	t_envr  *envr;
-	envr = env;
-	while (envr)
-	{
-		printf("%s=%s\n", envr->key, envr->val);
-        envr = envr->next;
-	}
-} //FIXME delete this func
-
-void	increment_shlvl(t_data *data)
-{
-	t_envr	*env;
-	char	*ptr_to_free;
-
-	env = data->env;
-	while (env)
-	{
-		if (is_same_lines(env->key, "SHLVL"))
-		{
-			ptr_to_free = env->val;
-			env->val = ft_itoa(ft_atoi(env->val) + 1);
-			free(ptr_to_free);
+		ptr = box;
+		data->comm = box->dt_comm;
+		init_index(data->comm);
+		if (launcher(data))
 			break ;
-		}
-		env = env->next;
+		set_next_box(&box);
+		freebox(&ptr);
 	}
+	if (i == 0)
+		exit (errno);
 }
 
-void	pars_and_launch(t_data *data)
+void	pars_and_launch(t_data *data, int i)
 {
-	t_comm	*start_dt;
+	t_box	*box;
 
-	if (parser(data) || check_tilda(&data->comm))
+	box = NULL;
+	if (parser(data, i) || check_tilda(&data->comm))
 	{
 		freedata(data);
 		return ;
 	}
-	// tmp_print_arg_after_parser(data->comm);
-	// exit(0);
-	start_dt = data->comm;
-	// tmp_print_arg_after_parser(data->comm);
-	// exit(0);
-	launcher(data);
+	if (init_containers(data->comm, &box))
+		return ;
+	launch_box(box, i, data);
 	freedata(data);
 	return ;
 }
@@ -81,7 +58,7 @@ void	minishell(t_data *data, char **env)
 		err = errno;
 		if (!data->env)
 			error_mes_with_exit("🔥mini_hell🔥: error environment\n", data);
-		data->instr = readline("🔥mini_hell🔥$ ");
+		data->instr = delete_hashtag(readline("🔥mini_hell🔥$ "));
 		errno = err;
 		if (!data->instr)
 			error_mes_with_exit("\b\bexit\n", data);
@@ -91,7 +68,7 @@ void	minishell(t_data *data, char **env)
 			continue ;
 		}
 		add_history(data->instr);
-		pars_and_launch(data);
+		pars_and_launch(data, 1);
 	}
 	delenv(&data->env);
 	freedata(data);
@@ -115,8 +92,8 @@ int	main(int argc, char **argv, char **env)
 
 	if (check_argv(argc, argv, env, &data))
 		return (1);
-	// signal(SIGINT, ft_takesig);
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, ft_takesig);
+	signal(SIGQUIT, SIG_IGN);
 	minishell(&data, env);
 	return (0);
 }

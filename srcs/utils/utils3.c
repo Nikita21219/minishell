@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils3.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:06:25 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:06:26 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	is_redirect(char *op)
@@ -35,10 +47,11 @@ int	duplicate_fd(t_comm *data, int idx, int count_comm)
 	return (0);
 }
 
-int	initialize_dirs(char ***dirs, t_data *data)
+int	initialize_dirs(char ***dirs, t_data *data, int *i)
 {
 	t_envr	*var;
 
+	*i = -1;
 	var = take_path_env(&data->env, "PATH");
 	if (var == NULL)
 		return (1);

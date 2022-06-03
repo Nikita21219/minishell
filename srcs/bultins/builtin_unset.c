@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:05:19 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:05:20 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	free_one_list(t_envr **env)
@@ -49,4 +61,17 @@ void	ft_unset(t_data	*data)
 			ft_unset_del(&p2, &data->vars, data->comm->args[i]);
 		i++;
 	}
+}
+
+int	check_right_var(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(*arg) && (*arg) != '_')
+		return (1);
+	while (arg[i] && arg[i] != '=')
+		if (!ft_isalnum(arg[i++]) && (*arg) != '_')
+			return (1);
+	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   launcher.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:05:41 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:05:42 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 char	*get_path(char *comm, t_data *data)
@@ -7,16 +19,17 @@ char	*get_path(char *comm, t_data *data)
 	char	*result;
 	int		i;
 
-	if (is_correct_comm(comm))
-		return (ft_strdup(comm));
-	i = -1;
-	if (initialize_dirs(&dirs, data))
+	if (is_correct_comm(comm) || initialize_dirs(&dirs, data, &i))
 		return (ft_strdup(comm));
 	while (dirs[++i])
 	{
-		correct_dir = ft_strjoin(dirs[i], "/"); //FIXME check if not allocated
-		result = ft_strjoin(correct_dir, comm); //FIXME check if not allocated
+		correct_dir = ft_strjoin(dirs[i], "/");
+		if (correct_dir == NULL)
+			return (NULL);
+		result = ft_strjoin(correct_dir, comm);
 		free(correct_dir);
+		if (result == NULL)
+			return (NULL);
 		if (!access(result, 1))
 		{
 			free_arrs(dirs);
@@ -30,9 +43,11 @@ char	*get_path(char *comm, t_data *data)
 
 int	close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt)
 {
-	int	wstatus;
-	int	status_code;
+	int		wstatus;
+	int		status_code;
+	t_comm	*ptr;
 
+	ptr = data;
 	if (close_fd(data))
 		return (continue_with_print("Error: close() returned fail\n"));
 	while (wait_count-- > 0)
@@ -48,6 +63,7 @@ int	close_fds_and_waiting(t_comm *data, int wait_count, t_data *dt)
 	if (is_same_lines(data->comm, "export") && data->args[1])
 		if (set_env(data, dt))
 			return (continue_with_print("Error\n"));
+	del_file_doc(ptr);
 	return (0);
 }
 
@@ -74,6 +90,7 @@ int	check_builtins(t_data *data, char **path)
 
 void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 {
+	(void) path;
 	if (data->comm && (is_same_lines(data->comm->oper, ">") || \
 	is_same_lines(data->comm->oper, ">>") || \
 	is_same_lines(data->comm->oper, "<<") || \
@@ -98,7 +115,6 @@ void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 	}
 	else
 		data->comm = data->comm->next;
-	free(path);
 }
 
 int	launcher(t_data *data)
@@ -113,6 +129,11 @@ int	launcher(t_data *data)
 		return (0);
 	while (data->comm)
 	{
+		result = check_parenthesis(path, count_command, data, tmp_dt);
+		if (result == 1)
+			continue ;
+		else if (result < 0)
+			return (1);
 		if (check_builtins(data, &path))
 			continue ;
 		wait_count++;
@@ -120,10 +141,7 @@ int	launcher(t_data *data)
 		if (result < 0 || result == 1)
 			return (handle_error_executor(result));
 		set_next_ptr_data_and_free_path(data, path);
+		free(path);
 	}
-	result = close_fds_and_waiting(tmp_dt, wait_count, data);
-	if (del_file_doc(tmp_dt))
-		printf("🔥mini_hell🔥: error unlink\n");
-	delcommand(&tmp_dt);
-	return (result);
+	return (close_fds_and_waiting(tmp_dt, wait_count, data));
 }

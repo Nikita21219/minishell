@@ -1,12 +1,12 @@
 NAME = minishell
 CC = cc
 
-CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror
 IREADFL = -I/Users/${USER}/.brew/opt/readline/include
 LREADFL = -L/Users/${USER}/.brew/opt/readline/lib
 
 OBJDIR = ./objs
-VPATH = ./srcs ./srcs/bultins ./srcs/launcher ./srcs/parser ./srcs/utils ./srcs/wildcard
+VPATH = ./srcs ./srcs/bultins ./srcs/launcher ./srcs/parser ./srcs/utils ./srcs/wildcard ./srcs/bonus
 LIBFT_DIR = libft/
 HEADDIR = ./includes
 

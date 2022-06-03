@@ -1,56 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parserutils3.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:06:07 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:06:08 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int	rewrite_args(char ***in, char **out)
+char	*delete_hashtag(char *str)
 {
-	int		x;
-	int		y;
-	char	**tmp;
-
-	x = len(*in);
-	y = len(out);
-	tmp = malloc(sizeof(char *) * (x + y + 1));
-	if (!tmp)
-		return (1);
-	x = -1;
-	while ((*in)[++x])
-		tmp[x] = (*in)[x];
-	y = -1;
-	while (out[++y])
-	{
-		tmp[x++] = out[y];
-		out[y] = NULL;
-	}
-	tmp[x] = NULL;
-	free (*in);
-	*in = tmp;
-	return (0);
-}
-
-int	move_args(t_comm **p, t_comm **tmp)
-{
-	char	**arg;
+	char	**split;
+	char	*res;
 	int		i;
 
+	if (!ft_strlen(str))
+		return (str);
+	split = ft_split(str, '#');
+	res = split[0];
 	i = 0;
-	if ((((*tmp)->oper && (*tmp)->oper[0] == '>') \
-	|| ((*tmp)->prev && (*tmp)->prev->oper && (*tmp)->prev->oper[0] == '>')) \
-	|| (((*tmp)->oper && (*tmp)->oper[0] == '<') \
-	|| ((*tmp)->prev && (*tmp)->prev->oper && (*tmp)->prev->oper[0] == '<')))
-	{
-		arg = (*tmp)->args;
-		arg++;
-		if (!(*p)->comm && arg[0])
-		{
-			(*p)->comm = arg[0];
-			arg++;
-		}
-		if (*arg && (*tmp)->prev)
-			if (rewrite_args(&(*p)->args, arg))
-				return (1);
-		while ((*tmp)->args[++i] && (*tmp)->prev)
-			(*tmp)->args[i] = NULL;
-	}
-	return (0);
+	while (split[++i])
+		free(split[i]);
+	free(split);
+	free(str);
+	return (res);
 }
 
 int	checkallcommands(t_comm **p)
@@ -58,12 +35,11 @@ int	checkallcommands(t_comm **p)
 	t_comm	*tmp;
 
 	tmp = *p;
-	if (!tmp->comm && !tmp->args[1] && !tmp->oper)
+	if (!tmp || (!tmp->comm && !tmp->args[1] && !tmp->oper))
 		return (0);
 	while (tmp)
 	{
-		if (tmp->oper && tmp->oper[0] != '<' \
-		&& tmp->oper[0] != '>' && (!tmp->next || !tmp->comm))
+		if (tmp->oper && !tmp->next)
 		{
 			if (!tmp->comm)
 				printf("🔥mini_hell🔥: syntax error near unexpected token `%s'\n"\
@@ -73,8 +49,6 @@ int	checkallcommands(t_comm **p)
 			errno = 258;
 			return (1);
 		}
-		if (move_args(p, &tmp))
-			return (1);
 		if (check_wildcard(tmp))
 			return (1);
 		tmp = tmp->next;
@@ -109,4 +83,11 @@ int	vars_quote_check(char **str, char **s, int i, t_comm *data)
 	if ((*s)[i] == '*')
 		(*s)[i] = '*' * -1;
 	return (++i);
+}
+
+int	print_error_and_errno(char *str, int error, int ret)
+{
+	printf("%s\n", str);
+	errno = error;
+	return (ret);
 }

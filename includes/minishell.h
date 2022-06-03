@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 16:07:20 by bclarind          #+#    #+#             */
+/*   Updated: 2022/05/31 16:09:56 by bclarind         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -30,6 +42,7 @@ typedef struct s_comm
 	int				fd[2];
 	int				i;
 	pid_t			pid;
+	pid_t			prnt;
 	char			*comm;
 	char			**args;
 	char			*oper;
@@ -57,14 +70,14 @@ typedef struct s_finfo
 typedef struct s_box
 {
 	t_comm			*dt_comm;
+	char			*oper;
 	struct s_box	*next;
 }	t_box;
-
 
 /*!!!!DELETE!!!!!*/
 void	tmp_print_env(t_envr *env);
 void	tmp_print_arg_after_parser(t_comm *data);
-
+void	print_containers(t_box *box);
 
 /* general */
 int		is_same_lines(char *f_str, char *s_str);
@@ -73,15 +86,19 @@ void	free_arrs(char **arr);
 int		ft_perror(t_comm *dt);
 int		continue_with_print(char *err_str);
 void	ft_fprintf(char *command, char *str);
+int		print_error_and_errno(char *str, int error, int ret);
+void	pars_and_launch(t_data *data, int i);
 
 /* parser */
+int		check_for_move_arg(t_box **box);
 int		check_argv(int argc, char **argv, char **env, t_data *data);
+char	*delete_hashtag(char *str);
 void	error_mes_with_exit(char *err_mes, t_data *data);
 void	take_start_env(t_data *data, char **envar);
 void	write_start_env(char *envar, t_envr **temp);
 int		ft_create_var(t_data *data, char *var);
-int		parser(t_data *data);
-t_comm	*addelem(t_data *data);
+int		parser(t_data *data, int i);
+t_comm	*addelem(t_data *data, int i);
 void	delcommand(t_comm **comm);
 int		check_quote(char **s, char **str, char quote, t_comm *data);
 int		write_arg(char **arg, char **s, int i);
@@ -103,6 +120,9 @@ int		checkallcommands(t_comm **p);
 int		add_list_env(t_envr **env, char *arg);
 int		check_for_local_vars(char **str, t_data *data);
 int		check_right_var(char *arg);
+int		check_prnts(char **str, char **s, int *i, t_comm *data);
+void	init_index(t_comm *dt);
+void	increment_shlvl(t_data *data);
 
 /* launcher */
 int		launcher(t_data *data);
@@ -114,6 +134,8 @@ int		check_redirect(t_data *data);
 int		is_correct_comm(char *comm);
 int		handle_error_executor(int error);
 int		create_pipe(t_comm *data);
+void	set_next_ptr_data_and_free_path(t_data *data, char *path);
+int		handle_oper(t_data *data, int count_comm);
 int		heredoc(t_comm *data);
 int		init_result(char **free_ptr, char **nl, char **line, char **res);
 int		is_redirect(char *op);
@@ -122,7 +144,7 @@ int		del_file_doc(t_comm *data);
 int		duplicate_fd(t_comm *data, int idx, int count_comm);
 int		redirect_out(t_comm *data);
 int		redirect_in(t_comm *data);
-int		initialize_dirs(char ***dirs, t_data *data);
+int		initialize_dirs(char ***dirs, t_data *data, int *i);
 int		check_oper(t_data *data);
 int		check_tilda(t_comm **comm);
 char	**get_env(t_envr *dt_env);
@@ -139,6 +161,7 @@ int		ft_exit(t_data *data);
 int		ft_cd(t_data *data);
 int		ft_space(char str);
 int		launch_builtins(t_data *data);
+int		check_right_var(char *arg);
 int		is_builtins(char *comm, t_data *dt);
 int		is_builtins_in_main_proc(char *comm, t_data *dt);
 int		check_builtins(t_data *data, char **path);
@@ -161,7 +184,8 @@ int		check_finish(t_finfo *dt, char *filename);
 int		check_between(t_finfo *dt, char *filename);
 int		free_dt(t_finfo *dt);
 int		len(char **template);
-int		initial_var(char ***split_template, t_finfo *dt, char *template, int *arr_int);
+int		initial_var(char ***split_template, \
+		t_finfo *dt, char *template, int *arr_int);
 int		init_dt_start(t_finfo *dt, char *str, char ***split_template);
 int		init_dt_finish(t_finfo *dt, char *str, char ***temp, int last_idx_str);
 int		init_dt_between(t_finfo *dt, char ***split_template, int *i);
@@ -173,5 +197,12 @@ void	fill_zero(int *arr, int k, int *j, char **res);
 int		init_containers(t_comm *data, t_box	**box);
 int		take_pos_for_wild(char **str, int **pos);
 int		write_arg_wild(char ***args, char **wild, int a);
+
+/* bonus func */
+int		is_logic_oper(char *str);
+int		init_containers(t_comm *data, t_box	**box);
+void	set_next_box(t_box **box);
+int		freebox(t_box **box);
+int		check_parenthesis(char *path, int c, t_data *data, t_comm *tmp_dt);
 
 #endif
