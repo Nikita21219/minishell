@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:06:28 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:06:29 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 10:16:46 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ void	take_start_env(t_data *data, char **envar)
 		if (!temp)
 		{
 			errno = 12;
-			error_mes_with_exit("Error malloc\n", data);
+			error_mes_with_exit("Error malloc in write env\n", data);
 		}
 		write_start_env(envar[a], &temp);
-		if (!temp->key || !temp->val)
+		if (!temp->key)
 		{
 			errno = 12;
-			error_mes_with_exit("Error malloc\n", data);
+			error_mes_with_exit("Error malloc in write env\n", data);
 		}
 		temp->next = data->env;
 		data->env = temp;

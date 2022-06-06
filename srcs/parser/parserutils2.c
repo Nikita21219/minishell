@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parserutils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:06:04 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/03 15:38:14 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 11:10:13 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	check_tilda(t_comm **comm)
 			if (write_tilda(&tmp->comm))
 				return (1);
 		while (tmp->args && tmp->args[++i])
-			if (is_same_lines(tmp->args[i], "~") || (tmp->args[i][0] == '~' && tmp->args[i][1] == '/'))
+			if (is_same_lines(tmp->args[i], "~") || \
+			(tmp->args[i][0] == '~' && tmp->args[i][1] == '/'))
 				if (write_tilda(&tmp->args[i]))
 					return (1);
 		tmp = tmp->next;

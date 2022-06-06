@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:27 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:05:28 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 10:55:58 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,16 @@ int	count_dict(t_envr *dt_env)
 
 int	do_pair(char **key_with_equel, char **pair, char ***env, t_envr *dt_env)
 {
+	if (!dt_env->val)
+	{
+		*pair = ft_strdup(dt_env->key);
+		if (*pair == NULL)
+		{
+			free_arrs(*env);
+			return (1);
+		}
+		return (0);
+	}
 	*key_with_equel = ft_strjoin(dt_env->key, "=");
 	if (*key_with_equel == NULL)
 	{
