@@ -6,7 +6,7 @@
 /*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:17 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 10:23:05 by rrast            ###   ########.fr       */
+/*   Updated: 2022/06/06 11:05:21 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	seach_in_vars(t_data *data, char *var, int *i)
 	if (ft_strchr(var, '='))
 		return (seach_in_vars_with_eq(data, var, i));
 	rv = take_path_env(&data->vars, var);
-		tenv = malloc(sizeof(t_envr));
+	tenv = malloc(sizeof(t_envr));
 	if (!tenv)
 		return (1);
 	if (rv)
@@ -101,6 +101,7 @@ int	seach_in_vars(t_data *data, char *var, int *i)
 		tenv->key = ft_strdup(var);
 		if (!tenv->key)
 			return (1);
+		tenv->val = NULL;
 	}
 	tenv->next = data->env;
 	data->env = tenv;
