@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:22 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:05:23 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 10:07:07 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ int	ft_env(t_envr *env)
 	}
 	while (p)
 	{
-		printf("%s=%s\n", p->key, p->val);
+		if (p->val)
+			printf("%s=%s\n", p->key, p->val);
 		p = p->next;
 	}
 	return (0);

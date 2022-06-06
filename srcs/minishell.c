@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:06:47 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/03 15:07:36 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 10:02:52 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	pars_and_launch(t_data *data, int i)
 	t_box	*box;
 
 	box = NULL;
+	data->comm = NULL;
 	if (parser(data, i) || check_tilda(&data->comm))
 	{
 		freedata(data);
