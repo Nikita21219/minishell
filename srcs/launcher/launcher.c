@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:41 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:05:42 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 12:03:53 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*get_path(char *comm, t_data *data)
 	char	*result;
 	int		i;
 
+	if (take_path_env(&data->env, "PATH") == NULL)
+		return (ft_strdup("launch builtins"));
 	if (is_correct_comm(comm) || initialize_dirs(&dirs, data, &i))
 		return (ft_strdup(comm));
 	while (dirs[++i])
@@ -71,6 +73,8 @@ int	check_builtins(t_data *data, char **path)
 {
 	int	error;
 
+	if (check_path(data->comm->comm))
+		return (1);
 	if (is_builtins_in_main_proc(data->comm->comm, data))
 	{
 		error = launch_builtins(data);
@@ -90,7 +94,7 @@ int	check_builtins(t_data *data, char **path)
 
 void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 {
-	(void) path;
+	(void) path; //FIXME delete line
 	if (data->comm && (is_same_lines(data->comm->oper, ">") || \
 	is_same_lines(data->comm->oper, ">>") || \
 	is_same_lines(data->comm->oper, "<<") || \
@@ -135,7 +139,11 @@ int	launcher(t_data *data)
 		else if (result < 0)
 			return (1);
 		if (check_builtins(data, &path))
+		{
+			while (data->comm && !is_logic_oper(data->comm->oper))
+				data->comm = data->comm->next;
 			continue ;
+		}
 		wait_count++;
 		result = executor(data, path, count_command);
 		if (result < 0 || result == 1)
