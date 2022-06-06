@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:06:47 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 12:29:54 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 19:12:53 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	minishell(t_data *data, char **env)
 		err = errno;
 		if (!data->env)
 			error_mes_with_exit("🔥mini_hell🔥: error environment\n", data);
-		data->instr = delete_hashtag(readline("\r🔥mini_hell🔥$ "));
+		data->instr = delete_hashtag(readline("🔥mini_hell🔥$ "));
 		errno = err;
 		if (!data->instr)
 			error_mes_with_exit("\b\bexit\n", data);

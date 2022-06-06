@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_move_args.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:51 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:05:52 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 18:40:19 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ int	move_args(t_comm **p, t_comm **tmp)
 	int		i;
 
 	i = 0;
+	if ((*tmp)->prev && (*tmp)->prev->oper && !((*tmp)->prev->oper[0] == '>' || (*tmp)->prev->oper[0] == '<'))
+	{
+		if ((*p)->comm)
+			*p = (*p)->next;
+		return (0);
+	}
 	if ((((*tmp)->oper && (*tmp)->oper[0] == '>') \
 	|| ((*tmp)->prev && (*tmp)->prev->oper && (*tmp)->prev->oper[0] == '>')) \
 	|| (((*tmp)->oper && (*tmp)->oper[0] == '<') \
@@ -62,7 +68,7 @@ int	move_args(t_comm **p, t_comm **tmp)
 		while ((*tmp)->args[++i] && (*tmp)->prev)
 			(*tmp)->args[i] = NULL;
 	}
-	else
+	else if ((*p)->comm)
 		*p = (*p)->next;
 	return (0);
 }

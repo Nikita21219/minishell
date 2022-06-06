@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:06:23 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 09:32:10 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 19:24:35 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int	close_fd(t_comm *data)
 
 int	is_correct_comm(char *comm)
 {
-	if (comm && (comm[0] == '/' || \
-	(comm[0] == '.' && comm[1] == '/')) && !access(comm, 1))
+	if (comm && (comm[0] == '/' || comm[0] == '.' \
+	|| (comm[0] == '.' && comm[1] == '/')) && !access(comm, 1))
 		return (1);
 	return (0);
 }
