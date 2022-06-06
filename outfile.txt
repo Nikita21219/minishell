@@ -1,2 +1,2 @@
-/usr/bin/grep hello << h > outfile.txt
-/usr/bin/grep hello << h > outfile.txt
+hello from outfile
+test

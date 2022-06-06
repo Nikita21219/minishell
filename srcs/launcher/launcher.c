@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:41 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:05:42 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 09:34:28 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*get_path(char *comm, t_data *data)
 	char	*result;
 	int		i;
 
+	if (take_path_env(&data->env, "PATH") == NULL)
+		return (ft_strdup("launch builtins"));
 	if (is_correct_comm(comm) || initialize_dirs(&dirs, data, &i))
 		return (ft_strdup(comm));
 	while (dirs[++i])
