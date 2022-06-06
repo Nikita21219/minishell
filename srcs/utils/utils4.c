@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:06:28 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 10:16:46 by rrast            ###   ########.fr       */
+/*   Updated: 2022/06/06 15:52:05 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,11 @@ void	take_start_env(t_data *data, char **envar)
 		temp->next = data->env;
 		data->env = temp;
 	}
+}
+
+int	set_next_dt(t_data *data)
+{
+	while (data->comm && !is_logic_oper(data->comm->oper))
+		data->comm = data->comm->next;
+	return (1);
 }

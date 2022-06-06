@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:07:20 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 15:36:42 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:52:21 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int		heredoc(t_comm *data);
 int		init_result(char **free_ptr, char **nl, char **line, char **res);
 int		is_redirect(char *op);
 int		duplicate_fd_for_heredoc(t_comm *data);
+int		set_next_dt(t_data *data);
 int		del_file_doc(t_comm *data);
 int		duplicate_fd(t_comm *data, int idx, int count_comm);
 int		redirect_out(t_comm *data);

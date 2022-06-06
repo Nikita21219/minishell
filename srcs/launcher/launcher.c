@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:41 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 15:36:28 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:51:47 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ char	*get_path(char *comm, t_data *data)
 			return (NULL);
 		result = ft_strjoin(correct_dir, comm);
 		free(correct_dir);
-		if (result == NULL)
-			return (NULL);
-		if (!access(result, 1))
+		if (result == NULL || !access(result, 1))
 		{
 			free_arrs(dirs);
 			return (result);
@@ -92,7 +90,7 @@ int	check_builtins(t_data *data, char **path)
 
 void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 {
-	(void) path; //FIXME delete line
+	free(path);
 	if (data->comm && (is_same_lines(data->comm->oper, ">") || \
 	is_same_lines(data->comm->oper, ">>") || \
 	is_same_lines(data->comm->oper, "<<") || \
@@ -136,18 +134,13 @@ int	launcher(t_data *data)
 			continue ;
 		else if (result < 0)
 			return (1);
-		if (check_builtins(data, &path))
-		{
-			while (data->comm && !is_logic_oper(data->comm->oper))
-				data->comm = data->comm->next;
+		if (check_builtins(data, &path) && set_next_dt(data))
 			continue ;
-		}
 		wait_count++;
 		result = executor(data, path, count_command);
 		if (result < 0 || result == 1)
 			return (handle_error_executor(result));
 		set_next_ptr_data_and_free_path(data, path);
-		free(path);
 	}
 	return (close_fds_and_waiting(tmp_dt, wait_count, data));
 }
