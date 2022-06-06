@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:07:20 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:09:56 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 13:19:03 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int		is_builtins_in_main_proc(char *comm, t_data *dt);
 int		check_builtins(t_data *data, char **path);
 
 /* executor */
-int		executor(t_data *data, char *path, int count_comm);
+int		executor(t_data *data, char *path, int count_comm, int *wait_count);
 int		kill_childs(t_comm *data);
 void	print_last_exit(void);
 t_envr	*search_var(char *tmp, t_envr *p, t_envr *vars);

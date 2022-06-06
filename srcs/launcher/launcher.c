@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launcher.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:41 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 12:03:53 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 13:40:32 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ char	*get_path(char *comm, t_data *data)
 			return (NULL);
 		result = ft_strjoin(correct_dir, comm);
 		free(correct_dir);
-		if (result == NULL)
-			return (NULL);
-		if (!access(result, 1))
+		if (result == NULL || !access(result, 1))
 		{
 			free_arrs(dirs);
 			return (result);
@@ -94,7 +92,7 @@ int	check_builtins(t_data *data, char **path)
 
 void	set_next_ptr_data_and_free_path(t_data *data, char *path)
 {
-	(void) path; //FIXME delete line
+	free(path);
 	if (data->comm && (is_same_lines(data->comm->oper, ">") || \
 	is_same_lines(data->comm->oper, ">>") || \
 	is_same_lines(data->comm->oper, "<<") || \
@@ -144,12 +142,10 @@ int	launcher(t_data *data)
 				data->comm = data->comm->next;
 			continue ;
 		}
-		wait_count++;
-		result = executor(data, path, count_command);
+		result = executor(data, path, count_command, &wait_count);
 		if (result < 0 || result == 1)
 			return (handle_error_executor(result));
 		set_next_ptr_data_and_free_path(data, path);
-		free(path);
 	}
 	return (close_fds_and_waiting(tmp_dt, wait_count, data));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:32 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 08:41:12 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 13:19:33 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,11 @@ void	exec_command(t_data *data, char *path)
 	exit(0);
 }
 
-int	executor(t_data *data, char *path, int count_comm)
+int	executor(t_data *data, char *path, int count_comm, int *wait_count)
 {
 	int		error;
 
+	(*wait_count)++;
 	error = check_oper(data);
 	data->comm->pid = fork();
 	if (data->comm->pid < 0)
