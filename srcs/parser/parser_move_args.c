@@ -6,7 +6,7 @@
 /*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:51 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 18:40:19 by rrast            ###   ########.fr       */
+/*   Updated: 2022/06/06 19:43:20 by rrast            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,31 @@ int	rewrite_args(char ***in, char **out)
 	return (0);
 }
 
-int	move_args(t_comm **p, t_comm **tmp)
+int	move_args_loop(t_comm **p, t_comm **tmp)
 {
 	char	**arg;
 	int		i;
 
 	i = 0;
-	if ((*tmp)->prev && (*tmp)->prev->oper && !((*tmp)->prev->oper[0] == '>' || (*tmp)->prev->oper[0] == '<'))
+	arg = (*tmp)->args;
+	arg++;
+	if (!(*p)->comm && arg[0])
+	{
+		(*p)->comm = arg[0];
+		arg++;
+	}
+	if (*arg && (*tmp)->prev)
+		if (rewrite_args(&(*p)->args, arg))
+			return (1);
+	while ((*tmp)->args[++i] && (*tmp)->prev)
+		(*tmp)->args[i] = NULL;
+	return (0);
+}
+
+int	move_args(t_comm **p, t_comm **tmp)
+{
+	if ((*tmp)->prev && (*tmp)->prev->oper && \
+	!((*tmp)->prev->oper[0] == '>' || (*tmp)->prev->oper[0] == '<'))
 	{
 		if ((*p)->comm)
 			*p = (*p)->next;
@@ -55,18 +73,8 @@ int	move_args(t_comm **p, t_comm **tmp)
 	|| (((*tmp)->oper && (*tmp)->oper[0] == '<') \
 	|| ((*tmp)->prev && (*tmp)->prev->oper && (*tmp)->prev->oper[0] == '<')))
 	{
-		arg = (*tmp)->args;
-		arg++;
-		if (!(*p)->comm && arg[0])
-		{
-			(*p)->comm = arg[0];
-			arg++;
-		}
-		if (*arg && (*tmp)->prev)
-			if (rewrite_args(&(*p)->args, arg))
-				return (1);
-		while ((*tmp)->args[++i] && (*tmp)->prev)
-			(*tmp)->args[i] = NULL;
+		if (move_args_loop(p, tmp))
+			return (1);
 	}
 	else if ((*p)->comm)
 		*p = (*p)->next;
