@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrast <rrast@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:06:47 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 10:02:52 by rrast            ###   ########.fr       */
+/*   Updated: 2022/06/06 12:29:54 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	minishell(t_data *data, char **env)
 		err = errno;
 		if (!data->env)
 			error_mes_with_exit("🔥mini_hell🔥: error environment\n", data);
-		data->instr = delete_hashtag(readline("🔥mini_hell🔥$ "));
+		data->instr = delete_hashtag(readline("\r🔥mini_hell🔥$ "));
 		errno = err;
 		if (!data->instr)
 			error_mes_with_exit("\b\bexit\n", data);
@@ -79,6 +79,7 @@ void	ft_takesig(int sig)
 {
 	if (sig == SIGINT)
 	{
+		errno = 130;
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
