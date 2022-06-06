@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:41 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 12:03:53 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:36:28 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ int	check_builtins(t_data *data, char **path)
 {
 	int	error;
 
-	if (check_path(data->comm->comm))
-		return (1);
 	if (is_builtins_in_main_proc(data->comm->comm, data))
 	{
 		error = launch_builtins(data);

@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:06:12 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:06:13 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:36:32 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,8 @@ void	fill_zero(int *arr, int k, int *j, char **res)
 
 int	only_slash(char *path)
 {
-	while (*path)
+	while (path && *path)
 		if (*path++ != '/')
 			return (0);
 	return (1);
-}
-
-int	check_path(char *path)
-{
-	if (is_same_lines(path, ".."))
-	{
-		errno = 127;
-		ft_fprintf(path, "command not found\n");
-		return (errno);
-	}
-	else if (is_same_lines(path, "."))
-	{
-		errno = 2;
-		ft_fprintf(path, "usage: . filename [arguments]\n");
-		return (errno);
-	}
-	else if (only_slash(path))
-	{
-		errno = 126;
-		ft_fprintf(path, "is a directory\n");
-		return (errno);
-	}
-	return (0);
 }

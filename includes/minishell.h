@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:07:20 by bclarind          #+#    #+#             */
-/*   Updated: 2022/05/31 16:09:56 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:36:42 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,6 @@ int		check_oper(t_data *data);
 int		check_tilda(t_comm **comm);
 char	**get_env(t_envr *dt_env);
 int		set_env(t_comm *data, t_data *dt);
-int		check_path(char *path);
 
 /* builtins */
 int		ft_export(t_data *data);

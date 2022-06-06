@@ -6,7 +6,7 @@
 /*   By: bclarind <bclarind@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 16:05:32 by bclarind          #+#    #+#             */
-/*   Updated: 2022/06/06 08:41:12 by bclarind         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:36:53 by bclarind         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ int	handle_oper(t_data *data, int count_comm)
 
 void	exec_command(t_data *data, char *path)
 {
-	int	res;
-
 	if (data->comm->prev && data->comm->prev->prev \
 	&& is_same_lines(data->comm->prev->prev->oper, "<<"))
 		if (dup2(data->comm->prev->fd[0], STDIN_FILENO) == -1)
@@ -79,9 +77,6 @@ void	exec_command(t_data *data, char *path)
 		exit(launch_builtins(data));
 	else
 	{
-		res = check_path(path);
-		if (res)
-			exit(res);
 		if (execve(path, data->comm->args, get_env(data->env)) == -1)
 		{
 			perror(path);
